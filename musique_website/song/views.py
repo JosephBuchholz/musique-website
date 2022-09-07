@@ -1,7 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
+from .models import Song, SongGroup
 
 def song_provider(request):
+
+    for object in Song.objects.all():
+        print(object.title)
+        print(object.artists)
+        for file in object.file:
+            print(file.file.url)
+
     print(request.GET)
     key = request.GET.get('key')
     print(key)
