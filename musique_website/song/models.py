@@ -10,7 +10,7 @@ class Song(models.Model):
 
 class SongFile(models.Model):
     file = models.FileField(upload_to='music_files')
-    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name='files')
 
     def __str__(self):
         return self.file.url
