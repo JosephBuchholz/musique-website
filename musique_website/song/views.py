@@ -36,12 +36,19 @@ def song_provider(request):
             returnJson = json.dumps(returnDict)
 
             return HttpResponse(returnJson)
-        if method == 'get':
+        if method == 'get_file':
             song_id_str = request.GET.get('id')
-            if song_id_str:
-                if song_id_str.isdigit():
+            file_index_str = request.GET.get('file_index')
+            if song_id_str and file_index_str:
+                if song_id_str.isdigit() and file_index_str.isdigit():
                     song_id = int(song_id_str)
-                    print(song_id)
+                    file_index = int(file_index_str)
+                    print("Song ID and Index: ", song_id, ", ", file_index)
+
+                    file = Song.objects.get(id=song_id).files.all()[file_index].file
+                    with file.open() as f:
+                        print("gopt")
+                        return HttpResponse(f.read())
                 
         if method == 'search':
             print("searching!!")
