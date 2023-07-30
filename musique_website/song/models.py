@@ -8,6 +8,7 @@ class Song(models.Model):
     instruments = models.CharField(max_length=1000)
     difficulty_level = models.FloatField()
     tags = models.CharField(max_length=1000, blank=True, null=True)
+    description_file = models.FileField(upload_to='description_files', null=True)
 
     def __str__(self):
         return self.title
@@ -15,6 +16,8 @@ class Song(models.Model):
 class SongFile(models.Model):
     file = models.FileField(upload_to='music_files')
     song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name='files')
+
+    score_name = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return self.file.url

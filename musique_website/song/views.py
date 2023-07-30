@@ -8,6 +8,7 @@ KEY = 'ABC123'
 METHOD_ALL = 'all'
 METHOD_GET_FILE = 'get_file'
 METHOD_SEARCH = 'search'
+METHOD_GET_DESCRIPTION = 'get_desc'
 
 def song_provider(request):
     print(request.GET)
@@ -34,6 +35,13 @@ def song_provider(request):
                     with file.open() as f:
                         print("gopt")
                         return HttpResponse(f.read())
+        
+        # -------- GET DESCRIPTION --------
+        if method == METHOD_GET_DESCRIPTION:
+            song_id_str = request.GET.get('id')
+            if song_id_str:
+                if song_id_str.isdigit():
+                    return get_description_method(song_id=int(song_id_str));
     
         # -------- SEARCH --------
         if method == METHOD_SEARCH:
@@ -61,6 +69,15 @@ def song_provider(request):
 
             return search_method(query_str, difficulty, tags, instruments)
     return HttpResponse()
+
+def get_description_method(song_id):
+    print("Song ID and Index for GET_DESCRIPTION: ", song_id)
+    file = Song.objects.get(id=song_id).description_file
+    if file:
+        with file.open() as f:
+            return HttpResponse(f.read())
+    else:
+        return HttpResponse("none")
 
 def search_method(query_str, difficulty, tags, instruments):
     print("Searching!!: ", query_str, difficulty, tags, instruments)
@@ -92,8 +109,8 @@ def create_json_from_query_set(query_set):
     for object in query_set:
         files = []
         for file in object.files.all():
-            print(file.file.url)
-            files.append(file.file.url)
+            print(file.file.url, file.score_name)
+            files.append(file.score_name)
         
         songDict = {
             "id": object.pk,
