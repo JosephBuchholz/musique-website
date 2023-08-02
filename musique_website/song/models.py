@@ -9,6 +9,7 @@ class Song(models.Model):
     difficulty_level = models.FloatField()
     tags = models.CharField(max_length=1000, blank=True, null=True)
     description_file = models.FileField(upload_to='description_files', null=True)
+    visibility = models.IntegerField(default=1) # 0 = private, 1 = public
 
     def __str__(self):
         return self.title

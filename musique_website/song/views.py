@@ -10,6 +10,9 @@ METHOD_GET_FILE = 'get_file'
 METHOD_SEARCH = 'search'
 METHOD_GET_DESCRIPTION = 'get_desc'
 
+VISIBILITY_PRIVATE = 0
+VISIBILITY_PUBLIC = 1
+
 def song_provider(request):
     print(request.GET)
     key = request.GET.get('key')
@@ -18,8 +21,7 @@ def song_provider(request):
 
         # -------- ALL --------
         if method == METHOD_ALL:
-            returnJson = create_json_from_query_set(Song.objects.all())
-            return HttpResponse(returnJson)
+            return all_method()
         
         # -------- GET FILE --------
         if method == METHOD_GET_FILE:
@@ -70,6 +72,12 @@ def song_provider(request):
             return search_method(query_str, difficulty, tags, instruments)
     return HttpResponse()
 
+def all_method():
+    query_set = Song.objects.all()
+    query_set = query_set.filter(visibility=VISIBILITY_PUBLIC)
+    returnJson = create_json_from_query_set(query_set)
+    return HttpResponse(returnJson)
+
 def get_description_method(song_id):
     print("Song ID and Index for GET_DESCRIPTION: ", song_id)
     file = Song.objects.get(id=song_id).description_file
@@ -83,6 +91,7 @@ def search_method(query_str, difficulty, tags, instruments):
     print("Searching!!: ", query_str, difficulty, tags, instruments)
 
     query_set = Song.objects.all()
+    query_set = query_set.filter(visibility=VISIBILITY_PUBLIC)
 
     if query_set != "":
         query_set = query_set.filter(title__icontains=query_str) or query_set.filter(artists__icontains=query_str) or query_set.filter(instruments__icontains=query_str) or query_set.filter(tags__icontains=query_str)
