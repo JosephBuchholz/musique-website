@@ -7,8 +7,8 @@
   <identification>
     <creator type="composer">Jadon Lavik</creator>
     <encoding>
-      <software>MuseScore 4.0.1</software>
-      <encoding-date>2023-03-09</encoding-date>
+      <software>MuseScore 4.0.2</software>
+      <encoding-date>2023-06-30</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
