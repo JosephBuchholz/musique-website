@@ -12,6 +12,7 @@ export default defineConfig({
       input: "src/main.tsx",
       output: {
           entryFileNames: "main.js",
+          assetFileNames: "index.css",
       }
     }
   }

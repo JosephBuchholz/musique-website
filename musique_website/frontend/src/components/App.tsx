@@ -1,11 +1,7 @@
+import HomePage from "./HomePage"
 
 export default function App() {
   return (<>
-    <h1>hello</h1>
-    <Button></Button>
+    <HomePage></HomePage>
   </>)
-}
-
-function Button() {
-  return (<button>this is a button</button>)
 }
