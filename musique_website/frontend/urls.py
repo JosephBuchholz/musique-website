@@ -3,4 +3,6 @@ from .views import index
 
 urlpatterns = [
     path('', index),
+    path('home/', index),
+    path('editor/', index),
 ]
