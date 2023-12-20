@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage"
 import EditorPage from "./pages/EditorPage"
 
 export default function App() {
+
   return (<>
   <BrowserRouter>
     <Routes>
