@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 /**
  * An object that holds data needed to describe how a specific object
  * should be rendered (for example: color, font, or stroke width).

@@ -9,6 +9,8 @@
 #include "Rendering/Renderer.h"
 #include "MusicData/Types.h"
 
+#include "App.h"
+
 void AddFunctionsToCpp(int drawLineFP, int drawTextFP, int drawGlyphFP)
 {
     LOGI("Adding functions (from c++)");
@@ -21,6 +23,13 @@ void AddFunctionsToCpp(int drawLineFP, int drawTextFP, int drawGlyphFP)
 
 void callJsFunction()
 {
+    std::shared_ptr<App> app = std::make_shared<App>();
+
+    app->StartRendering();
+
+    app->OnUpdate(0.1f);
+
+
     LOGI("calling js function from c++");
     Renderer& renderer = Renderer::GetInstance();
     renderer.DrawLine({ 10.0f, 10.0f }, { 200.0f, 10.0f });

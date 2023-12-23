@@ -1,9 +1,9 @@
-#pragma once
+#ifndef MUSIQUE_TYPES_H
+#define MUSIQUE_TYPES_H
 
 #include <vector>
 #include <string>
 #include <limits>
-
 #include "../Debugging/Debug.h"
 
 #define INVALID_FLOAT_VALUE std::numeric_limits<float>::infinity()
@@ -50,6 +50,7 @@ static DiatonicNote DiatonicNoteFromString(std::string string)
         return DiatonicNote::B;
 
     ASSERT(false);
+    return DiatonicNote::C;
 }
 
 enum class NoteValue {
@@ -212,3 +213,4 @@ enum class OrnamentTwoNoteTurn {
     None = 0, Whole, Half
 };
 
+#endif // MUSIQUE_TYPES_H
