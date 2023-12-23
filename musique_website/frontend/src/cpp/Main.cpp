@@ -4,59 +4,38 @@
 #include <emscripten/bind.h>
 
 #include "Debugging/Debug.h"
+#include "Rendering/SMuFLGlyph.h"
+#include "Collisions/Vec2.h"
+#include "Rendering/Renderer.h"
 
-
-/*
-extern "C" {
-    //extern void logMsg();
-
-    EMSCRIPTEN_KEEPALIVE
-    int addNums(int a, int b)
-    {
-        //logMsg();
-        return a + b;
-    }
-}
-*/
-
-/*extern "C" {
-    extern void my_js();
-}
-
-EM_JS(void, call_alert, (), {
-    alert('hello from js inside c++');
-    throw 'all done';
-});*/
-
-/*EM_JS(void, callJs, (), {
-    console.log("calling js funciton from callJs c++");
-    jsFunction();
-});*/
-
-int addNums(int a, int b)
+void AddFunctionsToCpp(int drawLineFP, int drawTextFP, int drawGlyphFP)
 {
-    LOGI("calling call js");
-    //my_js();
-    //callJs();
-    return a * b;
-}
+    LOGI("Adding functions (from c++)");
 
-void (*jsFunction)(int);
-
-void addJsFunction(int functionPointer)
-{
-    LOGI("adding js function (from c++)");
-    jsFunction = reinterpret_cast<void (*)(int)>(functionPointer);
+    Renderer& renderer = Renderer::GetInstance();
+    renderer.DrawLineCallback = reinterpret_cast<void (*)(int, int, int, int)>(drawLineFP);
+    renderer.DrawTextCallback = reinterpret_cast<void (*)(const char*, int, int)>(drawTextFP);
+    renderer.DrawGlyphCallback = reinterpret_cast<void (*)(uint16_t, int, int)>(drawGlyphFP);
 }
 
 void callJsFunction()
 {
     LOGI("calling js function from c++");
-    jsFunction(555);
+    Renderer& renderer = Renderer::GetInstance();
+    renderer.DrawLine({ 10.0f, 10.0f }, { 200.0f, 10.0f });
+    renderer.DrawText("Hello World from C++!!", { 20.0f, 50.0f });
+    renderer.DrawGlyph(SMuFLID::fClef, { 300.0f, 300.0f });
+    renderer.DrawGlyph(SMuFLID::gClef, { 350.0f, 300.0f });
+    renderer.DrawGlyph(SMuFLID::cClef, { 400.0f, 300.0f });
+    renderer.DrawGlyph(SMuFLID::flag256thDown, { 400.0f, 400.0f });
+}
+
+int stringLength(std::string str) {
+    return str.length();
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {
-    emscripten::function("addNums", &addNums);
-    emscripten::function("addJsFunction", &addJsFunction);
+    emscripten::function("stringLength", &stringLength);
+    emscripten::function("addFunctionsToCpp", &AddFunctionsToCpp);
     emscripten::function("callJsFunction", &callJsFunction);
 }

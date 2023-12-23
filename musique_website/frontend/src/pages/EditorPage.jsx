@@ -1,7 +1,80 @@
 import { useEffect, useRef } from "react";
 import Header from "../components/Header";
+import Module from '../cpp.js';
 
 export default function EditorPage() {
+
+
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+
+    function addFont(fontName, fontUrl) {
+      var newFont = new FontFace(fontName, fontUrl)
+      newFont.load().then(() => {
+        document.fonts.add(newFont);
+      });
+    }
+
+    addFont("plainFont", "url(/static/fonts/times.ttf)");
+    addFont("italicFont", "url(/static/fonts/timesi.ttf)");
+    addFont("boldFont", "url(/static/fonts/timesbd.ttf)");
+    addFont("boldItalicFont", "url(/static/fonts/timesbi.ttf)");
+
+    addFont("tablatureFont", "url(/static/fonts/open_sans.ttf)");
+
+    addFont("musicFont", "url(/static/fonts/bravura.otf)");
+    //addFont("musicTextFont", "url(/static/fonts/bravura_text.otf)");
+
+    let canvas = canvasRef.current;
+    if (canvas == null) throw Error("canvas is null");
+
+    let context = canvas.getContext("2d");
+    if (context == null) throw Error("canvas is null");
+
+    context.font = "48px musicFont";
+
+    function drawLine(startX, startY, endX, endY) {
+      context.beginPath();
+      context.moveTo(startX, startY);
+      context.lineTo(endX, endY);
+      context.stroke();
+    }
+
+    function drawGlyph(codePoint, posX, posY) {
+      context.font = "48px musicFont";
+      context.fillText(String.fromCodePoint(codePoint), posX, posY);
+    }
+
+    
+
+    console.log("Hello outside");
+
+    Module()
+      .then(module => {
+        console.log('Module created!');
+
+        var strLen = module.stringLength("Hello World");
+        console.log("string length: " + strLen)
+
+        function drawText(text, posX, posY) {
+          context.font = "48px plainFont";
+          var textString = module.UTF8ToString(text);
+          context.fillText(textString, posX, posY);
+        }
+
+        var drawLineFP = module.addFunction(drawLine, "viiii");
+        var drawTextFP = module.addFunction(drawText, "viii");
+        var drawGlyphFP = module.addFunction(drawGlyph, "viii");
+
+        module.addFunctionsToCpp(drawLineFP, drawTextFP, drawGlyphFP);
+
+        module.callJsFunction();
+
+        //drawGlyph(0xE050, 300, 300);
+    });
+  });
+
   return (
     <>
       <div className="flex flex-col h-screen">
@@ -12,66 +85,25 @@ export default function EditorPage() {
             Hello, this is the editor!
           </h1>
 
-          <Canvas></Canvas>
+          {/*<Canvas></Canvas>*/}
+
+          <canvas ref={canvasRef} className="border-2" width="776" height="600"></canvas>
         </div>
       </div>
     </>
   );
 }
 
-function drawLine(context, startX, startY, endX, endY) {
-  context.beginPath();
-  context.moveTo(startX, startY);
-  context.lineTo(endX, endY);
-  context.stroke();
-}
-
 function Canvas() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    /*let canvas = canvasRef.current;
-    if (canvas == null) throw Error("canvas is null");
-
-    let context = canvas.getContext("2d");
-    if (context == null) throw Error("canvas is null");
-
-    // @ts-ignore
-    var drawRect = () => {
-      if (context == null) throw Error("canvas is null");
-
-      context.beginPath();
-      context.moveTo(150, 100);
-      context.lineTo(70, 30);
-      context.stroke();
-    };
-
-    drawLine(context, 50, 50, 100, 150);*/
-    //drawRect();
+    
   });
-
-  /*var module: MainModule = {};
-  console.log("result: " + module.addNums(1, 2));
-
-  var module: MainModule = {
-    onRuntimeInitialized: function() {
-      console.log('lerp result: ' + module.addNums(1, 2));
-    }
-  };*/
-
-  /*var addNums = Module.cwrap(
-    "addNums",
-    "number",
-    ["number", "number"]
-  );*/
 
   return (
     <>
       <canvas ref={canvasRef} className="border-2"></canvas>
-
-      {/*<button onClick={() => {
-            console.log(addNums(1, 5))
-          }}>Click Me</button>*/}
     </>
   );
 }
