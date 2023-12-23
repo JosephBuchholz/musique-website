@@ -9,10 +9,10 @@ std::string ToString(int value)
     return string;
 }
 
-std::string ToString(unsigned int value)
+std::string ToString(uint32_t value)
 {
     char* cstring = new char('0');
-    sprintf(cstring, "%d", value);
+    sprintf(cstring, "%u", value);
     std::string string = cstring;
     delete cstring;
     return string;

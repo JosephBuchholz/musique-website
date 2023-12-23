@@ -32,46 +32,83 @@ export default function EditorPage() {
     let context = canvas.getContext("2d");
     if (context == null) throw Error("canvas is null");
 
+    var currentFont = "musicFont";
+
     context.font = "48px musicFont";
 
-    function drawLine(startX, startY, endX, endY) {
+    function usePaint(paint) {
+      context.strokeStyle = "#" + paint.color.toString(16).padStart(8, '0');
+      context.fillStyle = "#" + paint.color.toString(16).padStart(8, '0');
+      context.lineWidth = paint.strokeWidth;
+      context.font = paint.textSize.toString() + "px " + currentFont;
+    }
+
+    function drawLine(startX, startY, endX, endY, paint) {
+      usePaint(paint);
+
       context.beginPath();
       context.moveTo(startX, startY);
       context.lineTo(endX, endY);
       context.stroke();
     }
 
-    function drawGlyph(codePoint, posX, posY) {
-      context.font = "48px musicFont";
-      context.fillText(String.fromCodePoint(codePoint), posX, posY);
+    function drawText(text, posX, posY, paint) {
+      currentFont = "plainFont"
+      usePaint(paint);
+
+      context.fillText(text, posX, posY);
     }
 
-    
+    function drawGlyph(codePoint, posX, posY, paint) {
+      currentFont = "musicFont"
+      usePaint(paint);
 
-    console.log("Hello outside");
+      context.fillText(String.fromCodePoint(codePoint), posX, posY);
+    }
 
     Module()
       .then(module => {
         console.log('Module created!');
 
-        var strLen = module.stringLength("Hello World");
-        console.log("string length: " + strLen)
+        function drawLineCpp(startX, startY, endX, endY, paintStrPtr) {
+          var testPaint = {
+            color: 0xFF0000FF,
+            strokeWidth: 1.0,
+          }
 
-        function drawText(text, posX, posY) {
-          context.font = "48px plainFont";
-          var textString = module.UTF8ToString(text);
-          context.fillText(textString, posX, posY);
+          console.log("test paint object: " + JSON.stringify(testPaint));
+
+          var paintString = module.UTF8ToString(paintStrPtr);
+          console.log("paint object: " + paintString);
+
+          var paint = JSON.parse(paintString);
+
+          drawLine(startX, startY, endX, endY, paint)
         }
 
-        var drawLineFP = module.addFunction(drawLine, "viiii");
-        var drawTextFP = module.addFunction(drawText, "viii");
-        var drawGlyphFP = module.addFunction(drawGlyph, "viii");
+        function drawTextCpp(textStrPtr, posX, posY, paintStrPtr) {
+          var paintString = module.UTF8ToString(paintStrPtr);
+          var paint = JSON.parse(paintString);
+
+          var text = module.UTF8ToString(textStrPtr);
+
+          drawText(text, posX, posY, paint)
+        }
+        
+        function drawGlyphCpp(codePoint, posX, posY, paintStrPtr) {
+          var paintString = module.UTF8ToString(paintStrPtr);
+          var paint = JSON.parse(paintString);
+
+          drawGlyph(codePoint, posX, posY, paint)
+        }
+
+        var drawLineFP = module.addFunction(drawLineCpp, "viiiii");
+        var drawTextFP = module.addFunction(drawTextCpp, "viiii");
+        var drawGlyphFP = module.addFunction(drawGlyphCpp, "viiii");
 
         module.addFunctionsToCpp(drawLineFP, drawTextFP, drawGlyphFP);
 
         module.callJsFunction();
-
-        //drawGlyph(0xE050, 300, 300);
     });
   });
 
@@ -80,13 +117,11 @@ export default function EditorPage() {
       <div className="flex flex-col h-screen">
         <Header></Header>
 
+        <h1 className="text-3xl font-bold text-blue-950">
+          Hello, this is the editor!
+        </h1>
+
         <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-3xl font-bold text-blue-950">
-            Hello, this is the editor!
-          </h1>
-
-          {/*<Canvas></Canvas>*/}
-
           <canvas ref={canvasRef} className="border-2" width="776" height="600"></canvas>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 #include "SMuFLGlyph.h"
 #include "../Collisions/Vec2.h"
+#include "Paint.h"
 
 // singleton reference: https://stackoverflow.com/questions/1008019/how-do-you-implement-the-singleton-design-pattern
 
@@ -18,15 +19,19 @@ private:
 
 public:
 
-	void DrawLine(Vec2<float> start, Vec2<float> end);
-	void DrawText(const std::string& text, Vec2<float> position);
-	void DrawGlyph(SMuFLID glyph, Vec2<float> position);
+	void DrawLine(Vec2<float> start, Vec2<float> end, const Paint& paint = Paint());
+	void DrawText(const std::string& text, Vec2<float> position, const Paint& paint = Paint());
+	void DrawGlyph(SMuFLID glyph, Vec2<float> position, const Paint& paint = Paint());
 
 private:
 
-	void (*DrawLineCallback)(int startX, int startY, int endX, int endY);
-	void (*DrawTextCallback)(const char* text, int posX, int posY);
-	void (*DrawGlyphCallback)(uint16_t codePoint, int posX, int posY);
+	std::string EncodePaintObject(const Paint& paint);
+
+private:
+
+	void (*DrawLineCallback)(int startX, int startY, int endX, int endY, const char* paint);
+	void (*DrawTextCallback)(const char* text, int posX, int posY, const char* paint);
+	void (*DrawGlyphCallback)(uint16_t codePoint, int posX, int posY, const char* paint);
 
 public:
 

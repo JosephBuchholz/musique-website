@@ -3,7 +3,7 @@
 #include <string>
 
 std::string ToString(int value);
-std::string ToString(unsigned int value);
+std::string ToString(uint32_t value);
 std::string ToString(float value);
 
 /// converts a string value to an int value
