@@ -8,6 +8,7 @@ call emcc -lembind ^
 	Rendering/Renderer.cpp ^
 	App.cpp ^
 	Callbacks.cpp ^
+	Debugging/Logging.cpp ^
 	Rendering/MusicRenderer.cpp ^
 	MusicPlayers/MusicPlayer.cpp ^
 	RenderMeasurement.cpp ^
@@ -125,5 +126,6 @@ call emcc -lembind ^
     -s MODULARIZE=1 ^
     -s ALLOW_TABLE_GROWTH ^
     -s EXPORTED_RUNTIME_METHODS=addFunction,UTF8ToString ^
-    -std=c++17
+    -std=c++17 ^
+	-fsanitize=undefined
 @python comp.py
