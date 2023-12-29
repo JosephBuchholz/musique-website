@@ -1,7 +1,7 @@
 import os
 import re
 
-with open("cpp.js", "r+") as file:
+with open("build/cpp.js", "r+") as file:
     contents = file.read()
 
     # update to correct path
@@ -21,5 +21,5 @@ else if (typeof define === 'function' && define['amd'])
     file.write(newContents)
 
 # move files to proper places
-os.replace("cpp.js", "../cpp.js")
-os.replace("cpp.wasm", "../../static/wasm/cpp.wasm")
+os.replace("build/cpp.js", "../cpp.js")
+os.replace("build/cpp.wasm", "../../static/wasm/cpp.wasm")

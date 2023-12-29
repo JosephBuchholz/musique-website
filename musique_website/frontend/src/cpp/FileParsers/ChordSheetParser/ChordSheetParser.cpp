@@ -132,10 +132,15 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
     std::vector<std::string> currentLine;
     for (char c : data)
     {
+        LOGD("char: %c", c);
+
         if (c == '\n')
         {
+            LOGD("new line");
             if (!currentLine.empty())
             {
+                LOGD("adding new line: %d", currentLine.size());
+
                 lines.push_back(currentLine);
                 currentLine = std::vector<std::string>();
             }
@@ -145,8 +150,10 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
 
         if (IsWhiteSpace(c))
         {
+            LOGD("is white space");
             if (!currentToken.empty())
             {
+                LOGD("adding token: %s", currentToken.c_str());
                 currentLine.push_back(currentToken);
                 currentToken = "";
             }
@@ -154,6 +161,7 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
             continue;
         }
 
+        LOGD("adding char: %c", c);
         currentToken += c;
     }
 
@@ -168,6 +176,12 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
     float currentBeatPositionInMeasure = 0.0f;
     for (const auto& line : lines)
     {
+        LOGD("Line:");
+        for (const std::string& token : line)
+        {
+            LOGD("token: %s", token.c_str());
+        }
+
         if (!line.empty())
         {
             if (!line[0].empty())
@@ -183,6 +197,14 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                     continue;
                 }
             }
+            else
+            {
+                continue;
+            }
+        }
+        else
+        {
+            continue;
         }
 
         bool isChords = true;
@@ -193,6 +215,7 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                 break;
         }
 
+        LOGD("is chords: %d", isChords);
         if (isChords)
         {
             currentMeasure->isFirstMeasureOfSystem = true;
@@ -231,6 +254,7 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
             }
 
             // add new system
+            LOGD("adding new system!!!");
             std::shared_ptr<System> newSystem = std::make_shared<System>();
             if (!song->systems.empty())
                 newSystem->beginningMeasureIndex = song->systems.back()->endingMeasureIndex + 1;
@@ -255,13 +279,21 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
         {
             LOGI("Is lyrics");
 
+            LOGD("size: %d", song->systems.size());
+
+            ASSERT(!song->systems.empty());
+
             std::shared_ptr<System> currentSystem = song->systems.back();
+
+            LOGD("marker 0");
 
             int measureIndex = 0;
             int chordIndex = 0;
 
             std::shared_ptr<CSChord> currentChord;
             float currentLyricBeatPosition = 0.0f;
+
+            LOGD("marker 1");
 
             if (measureIndex < staff->csStaff->measures.size())
             {
@@ -273,10 +305,16 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                 }
             }
 
+
+            LOGD("marker 2");
+
             if (currentSystem)
             {
                 measureIndex = currentSystem->beginningMeasureIndex;
             }
+
+
+            LOGD("marker 3");
 
             std::vector<std::shared_ptr<CSLyric>> allLyrics;
             bool foundFirstPlaceMarker = false;
@@ -287,6 +325,9 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
 
                 size_t firstPlaceMarker = token.find_first_of('_');
 
+
+                LOGD("marker 3 1");
+
                 std::string text = token.substr(0, firstPlaceMarker);
                 if (!text.empty())
                 {
@@ -295,6 +336,9 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                     if (!foundFirstPlaceMarker)
                         newLyric->isPickupToNextMeasure = true;
                     lyrics.push_back(newLyric);
+
+
+                    LOGD("marker 3 2");
 
                     if (measureIndex < staff->csStaff->measures.size())
                     {
@@ -324,6 +368,9 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                 if (firstPlaceMarker != std::string::npos)
                     foundFirstPlaceMarker = true;
 
+
+                LOGD("marker 3 3");
+
                 while (firstPlaceMarker != std::string::npos)
                 {
                     size_t nextPlaceMarker = token.find_first_of('_', firstPlaceMarker + 1);
@@ -351,6 +398,9 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                                     break;
                                 }
                             }
+
+
+                            LOGD("marker 3 4");
 
                             std::shared_ptr<CSMeasure> measure = staff->csStaff->measures[measureIndex];
                             if (chordIndex < measure->chords.size())
@@ -392,6 +442,9 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                 }
             }
 
+
+            LOGD("marker 4");
+
             if (!allLyrics.empty())
             {
                 std::shared_ptr<LyricalPhrase> lyricalPhrase = std::make_shared<LyricalPhrase>();
@@ -403,6 +456,9 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                     lyric->parentLyricalPhrase = lyricalPhrase;
                 }
             }
+
+
+            LOGD("marker 5");
         }
     }
 

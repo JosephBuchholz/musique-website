@@ -1,0 +1,12 @@
+{
+    "semi": true,
+    "tabWidth": 4,
+    "overrides": [
+        {
+            "files": ["*.js", "*.jsx"],
+            "options": {
+                "doubleQuote": true
+            }
+        }
+    ]
+}

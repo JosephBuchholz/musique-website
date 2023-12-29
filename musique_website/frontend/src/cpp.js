@@ -482,7 +482,6 @@ function checkStackCookie() {
 // end include: runtime_assertions.js
 var __ATPRERUN__  = []; // functions called before the runtime is initialized
 var __ATINIT__    = []; // functions called during startup
-var __ATMAIN__    = []; // functions called when main() is to be run
 var __ATEXIT__    = []; // functions called during shutdown
 var __ATPOSTRUN__ = []; // functions called after the main() is called
 
@@ -513,12 +512,6 @@ TTY.init();
   callRuntimeCallbacks(__ATINIT__);
 }
 
-function preMain() {
-  checkStackCookie();
-  
-  callRuntimeCallbacks(__ATMAIN__);
-}
-
 function postRun() {
   checkStackCookie();
 
@@ -538,10 +531,6 @@ function addOnPreRun(cb) {
 
 function addOnInit(cb) {
   __ATINIT__.unshift(cb);
-}
-
-function addOnPreMain(cb) {
-  __ATMAIN__.unshift(cb);
 }
 
 function addOnExit(cb) {
@@ -4229,161 +4218,6 @@ function dbg(text) {
   }
   }
 
-  var setErrNo = (value) => {
-      HEAP32[((___errno_location())>>2)] = value;
-      return value;
-    };
-  
-  function ___syscall_fcntl64(fd, cmd, varargs) {
-  SYSCALLS.varargs = varargs;
-  try {
-  
-      var stream = SYSCALLS.getStreamFromFD(fd);
-      switch (cmd) {
-        case 0: {
-          var arg = SYSCALLS.get();
-          if (arg < 0) {
-            return -28;
-          }
-          while (FS.streams[arg]) {
-            arg++;
-          }
-          var newStream;
-          newStream = FS.createStream(stream, arg);
-          return newStream.fd;
-        }
-        case 1:
-        case 2:
-          return 0;  // FD_CLOEXEC makes no sense for a single process.
-        case 3:
-          return stream.flags;
-        case 4: {
-          var arg = SYSCALLS.get();
-          stream.flags |= arg;
-          return 0;
-        }
-        case 5: {
-          var arg = SYSCALLS.getp();
-          var offset = 0;
-          // We're always unlocked.
-          HEAP16[(((arg)+(offset))>>1)] = 2;
-          return 0;
-        }
-        case 6:
-        case 7:
-          return 0; // Pretend that the locking is successful.
-        case 16:
-        case 8:
-          return -28; // These are for sockets. We don't have them fully implemented yet.
-        case 9:
-          // musl trusts getown return values, due to a bug where they must be, as they overlap with errors. just return -1 here, so fcntl() returns that, and we set errno ourselves.
-          setErrNo(28);
-          return -1;
-        default: {
-          return -28;
-        }
-      }
-    } catch (e) {
-    if (typeof FS == 'undefined' || !(e.name === 'ErrnoError')) throw e;
-    return -e.errno;
-  }
-  }
-
-  function ___syscall_ioctl(fd, op, varargs) {
-  SYSCALLS.varargs = varargs;
-  try {
-  
-      var stream = SYSCALLS.getStreamFromFD(fd);
-      switch (op) {
-        case 21509: {
-          if (!stream.tty) return -59;
-          return 0;
-        }
-        case 21505: {
-          if (!stream.tty) return -59;
-          if (stream.tty.ops.ioctl_tcgets) {
-            var termios = stream.tty.ops.ioctl_tcgets(stream);
-            var argp = SYSCALLS.getp();
-            HEAP32[((argp)>>2)] = termios.c_iflag || 0;
-            HEAP32[(((argp)+(4))>>2)] = termios.c_oflag || 0;
-            HEAP32[(((argp)+(8))>>2)] = termios.c_cflag || 0;
-            HEAP32[(((argp)+(12))>>2)] = termios.c_lflag || 0;
-            for (var i = 0; i < 32; i++) {
-              HEAP8[(((argp + i)+(17))>>0)] = termios.c_cc[i] || 0;
-            }
-            return 0;
-          }
-          return 0;
-        }
-        case 21510:
-        case 21511:
-        case 21512: {
-          if (!stream.tty) return -59;
-          return 0; // no-op, not actually adjusting terminal settings
-        }
-        case 21506:
-        case 21507:
-        case 21508: {
-          if (!stream.tty) return -59;
-          if (stream.tty.ops.ioctl_tcsets) {
-            var argp = SYSCALLS.getp();
-            var c_iflag = HEAP32[((argp)>>2)];
-            var c_oflag = HEAP32[(((argp)+(4))>>2)];
-            var c_cflag = HEAP32[(((argp)+(8))>>2)];
-            var c_lflag = HEAP32[(((argp)+(12))>>2)];
-            var c_cc = []
-            for (var i = 0; i < 32; i++) {
-              c_cc.push(HEAP8[(((argp + i)+(17))>>0)]);
-            }
-            return stream.tty.ops.ioctl_tcsets(stream.tty, op, { c_iflag, c_oflag, c_cflag, c_lflag, c_cc });
-          }
-          return 0; // no-op, not actually adjusting terminal settings
-        }
-        case 21519: {
-          if (!stream.tty) return -59;
-          var argp = SYSCALLS.getp();
-          HEAP32[((argp)>>2)] = 0;
-          return 0;
-        }
-        case 21520: {
-          if (!stream.tty) return -59;
-          return -28; // not supported
-        }
-        case 21531: {
-          var argp = SYSCALLS.getp();
-          return FS.ioctl(stream, op, argp);
-        }
-        case 21523: {
-          // TODO: in theory we should write to the winsize struct that gets
-          // passed in, but for now musl doesn't read anything on it
-          if (!stream.tty) return -59;
-          if (stream.tty.ops.ioctl_tiocgwinsz) {
-            var winsize = stream.tty.ops.ioctl_tiocgwinsz(stream.tty);
-            var argp = SYSCALLS.getp();
-            HEAP16[((argp)>>1)] = winsize[0];
-            HEAP16[(((argp)+(2))>>1)] = winsize[1];
-          }
-          return 0;
-        }
-        case 21524: {
-          // TODO: technically, this ioctl call should change the window size.
-          // but, since emscripten doesn't have any concept of a terminal window
-          // yet, we'll just silently throw it away as we do TIOCGWINSZ
-          if (!stream.tty) return -59;
-          return 0;
-        }
-        case 21515: {
-          if (!stream.tty) return -59;
-          return 0;
-        }
-        default: return -28; // not supported
-      }
-    } catch (e) {
-    if (typeof FS == 'undefined' || !(e.name === 'ErrnoError')) throw e;
-    return -e.errno;
-  }
-  }
-
   function ___syscall_mkdirat(dirfd, path, mode) {
   try {
   
@@ -5787,37 +5621,6 @@ function dbg(text) {
       return i;
     };
 
-  
-  var runtimeKeepaliveCounter = 0;
-  var keepRuntimeAlive = () => noExitRuntime || runtimeKeepaliveCounter > 0;
-  
-  var _proc_exit = (code) => {
-      EXITSTATUS = code;
-      if (!keepRuntimeAlive()) {
-        Module['onExit']?.(code);
-        ABORT = true;
-      }
-      quit_(code, new ExitStatus(code));
-    };
-  
-  /** @suppress {duplicate } */
-  /** @param {boolean|number=} implicit */
-  var exitJS = (status, implicit) => {
-      EXITSTATUS = status;
-  
-      checkUnflushedContent();
-  
-      // if exit() was called explicitly, warn the user if the runtime isn't actually being shut down
-      if (keepRuntimeAlive() && !implicit) {
-        var msg = `program exited (with status: ${status}), but keepRuntimeAlive() is set (counter=${runtimeKeepaliveCounter}) due to an async operation, so halting execution but not exiting the runtime or preventing further async execution (you can use emscripten_force_exit, if you want to force a true shutdown)`;
-        readyPromiseReject(msg);
-        err(msg);
-      }
-  
-      _proc_exit(status);
-    };
-  var _exit = exitJS;
-
   function _fd_close(fd) {
   try {
   
@@ -5911,24 +5714,17 @@ function dbg(text) {
   }
   }
 
-
-
-  var handleException = (e) => {
-      // Certain exception types we do not treat as errors since they are used for
-      // internal control flow.
-      // 1. ExitStatus, which is thrown by exit()
-      // 2. "unwind", which is thrown by emscripten_unwind_to_js_event_loop() and others
-      //    that wish to return to JS event loop.
-      if (e instanceof ExitStatus || e == 'unwind') {
-        return EXITSTATUS;
+  
+  var runtimeKeepaliveCounter = 0;
+  var keepRuntimeAlive = () => noExitRuntime || runtimeKeepaliveCounter > 0;
+  
+  var _proc_exit = (code) => {
+      EXITSTATUS = code;
+      if (!keepRuntimeAlive()) {
+        Module['onExit']?.(code);
+        ABORT = true;
       }
-      checkStackCookie();
-      if (e instanceof WebAssembly.RuntimeError) {
-        if (_emscripten_stack_get_current() <= 0) {
-          err('Stack overflow detected.  You can try increasing -sSTACK_SIZE (currently set to 65536)');
-        }
-      }
-      quit_(1, e);
+      quit_(code, new ExitStatus(code));
     };
 
   var uleb128Encode = (n, target) => {
@@ -6187,10 +5983,6 @@ var wasmImports = {
   /** @export */
   __syscall_dup: ___syscall_dup,
   /** @export */
-  __syscall_fcntl64: ___syscall_fcntl64,
-  /** @export */
-  __syscall_ioctl: ___syscall_ioctl,
-  /** @export */
   __syscall_mkdirat: ___syscall_mkdirat,
   /** @export */
   __syscall_openat: ___syscall_openat,
@@ -6253,8 +6045,6 @@ var wasmImports = {
   /** @export */
   emscripten_stack_unwind_buffer: _emscripten_stack_unwind_buffer,
   /** @export */
-  exit: _exit,
-  /** @export */
   fd_close: _fd_close,
   /** @export */
   fd_read: _fd_read,
@@ -6268,7 +6058,6 @@ var wasmImports = {
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors');
 var _free = createExportWrapper('free');
-var _main = Module['_main'] = createExportWrapper('main');
 var ___getTypeName = createExportWrapper('__getTypeName');
 var ___errno_location = createExportWrapper('__errno_location');
 var _fflush = Module['_fflush'] = createExportWrapper('fflush');
@@ -6304,11 +6093,13 @@ var missingLibrarySymbols = [
   'readI53FromU64',
   'convertI32PairToI53',
   'convertU32PairToI53',
+  'exitJS',
   'growMemory',
   'isLeapYear',
   'ydayFromDate',
   'arraySum',
   'addDays',
+  'setErrNo',
   'inetPton4',
   'inetNtop4',
   'inetPton6',
@@ -6324,6 +6115,7 @@ var missingLibrarySymbols = [
   'getExecutableName',
   'listenOnce',
   'autoResumeAudioContext',
+  'handleException',
   'runtimeKeepalivePush',
   'runtimeKeepalivePop',
   'callUserCallback',
@@ -6515,7 +6307,6 @@ var unexportedSymbols = [
   'convertI32PairToI53Checked',
   'ptrToString',
   'zeroMemory',
-  'exitJS',
   'getHeapMax',
   'abortOnCannotGrowMemory',
   'ENV',
@@ -6525,7 +6316,6 @@ var unexportedSymbols = [
   'MONTH_DAYS_LEAP_CUMULATIVE',
   'ERRNO_CODES',
   'ERRNO_MESSAGES',
-  'setErrNo',
   'DNS',
   'Protocols',
   'Sockets',
@@ -6540,7 +6330,6 @@ var unexportedSymbols = [
   'dynCallLegacy',
   'getDynCaller',
   'dynCall',
-  'handleException',
   'keepRuntimeAlive',
   'asyncLoad',
   'alignMemory',
@@ -6684,28 +6473,6 @@ dependenciesFulfilled = function runCaller() {
   if (!calledRun) dependenciesFulfilled = runCaller; // try this again later, after new deps are fulfilled
 };
 
-function callMain() {
-  assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on Module["onRuntimeInitialized"])');
-  assert(__ATPRERUN__.length == 0, 'cannot call main when preRun functions remain to be called');
-
-  var entryFunction = _main;
-
-  var argc = 0;
-  var argv = 0;
-
-  try {
-
-    var ret = entryFunction(argc, argv);
-
-    // if we're not running an evented main loop, it's time to exit
-    exitJS(ret, /* implicit = */ true);
-    return ret;
-  }
-  catch (e) {
-    return handleException(e);
-  }
-}
-
 function stackCheckInit() {
   // This is normally called automatically during __wasm_call_ctors but need to
   // get these values before even running any of the ctors so we call it redundantly
@@ -6741,12 +6508,10 @@ function run() {
 
     initRuntime();
 
-    preMain();
-
     readyPromiseResolve(Module);
     if (Module['onRuntimeInitialized']) Module['onRuntimeInitialized']();
 
-    if (shouldRunNow) callMain();
+    assert(!Module['_main'], 'compiled without a main, but one is present. if you added it from JS, use Module["onRuntimeInitialized"]');
 
     postRun();
   }
@@ -6811,11 +6576,6 @@ if (Module['preInit']) {
     Module['preInit'].pop()();
   }
 }
-
-// shouldRunNow refers to calling main(), not run().
-var shouldRunNow = true;
-
-if (Module['noInitialRun']) shouldRunNow = false;
 
 run();
 

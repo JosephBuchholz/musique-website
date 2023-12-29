@@ -12,15 +12,10 @@ void _LogLevelAndTag(const char* logLevel, const char* tag, const char* format, 
     printf("\n");
 }
 
-void _LogLevel(const char* logLevel, const char* format, ...)
+void _LogLevel(const char* logLevel, const char* format, va_list args)
 {
     printf("%s: ", logLevel);
-
-    va_list args;
-    va_start(args, format);
     vprintf(format, args);
-    va_end(args);
-
     printf("\n");
 }
 

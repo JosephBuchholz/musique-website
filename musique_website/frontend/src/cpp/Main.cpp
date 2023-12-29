@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <emscripten.h>
+#include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
 
 #include "Debugging/Debug.h"
@@ -25,15 +25,17 @@ void callJsFunction()
 {
     std::shared_ptr<App> app = std::make_shared<App>();
 
+    app->LoadSongFromString("txt", "key C \n#v \nC.. Csus4.. C\nHow I _long to _breathe the air of _Heaven \n");
 
-    /*app->LoadSongFromString("txt", R"V0G0N(
-key C
+#if 0
+    app->LoadSongFromString("txt", R"V0G0N(
+key C\n
 
-#v
+#v\n
 
-C.. Csus4.. C
+C.. Csus4.. C\n
 
-How I _long to _breathe the air of _Heaven
+How I _long to _breathe the air of _Heaven\n
 
 Am.. F.. G
 
@@ -149,12 +151,13 @@ F.. G.. C
 
 _Holy, _Holy is the _Lord
 
-)V0G0N");*/
+)V0G0N");
+
+#endif
 
     app->StartRendering();
 
     app->OnUpdate(0.1f);
-
 
     LOGI_TAG(LOG_TAG, "calling js function from c++");
     Renderer& renderer = Renderer::GetInstance();
@@ -162,7 +165,7 @@ _Holy, _Holy is the _Lord
 
     Paint linePaint;
 
-    linePaint.color = 0xFFFF00FF;
+    linePaint.color = 0xFF00FFFF;
     linePaint.strokeWidth = 10.0f;
 
     renderer.DrawLine({ 50.0f, 500.0f }, { 500.0f, 550.0f }, linePaint);
@@ -170,7 +173,7 @@ _Holy, _Holy is the _Lord
     Paint textPaint;
 
     textPaint.color = 0x0000FFFF;
-    textPaint.textSize = 40.0f;
+    textPaint.textSize = 50.0f;
 
     renderer.DrawText("Hello World from C++!!", { 20.0f, 50.0f }, textPaint);
     renderer.DrawGlyph(SMuFLID::fClef, { 300.0f, 300.0f }, textPaint);
