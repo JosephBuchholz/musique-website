@@ -28,6 +28,12 @@ public:
 
     void StartRendering() { startRendering = true; }
     void StopRendering() { startRendering = false; }
+
+    /**
+     * Handles all the updates for rendering and audio.
+     * 
+     * @param dt - The delta time in between each call.
+    */
     void OnUpdate(double dt);
     void OnPlayButtonToggled(bool state) { if (state) { musicPlayer->OnPlay(); } else { musicPlayer->OnStop(); } }
     void OnResetButtonPressed() { musicPlayer->Reset(); }

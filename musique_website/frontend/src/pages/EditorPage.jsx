@@ -33,52 +33,117 @@ export default function EditorPage() {
 
         context.font = "48px musicFont";
 
+        var scale = 0.6;
+
         function usePaint(paint) {
             context.strokeStyle =
                 "#" + paint.color.toString(16).padStart(8, "0");
             context.fillStyle = "#" + paint.color.toString(16).padStart(8, "0");
-            context.lineWidth = paint.strokeWidth;
-            context.font = paint.textSize.toString() + "px " + currentFont;
+            context.lineWidth = paint.strokeWidth * scale;
+            context.lineCap = paint.strokeCap;
+            context.textAlign = "left";
+        }
+
+        function setFont(paint) {
+            if (paint.isBold && paint.isItalic) currentFont = "boldItalicFont";
+            else if (paint.isBold) currentFont = "boldFont";
+            else if (paint.isItalic) currentFont = "italicFont";
+            else if (paint.useMusicFont) currentFont = "musicFont";
+            else currentFont = "plainFont";
+
+            context.font = paint.textSize * 2.0 * scale + "px " + currentFont;
+            context.textAlign = paint.align;
         }
 
         function drawLine(startX, startY, endX, endY, paint) {
             usePaint(paint);
 
             context.beginPath();
-            context.moveTo(startX, startY);
-            context.lineTo(endX, endY);
+            context.moveTo(startX * scale, startY * scale);
+            context.lineTo(endX * scale, endY * scale);
             context.stroke();
         }
 
         function drawText(text, posX, posY, paint) {
-            currentFont = "plainFont";
             usePaint(paint);
+            setFont(paint);
 
-            context.fillText(text, posX, posY);
+            context.fillStyle = "#000000FF";
+
+            context.fillText(text, posX * scale, posY * scale);
         }
 
         function drawGlyph(codePoint, posX, posY, paint) {
             currentFont = "musicFont";
             usePaint(paint);
+            var fontSize = 40.0 * paint.glyphSizeFactor * scale;
+            context.font = fontSize.toString() + "px " + currentFont;
 
-            context.fillText(String.fromCodePoint(codePoint), posX, posY);
+            context.fillText(
+                String.fromCodePoint(codePoint),
+                posX * scale,
+                posY * scale
+            );
+        }
+
+        function drawCubicCurve(
+            posX1,
+            posY1,
+            posX2,
+            posY2,
+            posX3,
+            posY3,
+            posX4,
+            posY4,
+            paint
+        ) {
+            usePaint(paint);
+
+            context.beginPath();
+            context.moveTo(posX1, posY1);
+            context.bezierCurveTo(posX2, posY2, posX3, posY3, posX4, posY4);
+            context.fill();
+        }
+
+        function measureText(text, paint) {
+            currentFont = "plainFont";
+            usePaint(paint);
+
+            var textMetrics = context.measureText(text);
+            return textMetrics;
+        }
+
+        function measureGlyph(codePoint, paint) {
+            currentFont = "musicFont";
+            usePaint(paint);
+            var fontSize = 40.0 * paint.glyphSizeFactor * scale;
+            context.font = fontSize.toString() + "px " + currentFont;
+
+            var textMetrics = context.measureText(
+                String.fromCodePoint(codePoint)
+            );
+            return textMetrics;
         }
 
         Module().then((module) => {
             console.log("Module created!");
 
             function drawLineCpp(startX, startY, endX, endY, paintStrPtr) {
-                var testPaint = {
-                    color: 0xff0000ff,
-                    strokeWidth: 1.0,
-                };
-
-                console.log("test paint object: " + JSON.stringify(testPaint));
-
                 var paintString = module.UTF8ToString(paintStrPtr);
-                console.log("paint object: " + paintString);
-
                 var paint = JSON.parse(paintString);
+
+                /*console.log(
+                    "drawing line: paint: " +
+                        paintString +
+                        " startX: " +
+                        startX +
+                        " startY: " +
+                        startY +
+                        " endX: " +
+                        endX +
+                        " endY: " +
+                        endY
+                );*/
 
                 drawLine(startX, startY, endX, endY, paint);
             }
@@ -92,18 +157,194 @@ export default function EditorPage() {
                 drawText(text, posX, posY, paint);
             }
 
+            function drawUTF16TextCpp(textStrPtr, posX, posY, paintStrPtr) {
+                var paintString = module.UTF8ToString(paintStrPtr);
+                var paint = JSON.parse(paintString);
+
+                var text = module.UTF16ToString(textStrPtr);
+
+                console.log(
+                    "Drawing utf16 text: " +
+                        text +
+                        ", at: " +
+                        posX +
+                        ", " +
+                        posY
+                );
+
+                drawText(text, posX, posY, paint);
+            }
+
             function drawGlyphCpp(codePoint, posX, posY, paintStrPtr) {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
+                /*console.log(
+                    "Drawing glyph: " +
+                        " | codePoint: " +
+                        codePoint +
+                        " paint object: " +
+                        paintString +
+                        " | positionX " +
+                        posX +
+                        " positionY " +
+                        posY
+                );*/
+
                 drawGlyph(codePoint, posX, posY, paint);
             }
 
-            var drawLineFP = module.addFunction(drawLineCpp, "viiiii");
-            var drawTextFP = module.addFunction(drawTextCpp, "viiii");
-            var drawGlyphFP = module.addFunction(drawGlyphCpp, "viiii");
+            function drawCubicCurveCpp(
+                posX1,
+                posY1,
+                posX2,
+                posY2,
+                posX3,
+                posY3,
+                posX4,
+                posY4,
+                paintStrPtr
+            ) {
+                var paintString = module.UTF8ToString(paintStrPtr);
+                var paint = JSON.parse(paintString);
 
-            module.addFunctionsToCpp(drawLineFP, drawTextFP, drawGlyphFP);
+                drawCubicCurve(
+                    posX1,
+                    posY1,
+                    posX2,
+                    posY2,
+                    posX3,
+                    posY3,
+                    posX4,
+                    posY4,
+                    paint
+                );
+            }
+
+            function measureTextCpp(textStrPtr, paintStrPtr) {
+                var paintString = module.UTF8ToString(paintStrPtr);
+                var paint = JSON.parse(paintString);
+
+                var text = module.UTF8ToString(textStrPtr);
+
+                var textMetrics = measureText(text, paint);
+
+                const boundingBoxArray = new Float32Array([
+                    -textMetrics.actualBoundingBoxLeft / scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / scale, // posY
+                    (textMetrics.actualBoundingBoxLeft +
+                        textMetrics.actualBoundingBoxRight) /
+                        scale, // width
+                    (textMetrics.actualBoundingBoxAscent +
+                        textMetrics.actualBoundingBoxDescent) /
+                        scale, // height
+                ]);
+
+                var buffer = arrayToCppPtr(boundingBoxArray, "float");
+
+                return buffer;
+            }
+
+            function measureUTF16TextCpp(textStrPtr, paintStrPtr) {
+                var paintString = module.UTF8ToString(paintStrPtr);
+                var paint = JSON.parse(paintString);
+
+                var text = module.UTF16ToString(textStrPtr);
+
+                var textMetrics = measureText(text, paint);
+
+                const boundingBoxArray = new Float32Array([
+                    -textMetrics.actualBoundingBoxLeft / scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / scale, // posY
+                    (textMetrics.actualBoundingBoxLeft +
+                        textMetrics.actualBoundingBoxRight) /
+                        scale, // width
+                    (textMetrics.actualBoundingBoxAscent +
+                        textMetrics.actualBoundingBoxDescent) /
+                        scale, // height
+                ]);
+
+                var buffer = arrayToCppPtr(boundingBoxArray, "float");
+
+                return buffer;
+            }
+
+            function measureGlyphCpp(codePoint, paintStrPtr) {
+                var paintString = module.UTF8ToString(paintStrPtr);
+                var paint = JSON.parse(paintString);
+
+                var textMetrics = measureGlyph(codePoint, paint);
+
+                /*const boundingBoxArray = new Float32Array([
+                    -textMetrics.actualBoundingBoxLeft / scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / scale, // posY
+                    (textMetrics.actualBoundingBoxLeft +
+                        textMetrics.actualBoundingBoxRight) /
+                        scale, // width
+                    (textMetrics.actualBoundingBoxAscent +
+                        textMetrics.actualBoundingBoxDescent) /
+                        scale, // height
+                ]);*/
+
+                // the array to return
+                const boundingBoxArray = new Float32Array([
+                    -textMetrics.actualBoundingBoxLeft / scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / scale, // posY
+                    textMetrics.width * 2, // width
+                    (textMetrics.actualBoundingBoxAscent +
+                        textMetrics.actualBoundingBoxDescent) /
+                        scale, // height
+                ]);
+
+                var buffer = arrayToCppPtr(boundingBoxArray, "float");
+
+                return buffer;
+            }
+
+            function arrayToCppPtr(array, type) {
+                // allocate buffer to hold the array
+                var buffer = module._malloc(
+                    array.length * array.BYTES_PER_ELEMENT
+                );
+
+                // copy the array into buffer
+                array.forEach((value, index) => {
+                    module.setValue(
+                        buffer + array.BYTES_PER_ELEMENT * index,
+                        value,
+                        type
+                    );
+                });
+
+                return buffer;
+            }
+
+            var drawLineFP = module.addFunction(drawLineCpp, "vffffi");
+            var drawTextFP = module.addFunction(drawTextCpp, "viffi");
+            var drawUTF16TextFP = module.addFunction(drawUTF16TextCpp, "viffi");
+            var drawGlyphFP = module.addFunction(drawGlyphCpp, "viffi");
+            var drawCubicCurveFP = module.addFunction(
+                drawCubicCurveCpp,
+                "vffffffffi"
+            );
+
+            var measureTextFP = module.addFunction(measureTextCpp, "iii");
+            var measureUTF16TextFP = module.addFunction(
+                measureUTF16TextCpp,
+                "iii"
+            );
+            var measureGlyphFP = module.addFunction(measureGlyphCpp, "iii");
+
+            module.addFunctionsToCpp(
+                drawLineFP,
+                drawTextFP,
+                drawUTF16TextFP,
+                drawGlyphFP,
+                drawCubicCurveFP,
+                measureTextFP,
+                measureUTF16TextFP,
+                measureGlyphFP
+            );
 
             module.callJsFunction();
         });

@@ -172,7 +172,7 @@ void App::OnUpdate(double dt)
 
                     {
                         auto start = high_resolution_clock::now();
-                        song->UpdateBoundingBoxes(musicRenderer->pagePositions, song->GetSystemPositions());
+                        //song->UpdateBoundingBoxes(musicRenderer->pagePositions, song->GetSystemPositions());
                         auto stop = high_resolution_clock::now();
                         auto duration = duration_cast<milliseconds>(stop - start);
                         LOGD("Time taken by UpdateBoundingBoxes function: %lld milliseconds | %f seconds", duration.count(), duration.count() / 1000.0f);
@@ -183,7 +183,7 @@ void App::OnUpdate(double dt)
                     {
                         LOGD("Start resolving collisions (number %d)", i);
                         auto start = high_resolution_clock::now();
-                        song->ResolveCollisions();
+                        //song->ResolveCollisions();
                         auto stop = high_resolution_clock::now();
                         auto duration = duration_cast<milliseconds>(stop - start);
                         LOGD("Time taken by collision function: %lld milliseconds | %f seconds", duration.count(), duration.count() / 1000.0f);

@@ -59,7 +59,7 @@ struct Paint {
 
     float strokeWidth = 1.0f;
     Cap strokeCap = Cap::Butt;
-    float textSize = 10.0f;
+    float textSize = 1.0f;
     float glyphSizeFactor = 1.0f; // this scales the size of the glyph
     Align align = Align::Center;
     bool isItalic = false;

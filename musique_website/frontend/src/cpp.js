@@ -27,7 +27,7 @@ Module['ready'] = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_main","_memory","___indirect_function_table","_fflush","onRuntimeInitialized"].forEach((prop) => {
+["_malloc","_memory","___indirect_function_table","_fflush","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(Module['ready'], prop)) {
     Object.defineProperty(Module['ready'], prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5919,6 +5919,9 @@ function dbg(text) {
     };
 
 
+
+
+
   var FSNode = /** @constructor */ function(parent, name, mode, rdev) {
     if (!parent) {
       parent = this;  // root node sets parent to itself
@@ -6057,11 +6060,11 @@ var wasmImports = {
 };
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors');
+var _malloc = Module['_malloc'] = createExportWrapper('malloc');
 var _free = createExportWrapper('free');
 var ___getTypeName = createExportWrapper('__getTypeName');
 var ___errno_location = createExportWrapper('__errno_location');
 var _fflush = Module['_fflush'] = createExportWrapper('fflush');
-var _malloc = createExportWrapper('malloc');
 var _memalign = createExportWrapper('memalign');
 var _emscripten_builtin_malloc = createExportWrapper('emscripten_builtin_malloc');
 var _emscripten_builtin_free = createExportWrapper('emscripten_builtin_free');
@@ -6082,7 +6085,10 @@ var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper('dynCall_jiji');
 // === Auto-generated postamble setup entry stuff ===
 
 Module['addFunction'] = addFunction;
+Module['setValue'] = setValue;
+Module['getValue'] = getValue;
 Module['UTF8ToString'] = UTF8ToString;
+Module['UTF16ToString'] = UTF16ToString;
 var missingLibrarySymbols = [
   'writeI53ToI64',
   'writeI53ToI64Clamped',
@@ -6347,8 +6353,6 @@ var unexportedSymbols = [
   'getEmptyTableSlot',
   'updateTableMap',
   'getFunctionAddress',
-  'setValue',
-  'getValue',
   'PATH',
   'PATH_FS',
   'UTF8Decoder',
@@ -6358,7 +6362,6 @@ var unexportedSymbols = [
   'lengthBytesUTF8',
   'intArrayFromString',
   'UTF16Decoder',
-  'UTF16ToString',
   'stringToUTF16',
   'lengthBytesUTF16',
   'UTF32ToString',

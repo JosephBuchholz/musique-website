@@ -1277,7 +1277,7 @@ void Song::CreatePageBreak(int measureIndex) const
         {
             if (staff->type != Staff::StaffType::ChordSheet)
             {
-                ASSERT(measureIndex > staff->measures.size());
+                ASSERT(measureIndex < staff->measures.size());
 
                 staff->measures[measureIndex]->startNewPage = true;
                 staff->measures[measureIndex]->startNewSystem = true; // a new page always starts a new system
