@@ -1,19 +1,23 @@
 #include "Callbacks.h"
 #include "Debugging/Debug.h"
 #include "Rendering/Renderer.h"
+#include "MusicPlayers/MidiCallbacks.h"
 
 void UpdateRender(const RenderData& renderData)
 {
+    LOGI("Updating Render!!! %f", renderData.zoom);
+
     Renderer& renderer = Renderer::GetInstance();
 
-    Vec2<float> scale = { 1.0f, 1.0f };
+    renderer.Clear();
+    renderer.SetScale(renderData.zoom);
 
     for (const Line& line : renderData.m_lines)
     {
         Paint paint = line.paint;
         paint.color = 0x000000FF;
 
-        renderer.DrawLine(line.start * scale, line.end * scale, paint);
+        renderer.DrawLine(line.start, line.end, paint);
     }
 
     for (const Text& text : renderData.m_texts)
@@ -21,7 +25,7 @@ void UpdateRender(const RenderData& renderData)
         Paint paint = text.paint;
         paint.color = 0x000000FF;
 
-        renderer.DrawText(text.text, text.position * scale, paint);
+        renderer.DrawText(text.text, text.position, paint);
 
         //BoundingBox boundingBox = renderer.MeasureText(text.text, text.paint);
 
@@ -39,7 +43,7 @@ void UpdateRender(const RenderData& renderData)
         Paint textPaint = glyph.paint;
         textPaint.color = 0x000000FF;
 
-        renderer.DrawGlyph(glyph.codePoint, glyph.position * scale, textPaint);
+        renderer.DrawGlyph(glyph.codePoint, glyph.position, textPaint);
 
         //BoundingBox boundingBox = renderer.MeasureGlyph(glyph.codePoint, textPaint);
 
@@ -77,6 +81,10 @@ void UpdateViewModelData(const ViewModelData& viewModelData)
 void WriteMidi(char* bytes, size_t size)
 {
     LOGD("Callbacks: Update Write Midi function called");
+
+    MidiCallbacks& midiCallbacks = MidiCallbacks::GetInstance();
+
+    midiCallbacks.WriteMidi((uint8_t*)bytes, size);
 }
 
 void SetMidiVolume(int volume)

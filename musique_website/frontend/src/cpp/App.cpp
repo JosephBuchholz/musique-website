@@ -21,6 +21,12 @@ App::App()
     musicPlayer->SetOnTempoChangedCallback(OnTempoChangedCallback);
 }
 
+App& App::GetInstance()
+{
+    static App instance;
+    return instance;
+}
+
 App::~App()
 {
     isUpdating = false;
@@ -318,12 +324,14 @@ void App::OnLayoutChanged()
     }
 }
 
-void App::OnInputEvent(const InputEvent& event)
+/*void App::OnInputEvent(const InputEvent& event)
 {
     switch (event.type)
     {
         case InputEvent::InputEventType::Tap:
         {
+
+
             std::shared_ptr<Measure> selectedMeasure = song->GetMeasureAtPoint(event.position, musicRenderer->systemPositions);
 
             if (selectedMeasure != nullptr)
@@ -344,6 +352,51 @@ void App::OnInputEvent(const InputEvent& event)
             break;
         }
     }
+}*/
+
+bool App::OnMouseScrollEvent(const MouseScrollEvent& event)
+{
+    musicRenderer->zoom -= event.deltaY / 1000.0;
+
+    musicRenderer->m_RenderData.zoom = musicRenderer->zoom;
+    musicRenderer->updateRenderData = true;
+    musicRenderer->RenderWithRenderData();
+
+    return true;
+}
+
+bool App::OnButtonEvent(const ButtonEvent& event)
+{
+    LOGD("got button pressed event!");
+
+    switch (event.buttonType)
+    {
+        case ButtonEvent::ButtonType::Play:
+        {
+            if (event.eventType == ButtonEvent::EventType::ToggledOn)
+                OnPlayButtonToggled(true);
+            else
+                OnPlayButtonToggled(false);
+
+            break;
+        }
+        case ButtonEvent::ButtonType::Reset:
+        {
+            OnResetButtonPressed();
+            break;
+        }
+        case ButtonEvent::ButtonType::Metronome:
+        {
+            if (event.eventType == ButtonEvent::EventType::ToggledOn)
+                OnMetronomeToggled(true);
+            else
+                OnMetronomeToggled(false);
+
+            break;
+        }
+    }
+
+    return true;
 }
 
 int App::OnCalculateNumPages()

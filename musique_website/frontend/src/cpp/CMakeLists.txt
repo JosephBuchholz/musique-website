@@ -14,6 +14,7 @@ add_executable(
         # Provides a relative path to your source file(s).
         Main.cpp
         Rendering/Renderer.cpp
+        MusicPlayers/MidiCallbacks.cpp
         App.cpp
         Callbacks.cpp
         Debugging/Logging.cpp
@@ -129,4 +130,4 @@ add_executable(
 
         libs/tinyxml2/tinyxml2.cpp)
 
-set_target_properties(cpp PROPERTIES LINK_FLAGS "-lembind -fsanitize=undefined -sMODULARIZE=1 -sALLOW_TABLE_GROWTH -sEXPORTED_RUNTIME_METHODS=addFunction,UTF8ToString,UTF16ToString,getValue,setValue -sEXPORTED_FUNCTIONS=_malloc")
+set_target_properties(cpp PROPERTIES LINK_FLAGS "-lembind -fsanitize=undefined -sMODULARIZE=1 -sALLOW_TABLE_GROWTH -sEXPORTED_RUNTIME_METHODS=addFunction,UTF8ToString,UTF16ToString,getValue,setValue -sEXPORTED_FUNCTIONS=_malloc,_main")

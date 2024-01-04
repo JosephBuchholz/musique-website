@@ -36,12 +36,17 @@ void AddStringValueToJson(std::string& json, const std::string& key, const std::
     AddValueToJson(json, key, "\"" + value + "\"");
 }
 
-void Renderer::DrawLine(Vec2<float> start, Vec2<float> end, const Paint& paint)
+void Renderer::Clear()
 {
-    DrawLineCallback(start.x, start.y, end.x, end.y, EncodePaintObject(paint).c_str());
+    ClearCallback();
 }
 
-void Renderer::DrawRect(Vec2<float> position, Vec2<float> size, const Paint &paint)
+void Renderer::DrawLine(Vec2<float> start, Vec2<float> end, const Paint& paint)
+{
+    DrawLineCallback(start.x * scale, start.y * scale, end.x * scale, end.y * scale, EncodePaintObject(paint, scale).c_str());
+}
+
+void Renderer::DrawRect(Vec2<float> position, Vec2<float> size, const Paint& paint)
 {
     DrawLine({ position.x, position.y }, { position.x + size.x, position.y }, paint);
     DrawLine({ position.x + size.x, position.y }, { position.x + size.x, position.y + size.y }, paint);
@@ -51,7 +56,7 @@ void Renderer::DrawRect(Vec2<float> position, Vec2<float> size, const Paint &pai
 
 void Renderer::DrawText(const std::string& text, Vec2<float> position, const Paint& paint)
 {
-    DrawTextCallback(text.c_str(), position.x, position.y, EncodePaintObject(paint).c_str());
+    DrawTextCallback(text.c_str(), position.x * scale, position.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 
 uint16_t* NewSubString(uint16_t* string, int size, int startIndex, int endIndex)
@@ -75,7 +80,7 @@ uint16_t* NewSubString(uint16_t* string, int size, int startIndex, int endIndex)
 
 void Renderer::DrawSpannableText(const SpannableText& spannableText)
 {
-    Vec2<float> currentPosition = spannableText.position;
+    Vec2<float> currentPosition = spannableText.position * scale;
 
     for (const TextSpan& span : spannableText.spans)
     {
@@ -90,7 +95,7 @@ void Renderer::DrawSpannableText(const SpannableText& spannableText)
 
         ASSERT(text != nullptr);
 
-        DrawUTF16TextCallback(text, currentPosition.x, currentPosition.y, EncodePaintObject(span.paint).c_str());
+        DrawUTF16TextCallback(text, currentPosition.x, currentPosition.y, EncodePaintObject(span.paint, scale).c_str());
 
         currentPosition.x += MeasureUTF16Text(text, span.paint).size.x;
 
@@ -100,12 +105,12 @@ void Renderer::DrawSpannableText(const SpannableText& spannableText)
 
 void Renderer::DrawGlyph(SMuFLID glyph, Vec2<float> position, const Paint& paint)
 {
-    DrawGlyphCallback((uint16_t)glyph, position.x, position.y, EncodePaintObject(paint).c_str());
+    DrawGlyphCallback((uint16_t)glyph, position.x * scale, position.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 
 void Renderer::DrawCubicCurve(Vec2<float> point1, Vec2<float> point2, Vec2<float> point3, Vec2<float> point4, const Paint& paint)
 {
-    DrawCubicCurveCallback(point1.x, point1.y, point2.x, point2.y, point3.x, point3.y, point4.x, point4.y, EncodePaintObject(paint).c_str());
+    DrawCubicCurveCallback(point1.x * scale, point1.y * scale, point2.x * scale, point2.y * scale, point3.x * scale, point3.y * scale, point4.x * scale, point4.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 
 BoundingBox Renderer::MeasureText(const std::string &text, const Paint &paint)
@@ -173,7 +178,7 @@ BoundingBox Renderer::MeasureGlyph(SMuFLID glyph, const Paint &paint)
     return boundingBox;
 }
 
-std::string Renderer::EncodePaintObject(const Paint& paint)
+std::string Renderer::EncodePaintObject(const Paint& paint, float scale)
 {
 	std::string paintString;
 
@@ -181,11 +186,11 @@ std::string Renderer::EncodePaintObject(const Paint& paint)
 
 	AddIntValueToJson(paintString, "color", paint.color);
 	paintString += ",";
-	AddFloatValueToJson(paintString, "strokeWidth", paint.strokeWidth);
+	AddFloatValueToJson(paintString, "strokeWidth", paint.strokeWidth * scale);
 	paintString += ",";
-	AddFloatValueToJson(paintString, "textSize", paint.textSize);
+	AddFloatValueToJson(paintString, "textSize", paint.textSize * scale);
 	paintString += ",";
-	AddFloatValueToJson(paintString, "glyphSizeFactor", paint.glyphSizeFactor);
+	AddFloatValueToJson(paintString, "glyphSizeFactor", paint.glyphSizeFactor * scale);
 	paintString += ",";
 	AddBooleanValueToJson(paintString, "isBold", paint.isBold);
 	paintString += ",";

@@ -1,6 +1,45 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
 import Module from "../cpp.js";
+import * as Tone from "tone";
+import handleMidiMessage from "../audio/midi.js";
+
+function writeMidi(bytes, size) {
+    var byteArray = new Uint8Array(size);
+
+    for (let i = 0; i < size; i++) {
+        var byte = module.getValue(bytes + i, "i8");
+        byteArray[i] = byte;
+    }
+
+    handleMidiMessage(byteArray);
+}
+
+var module;
+var moduleIsCreated = false;
+
+function createModule() {
+    if (!moduleIsCreated) {
+        // create module
+        return Module().then((mod) => {
+            console.log("Creating Module!");
+
+            module = mod;
+            moduleIsCreated = true;
+
+            console.log("Module created!");
+
+            var writeMidiFP = module.addFunction(writeMidi, "vii");
+
+            module.addAudioCallbacksToCpp(writeMidiFP);
+        });
+    }
+
+    // else already exits
+    return new Promise(function (resolve, reject) {
+        resolve(module);
+    });
+}
 
 export default function EditorPage() {
     const canvasRef = useRef(null);
@@ -53,6 +92,16 @@ export default function EditorPage() {
 
             context.font = paint.textSize * 2.0 * scale + "px " + currentFont;
             context.textAlign = paint.align;
+        }
+
+        function clearCanvas() {
+            console.log("clearing canvas!!!");
+            context.clearRect(
+                0,
+                0,
+                context.canvas.width,
+                context.canvas.height
+            );
         }
 
         function drawLine(startX, startY, endX, endY, paint) {
@@ -125,25 +174,19 @@ export default function EditorPage() {
             return textMetrics;
         }
 
-        Module().then((module) => {
-            console.log("Module created!");
+        /*while (!moduleIsCreated) {
+            console.log("waiting...");
+        }*/
+
+        //Module().then((mod) => {
+        createModule().then((mod) => {
+            console.log("adding rendering functions!!");
+            //module = mod;
+            //moduleIsCreated = true;
 
             function drawLineCpp(startX, startY, endX, endY, paintStrPtr) {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
-
-                /*console.log(
-                    "drawing line: paint: " +
-                        paintString +
-                        " startX: " +
-                        startX +
-                        " startY: " +
-                        startY +
-                        " endX: " +
-                        endX +
-                        " endY: " +
-                        endY
-                );*/
 
                 drawLine(startX, startY, endX, endY, paint);
             }
@@ -178,18 +221,6 @@ export default function EditorPage() {
             function drawGlyphCpp(codePoint, posX, posY, paintStrPtr) {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
-
-                /*console.log(
-                    "Drawing glyph: " +
-                        " | codePoint: " +
-                        codePoint +
-                        " paint object: " +
-                        paintString +
-                        " | positionX " +
-                        posX +
-                        " positionY " +
-                        posY
-                );*/
 
                 drawGlyph(codePoint, posX, posY, paint);
             }
@@ -275,17 +306,6 @@ export default function EditorPage() {
 
                 var textMetrics = measureGlyph(codePoint, paint);
 
-                /*const boundingBoxArray = new Float32Array([
-                    -textMetrics.actualBoundingBoxLeft / scale, // posX
-                    -textMetrics.actualBoundingBoxAscent / scale, // posY
-                    (textMetrics.actualBoundingBoxLeft +
-                        textMetrics.actualBoundingBoxRight) /
-                        scale, // width
-                    (textMetrics.actualBoundingBoxAscent +
-                        textMetrics.actualBoundingBoxDescent) /
-                        scale, // height
-                ]);*/
-
                 // the array to return
                 const boundingBoxArray = new Float32Array([
                     -textMetrics.actualBoundingBoxLeft / scale, // posX
@@ -319,6 +339,8 @@ export default function EditorPage() {
                 return buffer;
             }
 
+            var clearFP = module.addFunction(clearCanvas, "v");
+
             var drawLineFP = module.addFunction(drawLineCpp, "vffffi");
             var drawTextFP = module.addFunction(drawTextCpp, "viffi");
             var drawUTF16TextFP = module.addFunction(drawUTF16TextCpp, "viffi");
@@ -336,6 +358,7 @@ export default function EditorPage() {
             var measureGlyphFP = module.addFunction(measureGlyphCpp, "iii");
 
             module.addFunctionsToCpp(
+                clearFP,
                 drawLineFP,
                 drawTextFP,
                 drawUTF16TextFP,
@@ -345,10 +368,10 @@ export default function EditorPage() {
                 measureUTF16TextFP,
                 measureGlyphFP
             );
-
-            module.callJsFunction();
         });
     });
+
+    const [isPlaying, setIsPlaying] = useState(false);
 
     return (
         <>
@@ -363,10 +386,31 @@ export default function EditorPage() {
                     <canvas
                         ref={canvasRef}
                         className="border-2"
+                        id="canvas"
                         width="776"
                         height="600"
                     ></canvas>
                 </div>
+
+                <button
+                    onClick={async () => {
+                        await Tone.start();
+
+                        if (moduleIsCreated) {
+                            if (isPlaying) {
+                                console.log("is playing so pausing");
+                                setIsPlaying(false);
+                                module.onButtonEvent(1, 3);
+                            } else {
+                                console.log("is paused so playing");
+                                setIsPlaying(true);
+                                module.onButtonEvent(1, 2);
+                            }
+                        }
+                    }}
+                >
+                    Play
+                </button>
             </div>
         </>
     );

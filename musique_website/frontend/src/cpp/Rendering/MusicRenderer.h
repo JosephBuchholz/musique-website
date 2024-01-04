@@ -66,4 +66,6 @@ public:
     float pageGap = 80.0f;
 
     bool updateRenderData = true; // weather the sheet music needs to be updated(rendered) again
+
+    float zoom = 1.0f;
 };

@@ -19,12 +19,21 @@
 /**
  * This class acts like an interface between Kotlin and C++.
  */
-class App {
+class App
+{
 
 public:
+	static App& GetInstance();
 
-    App();
     ~App();
+
+private:
+	App();
+
+	App(App const&) = delete;
+	void operator=(App const&) = delete;
+
+public:
 
     void StartRendering() { startRendering = true; }
     void StopRendering() { startRendering = false; }
@@ -32,9 +41,10 @@ public:
     /**
      * Handles all the updates for rendering and audio.
      * 
-     * @param dt - The delta time in between each call.
+     * @param dt - The delta time in milliseconds in between each call.
     */
     void OnUpdate(double dt);
+
     void OnPlayButtonToggled(bool state) { if (state) { musicPlayer->OnPlay(); } else { musicPlayer->OnStop(); } }
     void OnResetButtonPressed() { musicPlayer->Reset(); }
     void OnPlayProgressChanged(float progress);
@@ -51,7 +61,8 @@ public:
 
     void OnMetronomeToggled(bool state) { if (musicPlayer) musicPlayer->OnMetronomeToggled(state); }
 
-    void OnInputEvent(const InputEvent& event);
+    bool OnMouseScrollEvent(const MouseScrollEvent& event);
+    bool OnButtonEvent(const ButtonEvent& event);
 
     int OnCalculateNumPages();
 

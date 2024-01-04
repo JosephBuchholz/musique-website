@@ -23,6 +23,9 @@ private:
 
 public:
 
+	void Clear();
+	void SetScale(float scale) { this->scale = scale; }
+
 	void DrawLine(Vec2<float> start, Vec2<float> end, const Paint& paint = Paint());
 	void DrawRect(Vec2<float> position, Vec2<float> size, const Paint& paint = Paint());
 	void DrawText(const std::string& text, Vec2<float> position, const Paint& paint = Paint());
@@ -36,9 +39,11 @@ public:
 
 private:
 
-	std::string EncodePaintObject(const Paint& paint);
+	std::string EncodePaintObject(const Paint& paint, float scale = 1.0f);
 
 private:
+
+	void (*ClearCallback)();
 
 	void (*DrawLineCallback)(float startX, float startY, float endX, float endY, const char* paint);
 	void (*DrawTextCallback)(const char* text, float posX, float posY, const char* paint);
@@ -52,5 +57,9 @@ private:
 
 public:
 
-	friend void AddFunctionsToCpp(int, int, int, int, int, int, int, int);
+	friend void AddFunctionsToCpp(int, int, int, int, int, int, int, int, int);
+
+private:
+
+	float scale;
 };

@@ -117,6 +117,8 @@ public:
     Paints paints;
 
     MusicDisplayConstants displayConstants = MusicDisplayConstants();
+
+    float zoom = 1.0f;
 };
 
 #endif // MUSIQUE_RENDERDATA_H
