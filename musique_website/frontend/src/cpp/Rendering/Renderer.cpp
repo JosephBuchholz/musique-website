@@ -198,6 +198,22 @@ std::string Renderer::EncodePaintObject(const Paint& paint, float scale)
 	paintString += ",";
 	AddBooleanValueToJson(paintString, "useMusicFont", paint.useMusicFont);
 	paintString += ",";
+	AddBooleanValueToJson(paintString, "varyThickness", paint.varyThickness);
+	paintString += ",";
+	AddFloatValueToJson(paintString, "slurSpacing", paint.slurSpacing * scale);
+	paintString += ",";
+	AddBooleanValueToJson(paintString, "verticalEnds", paint.verticalEnds);
+	paintString += ",";
+
+	AddBooleanValueToJson(paintString, "isTablature", paint.isTablature);
+	paintString += ",";
+
+	AddBooleanValueToJson(paintString, "centerHorizontally", paint.centerHorizontally);
+	paintString += ",";
+	AddBooleanValueToJson(paintString, "centerVetically", paint.centerVertically);
+	paintString += ",";
+
+
 
     std::string strokeCapString;
     switch (paint.strokeCap)

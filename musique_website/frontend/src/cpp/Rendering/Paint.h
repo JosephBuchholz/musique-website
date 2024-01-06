@@ -83,7 +83,11 @@ struct Paint {
     bool isDottedLine = false;
     bool isDashedLine = false;
 
+    // used for slur lines
     bool varyThickness = false;
+
+    // the spacing in between the curves of a slur line (modifies the thickness)
+    float slurSpacing = 0.6f;
 
     // for dashed lines
     float dashLength = 10.0f;

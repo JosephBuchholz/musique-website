@@ -52,7 +52,10 @@ void UpdateRender(const RenderData& renderData)
 
     for (const CubicCurve& curve : renderData.m_cubicCurves)
     {
-        renderer.DrawCubicCurve(curve.point1, curve.point2, curve.point3, curve.point4, curve.paint);
+        Paint paint = curve.paint;
+        paint.color = 0x000000FF;
+
+        renderer.DrawCubicCurve(curve.point1, curve.point2, curve.point3, curve.point4, paint);
     }
 
     LOGD("Callbacks: Update Render function called");

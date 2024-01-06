@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Module from "../cpp.js";
 import * as Tone from "tone";
 import handleMidiMessage from "../audio/midi.js";
+import * as Renderer from "../rendering/rendering.js";
 
 function writeMidi(bytes, size) {
     var byteArray = new Uint8Array(size);
@@ -68,127 +69,16 @@ export default function EditorPage() {
         let context = canvas.getContext("2d");
         if (context == null) throw Error("canvas is null");
 
-        var currentFont = "musicFont";
-
         context.font = "48px musicFont";
 
-        var scale = 0.6;
-
-        function usePaint(paint) {
-            context.strokeStyle =
-                "#" + paint.color.toString(16).padStart(8, "0");
-            context.fillStyle = "#" + paint.color.toString(16).padStart(8, "0");
-            context.lineWidth = paint.strokeWidth * scale;
-            context.lineCap = paint.strokeCap;
-            context.textAlign = "left";
-        }
-
-        function setFont(paint) {
-            if (paint.isBold && paint.isItalic) currentFont = "boldItalicFont";
-            else if (paint.isBold) currentFont = "boldFont";
-            else if (paint.isItalic) currentFont = "italicFont";
-            else if (paint.useMusicFont) currentFont = "musicFont";
-            else currentFont = "plainFont";
-
-            context.font = paint.textSize * 2.0 * scale + "px " + currentFont;
-            context.textAlign = paint.align;
-        }
-
-        function clearCanvas() {
-            console.log("clearing canvas!!!");
-            context.clearRect(
-                0,
-                0,
-                context.canvas.width,
-                context.canvas.height
-            );
-        }
-
-        function drawLine(startX, startY, endX, endY, paint) {
-            usePaint(paint);
-
-            context.beginPath();
-            context.moveTo(startX * scale, startY * scale);
-            context.lineTo(endX * scale, endY * scale);
-            context.stroke();
-        }
-
-        function drawText(text, posX, posY, paint) {
-            usePaint(paint);
-            setFont(paint);
-
-            context.fillStyle = "#000000FF";
-
-            context.fillText(text, posX * scale, posY * scale);
-        }
-
-        function drawGlyph(codePoint, posX, posY, paint) {
-            currentFont = "musicFont";
-            usePaint(paint);
-            var fontSize = 40.0 * paint.glyphSizeFactor * scale;
-            context.font = fontSize.toString() + "px " + currentFont;
-
-            context.fillText(
-                String.fromCodePoint(codePoint),
-                posX * scale,
-                posY * scale
-            );
-        }
-
-        function drawCubicCurve(
-            posX1,
-            posY1,
-            posX2,
-            posY2,
-            posX3,
-            posY3,
-            posX4,
-            posY4,
-            paint
-        ) {
-            usePaint(paint);
-
-            context.beginPath();
-            context.moveTo(posX1, posY1);
-            context.bezierCurveTo(posX2, posY2, posX3, posY3, posX4, posY4);
-            context.fill();
-        }
-
-        function measureText(text, paint) {
-            currentFont = "plainFont";
-            usePaint(paint);
-
-            var textMetrics = context.measureText(text);
-            return textMetrics;
-        }
-
-        function measureGlyph(codePoint, paint) {
-            currentFont = "musicFont";
-            usePaint(paint);
-            var fontSize = 40.0 * paint.glyphSizeFactor * scale;
-            context.font = fontSize.toString() + "px " + currentFont;
-
-            var textMetrics = context.measureText(
-                String.fromCodePoint(codePoint)
-            );
-            return textMetrics;
-        }
-
-        /*while (!moduleIsCreated) {
-            console.log("waiting...");
-        }*/
-
-        //Module().then((mod) => {
         createModule().then((mod) => {
             console.log("adding rendering functions!!");
-            //module = mod;
-            //moduleIsCreated = true;
 
             function drawLineCpp(startX, startY, endX, endY, paintStrPtr) {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                drawLine(startX, startY, endX, endY, paint);
+                Renderer.drawLine(context, startX, startY, endX, endY, paint);
             }
 
             function drawTextCpp(textStrPtr, posX, posY, paintStrPtr) {
@@ -197,7 +87,7 @@ export default function EditorPage() {
 
                 var text = module.UTF8ToString(textStrPtr);
 
-                drawText(text, posX, posY, paint);
+                Renderer.drawText(context, text, posX, posY, paint);
             }
 
             function drawUTF16TextCpp(textStrPtr, posX, posY, paintStrPtr) {
@@ -206,23 +96,14 @@ export default function EditorPage() {
 
                 var text = module.UTF16ToString(textStrPtr);
 
-                console.log(
-                    "Drawing utf16 text: " +
-                        text +
-                        ", at: " +
-                        posX +
-                        ", " +
-                        posY
-                );
-
-                drawText(text, posX, posY, paint);
+                Renderer.drawText(context, text, posX, posY, paint);
             }
 
             function drawGlyphCpp(codePoint, posX, posY, paintStrPtr) {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                drawGlyph(codePoint, posX, posY, paint);
+                Renderer.drawGlyph(context, codePoint, posX, posY, paint);
             }
 
             function drawCubicCurveCpp(
@@ -239,7 +120,8 @@ export default function EditorPage() {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                drawCubicCurve(
+                Renderer.drawCubicCurve(
+                    context,
                     posX1,
                     posY1,
                     posX2,
@@ -258,17 +140,17 @@ export default function EditorPage() {
 
                 var text = module.UTF8ToString(textStrPtr);
 
-                var textMetrics = measureText(text, paint);
+                var textMetrics = Renderer.measureText(context, text, paint);
 
                 const boundingBoxArray = new Float32Array([
-                    -textMetrics.actualBoundingBoxLeft / scale, // posX
-                    -textMetrics.actualBoundingBoxAscent / scale, // posY
+                    -textMetrics.actualBoundingBoxLeft / Renderer.scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / Renderer.scale, // posY
                     (textMetrics.actualBoundingBoxLeft +
                         textMetrics.actualBoundingBoxRight) /
-                        scale, // width
+                        Renderer.scale, // width
                     (textMetrics.actualBoundingBoxAscent +
                         textMetrics.actualBoundingBoxDescent) /
-                        scale, // height
+                        Renderer.scale, // height
                 ]);
 
                 var buffer = arrayToCppPtr(boundingBoxArray, "float");
@@ -282,17 +164,17 @@ export default function EditorPage() {
 
                 var text = module.UTF16ToString(textStrPtr);
 
-                var textMetrics = measureText(text, paint);
+                var textMetrics = Renderer.measureText(context, text, paint);
 
                 const boundingBoxArray = new Float32Array([
-                    -textMetrics.actualBoundingBoxLeft / scale, // posX
-                    -textMetrics.actualBoundingBoxAscent / scale, // posY
+                    -textMetrics.actualBoundingBoxLeft / Renderer.scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / Renderer.scale, // posY
                     (textMetrics.actualBoundingBoxLeft +
                         textMetrics.actualBoundingBoxRight) /
-                        scale, // width
+                        Renderer.scale, // width
                     (textMetrics.actualBoundingBoxAscent +
                         textMetrics.actualBoundingBoxDescent) /
-                        scale, // height
+                        Renderer.scale, // height
                 ]);
 
                 var buffer = arrayToCppPtr(boundingBoxArray, "float");
@@ -304,16 +186,20 @@ export default function EditorPage() {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                var textMetrics = measureGlyph(codePoint, paint);
+                var textMetrics = Renderer.measureGlyph(
+                    context,
+                    codePoint,
+                    paint
+                );
 
                 // the array to return
                 const boundingBoxArray = new Float32Array([
-                    -textMetrics.actualBoundingBoxLeft / scale, // posX
-                    -textMetrics.actualBoundingBoxAscent / scale, // posY
-                    textMetrics.width * 2, // width
+                    -textMetrics.actualBoundingBoxLeft / Renderer.scale, // posX
+                    -textMetrics.actualBoundingBoxAscent / Renderer.scale, // posY
+                    textMetrics.width, // width
                     (textMetrics.actualBoundingBoxAscent +
                         textMetrics.actualBoundingBoxDescent) /
-                        scale, // height
+                        Renderer.scale, // height
                 ]);
 
                 var buffer = arrayToCppPtr(boundingBoxArray, "float");
@@ -339,7 +225,11 @@ export default function EditorPage() {
                 return buffer;
             }
 
-            var clearFP = module.addFunction(clearCanvas, "v");
+            function clearCanvasCpp() {
+                Renderer.clearCanvas(context);
+            }
+
+            var clearFP = module.addFunction(clearCanvasCpp, "v");
 
             var drawLineFP = module.addFunction(drawLineCpp, "vffffi");
             var drawTextFP = module.addFunction(drawTextCpp, "viffi");
