@@ -4,6 +4,8 @@ import Module from "../cpp.js";
 import * as Tone from "tone";
 import handleMidiMessage from "../audio/midi.js";
 import * as Renderer from "../rendering/rendering.js";
+import { jsPDF } from "jspdf";
+import PDFRenderer from "../rendering/pdf_renderer.js";
 
 function writeMidi(bytes, size) {
     var byteArray = new Uint8Array(size);
@@ -14,6 +16,29 @@ function writeMidi(bytes, size) {
     }
 
     handleMidiMessage(byteArray);
+}
+
+class ButtonType {
+    static None = new ButtonType(0);
+    static Play = new ButtonType(1);
+    static Reset = new ButtonType(2);
+    static Metronome = new ButtonType(3);
+    static DownloadPDF = new ButtonType(4);
+
+    constructor(value) {
+        this.value = value;
+    }
+}
+
+class ButtonEventType {
+    static None = new ButtonType(0);
+    static Pressed = new ButtonType(1);
+    static ToggledOn = new ButtonType(2);
+    static ToggledOff = new ButtonType(3);
+
+    constructor(value) {
+        this.value = value;
+    }
 }
 
 var module;
@@ -44,6 +69,13 @@ function createModule() {
 
 export default function EditorPage() {
     const canvasRef = useRef(null);
+    const pdfCanvasRef = useRef(null);
+
+    const pageWidthTenths = 1233.87;
+    const pageHeightTenths = 1596.77;
+
+    const pageWidth = pageWidthTenths * Renderer.scale;
+    const pageHeight = pageHeightTenths * Renderer.scale;
 
     useEffect(() => {
         function addFont(fontName, fontUrl) {
@@ -66,10 +98,23 @@ export default function EditorPage() {
         let canvas = canvasRef.current;
         if (canvas == null) throw Error("canvas is null");
 
-        let context = canvas.getContext("2d");
-        if (context == null) throw Error("canvas is null");
+        let mainContext = canvas.getContext("2d");
+        if (mainContext == null) throw Error("canvas is null");
+
+        let pdfCanvas = pdfCanvasRef.current;
+        if (pdfCanvas == null) throw Error("canvas is null");
+
+        let pdfContext = pdfCanvas.getContext("2d");
+        if (pdfContext == null) throw Error("canvas is null");
+
+        var context = mainContext;
+        var isRenderingPDF = false;
 
         context.font = "48px musicFont";
+
+        var renderer = new Renderer.CanvasRenderer(context);
+
+        var pdfDocument;
 
         createModule().then((mod) => {
             console.log("adding rendering functions!!");
@@ -78,7 +123,7 @@ export default function EditorPage() {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                Renderer.drawLine(context, startX, startY, endX, endY, paint);
+                renderer.drawLine(startX, startY, endX, endY, paint);
             }
 
             function drawTextCpp(textStrPtr, posX, posY, paintStrPtr) {
@@ -87,7 +132,7 @@ export default function EditorPage() {
 
                 var text = module.UTF8ToString(textStrPtr);
 
-                Renderer.drawText(context, text, posX, posY, paint);
+                renderer.drawText(text, posX, posY, paint);
             }
 
             function drawUTF16TextCpp(textStrPtr, posX, posY, paintStrPtr) {
@@ -227,6 +272,65 @@ export default function EditorPage() {
 
             function clearCanvasCpp() {
                 Renderer.clearCanvas(context);
+                Renderer.clearCanvas(pdfContext);
+            }
+
+            const pdfPageWidth = 210;
+            const pdfPageHeight = 297;
+
+            function startPDFRender() {
+                context = pdfContext;
+
+                isRenderingPDF = true;
+                console.log("Starting to render PDF!!!!");
+
+                pdfDocument = new jsPDF("p", "mm", "a4");
+
+                renderer = new PDFRenderer(
+                    pdfDocument,
+                    pageWidth,
+                    pageHeight,
+                    pdfPageWidth,
+                    pdfPageHeight
+                );
+            }
+
+            function endPDFRender() {
+                context = mainContext;
+                isRenderingPDF = false;
+
+                var img = pdfCanvasRef.current.toDataURL();
+
+                var width = pdfPageWidth;
+                var height = (1 / (pageWidth / pageHeight)) * pdfPageWidth;
+
+                var posY = (pdfPageHeight - height) / 2;
+
+                pdfDocument.addImage(img, "PNG", 0, posY, width, height);
+
+                //pdfDocument.text("Hello world!", 10, 10);
+                pdfDocument.save("song.pdf");
+
+                renderer = new Renderer.CanvasRenderer(context);
+
+                console.log("Ending the render of PDF!");
+            }
+
+            function startNewPDFPage() {
+                if (!isRenderingPDF) console.log("ERROR!!!");
+
+                var img = pdfCanvasRef.current.toDataURL();
+
+                var width = pdfPageWidth;
+                var height = (1 / (pageWidth / pageHeight)) * pdfPageWidth;
+
+                var posY = (pdfPageHeight - height) / 2;
+
+                pdfDocument.addImage(img, "PNG", 0, posY, width, height);
+
+                pdfDocument.addPage("p", "mm", "a4");
+
+                console.log("Start new PDF page");
             }
 
             var clearFP = module.addFunction(clearCanvasCpp, "v");
@@ -247,6 +351,10 @@ export default function EditorPage() {
             );
             var measureGlyphFP = module.addFunction(measureGlyphCpp, "iii");
 
+            var startPDFRenderFP = module.addFunction(startPDFRender, "v");
+            var endPDFRenderFP = module.addFunction(endPDFRender, "v");
+            var startNewPDFPageFP = module.addFunction(startNewPDFPage, "v");
+
             module.addFunctionsToCpp(
                 clearFP,
                 drawLineFP,
@@ -256,7 +364,10 @@ export default function EditorPage() {
                 drawCubicCurveFP,
                 measureTextFP,
                 measureUTF16TextFP,
-                measureGlyphFP
+                measureGlyphFP,
+                startPDFRenderFP,
+                endPDFRenderFP,
+                startNewPDFPageFP
             );
         });
     });
@@ -280,6 +391,14 @@ export default function EditorPage() {
                         width="776"
                         height="600"
                     ></canvas>
+
+                    <canvas
+                        ref={pdfCanvasRef}
+                        className="border-2 hidden"
+                        id="pdf_canvas"
+                        width={pageWidth}
+                        height={pageHeight}
+                    ></canvas>
                 </div>
 
                 <button
@@ -290,16 +409,59 @@ export default function EditorPage() {
                             if (isPlaying) {
                                 console.log("is playing so pausing");
                                 setIsPlaying(false);
-                                module.onButtonEvent(1, 3);
+                                module.onButtonEvent(
+                                    ButtonType.Play.value,
+                                    ButtonEventType.ToggledOff.value
+                                );
                             } else {
                                 console.log("is paused so playing");
                                 setIsPlaying(true);
-                                module.onButtonEvent(1, 2);
+                                module.onButtonEvent(
+                                    ButtonType.Play.value,
+                                    ButtonEventType.ToggledOn.value
+                                );
                             }
                         }
                     }}
                 >
                     Play
+                </button>
+
+                <button
+                    onClick={() => {
+                        const doc = new jsPDF("p", "mm", "a4");
+
+                        var img = pdfCanvasRef.current.toDataURL();
+
+                        doc.addImage(img, "PNG", 0, 0, 210, 297);
+
+                        doc.text("Hello world!", 10, 10);
+                        doc.save("a4.pdf");
+                    }}
+                >
+                    PDF
+                </button>
+
+                <button
+                    onClick={async () => {
+                        if (moduleIsCreated) {
+                            module.onButtonEvent(
+                                ButtonType.DownloadPDF.value,
+                                ButtonEventType.Pressed.value
+                            );
+
+                            /*const doc = new jsPDF("p", "mm", "a4");
+
+                            var img = pdfCanvasRef.current.toDataURL();
+
+                            doc.addImage(img, "PNG", 0, 0, 210, 297);
+
+                            doc.text("Hello world!", 10, 10);
+                            doc.save("a4.pdf");*/
+                        }
+                    }}
+                >
+                    Render PDF
                 </button>
             </div>
         </>

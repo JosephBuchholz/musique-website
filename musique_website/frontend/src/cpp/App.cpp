@@ -367,7 +367,7 @@ bool App::OnMouseScrollEvent(const MouseScrollEvent& event)
 
 bool App::OnButtonEvent(const ButtonEvent& event)
 {
-    LOGD("got button pressed event!");
+    LOGD("got button pressed event!: %d, %d", (int)event.buttonType, (int)event.eventType);
 
     switch (event.buttonType)
     {
@@ -393,6 +393,36 @@ bool App::OnButtonEvent(const ButtonEvent& event)
                 OnMetronomeToggled(false);
 
             break;
+        }
+        case ButtonEvent::ButtonType::DownloadPDF:
+        {
+            if (event.eventType == ButtonEvent::EventType::Pressed)
+            {
+                PrintRenderData printRenderData = PrintRenderData();
+
+                musicRenderer->systemPositions.clear();
+                musicRenderer->pagePositions.clear();
+
+                int totalPages = musicRenderer->OnCalculateNumPages(song);
+                int pageIndex = 0;
+                while (pageIndex < totalPages)
+                {
+                    RenderData pageRenderData = RenderData();
+                    musicRenderer->updateRenderData = true;
+                    musicRenderer->RenderMusicToPage(song, pageIndex, pageRenderData, settings, { 0.0f, 0.0f });
+                    printRenderData.pages.push_back(pageRenderData);
+                    pageIndex++;
+                }
+
+                UpdatePrintRenderData(printRenderData);
+            }
+
+            break;
+        }
+        case ButtonEvent::ButtonType::None:
+        {
+            LOGW("Got button type of None");
+            return false;
         }
     }
 

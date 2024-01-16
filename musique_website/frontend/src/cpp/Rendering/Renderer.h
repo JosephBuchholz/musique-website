@@ -36,6 +36,13 @@ public:
 	BoundingBox MeasureText(const std::string& text, const Paint& paint = Paint());
 	BoundingBox MeasureUTF16Text(const uint16_t* text, const Paint& paint = Paint());
 	BoundingBox MeasureGlyph(SMuFLID glyph, const Paint& paint = Paint());
+	
+	// PDF related functions
+
+	void StartPDFRender();
+	void EndPDFRender();
+
+	void StartNewPDFPage();
 
 private:
 
@@ -55,11 +62,16 @@ private:
 	float* (*MeasureUTF16TextCallback)(const uint16_t* text, const char* paint);
 	float* (*MeasureGlyphCallback)(uint16_t codePoint, const char* paint);
 
+	void (*StartPDFRenderCallback)();
+	void (*EndPDFRenderCallback)();
+	void (*StartNewPDFPageCallback)();
+
 public:
 
-	friend void AddFunctionsToCpp(int, int, int, int, int, int, int, int, int);
+	friend void AddFunctionsToCpp(int, int, int, int, int, int, int, int, int, int, int, int);
 
 private:
 
 	float scale;
+	bool isRenderingPDF = false;
 };

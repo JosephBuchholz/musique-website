@@ -178,6 +178,24 @@ BoundingBox Renderer::MeasureGlyph(SMuFLID glyph, const Paint &paint)
     return boundingBox;
 }
 
+void Renderer::StartPDFRender()
+{
+    StartPDFRenderCallback();
+    isRenderingPDF = true;
+}
+
+void Renderer::EndPDFRender()
+{
+    EndPDFRenderCallback();
+    isRenderingPDF = false;
+}
+
+void Renderer::StartNewPDFPage()
+{
+    LOGD("Starting new PDF page!!!!!!!!");
+    StartNewPDFPageCallback();
+}
+
 std::string Renderer::EncodePaintObject(const Paint& paint, float scale)
 {
 	std::string paintString;

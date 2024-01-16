@@ -73,6 +73,67 @@ void UpdateSongData(const SongData& songData)
 
 void UpdatePrintRenderData(const PrintRenderData& printRenderData)
 {
+    Renderer& renderer = Renderer::GetInstance();
+
+    renderer.StartPDFRender();
+
+    for (const RenderData& renderData : printRenderData.pages)
+    {
+        renderer.StartNewPDFPage();
+
+        renderer.Clear();
+        renderer.SetScale(renderData.zoom);
+
+        for (const Line& line : renderData.m_lines)
+        {
+            Paint paint = line.paint;
+            paint.color = 0x000000FF;
+
+            renderer.DrawLine(line.start, line.end, paint);
+        }
+
+        for (const Text& text : renderData.m_texts)
+        {
+            Paint paint = text.paint;
+            paint.color = 0x000000FF;
+
+            renderer.DrawText(text.text, text.position, paint);
+
+            //BoundingBox boundingBox = renderer.MeasureText(text.text, text.paint);
+
+            //renderer.DrawRect((text.position * scale) + boundingBox.position, boundingBox.size);
+        }
+
+        for (const SpannableText& text : renderData.m_spannableTexts)
+        {
+            LOGD("Drawing spannable text! size: %d", text.textSize);
+            renderer.DrawSpannableText(text);
+        }
+
+        for (const SMuFLGlyph& glyph : renderData.m_SMuFLGlyphs)
+        {
+            Paint textPaint = glyph.paint;
+            textPaint.color = 0x000000FF;
+
+            renderer.DrawGlyph(glyph.codePoint, glyph.position, textPaint);
+
+            //BoundingBox boundingBox = renderer.MeasureGlyph(glyph.codePoint, textPaint);
+
+            //renderer.DrawRect((glyph.position * scale) + boundingBox.position, boundingBox.size);
+        }
+
+        for (const CubicCurve& curve : renderData.m_cubicCurves)
+        {
+            Paint paint = curve.paint;
+            paint.color = 0x000000FF;
+
+            renderer.DrawCubicCurve(curve.point1, curve.point2, curve.point3, curve.point4, paint);
+        }
+
+    }
+
+    renderer.EndPDFRender();
+
     LOGD("Callbacks: Update Print Render Data function called");
 }
 

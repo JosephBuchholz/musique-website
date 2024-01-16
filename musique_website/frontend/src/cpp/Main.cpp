@@ -8317,7 +8317,7 @@ void AddAudioCallbacksToCpp(int writeMidiFP)
     midiCallbacks.WriteMidiCallback = reinterpret_cast<void (*)(const uint8_t*, int)>(writeMidiFP);
 }
 
-void AddFunctionsToCpp(int clearFP, int drawLineFP, int drawTextFP, int drawUTF16TextFP, int drawGlyphFP, int drawCubicCurveFP, int measureTextFP, int measureUTF16TextFP, int measureGlyphFP)
+void AddFunctionsToCpp(int clearFP, int drawLineFP, int drawTextFP, int drawUTF16TextFP, int drawGlyphFP, int drawCubicCurveFP, int measureTextFP, int measureUTF16TextFP, int measureGlyphFP, int startPDFRenderFP, int endPDFRenderFP, int startNewPDFPageFP)
 {
     LOGI("Adding functions (from c++)");
 
@@ -8334,6 +8334,10 @@ void AddFunctionsToCpp(int clearFP, int drawLineFP, int drawTextFP, int drawUTF1
     renderer.MeasureTextCallback = reinterpret_cast<float* (*)(const char*, const char*)>(measureTextFP);
     renderer.MeasureUTF16TextCallback = reinterpret_cast<float* (*)(const uint16_t*, const char*)>(measureUTF16TextFP);
     renderer.MeasureGlyphCallback = reinterpret_cast<float* (*)(uint16_t, const char*)>(measureGlyphFP);
+
+    renderer.StartPDFRenderCallback = reinterpret_cast<void (*)()>(startPDFRenderFP);
+    renderer.EndPDFRenderCallback = reinterpret_cast<void (*)()>(endPDFRenderFP);
+    renderer.StartNewPDFPageCallback = reinterpret_cast<void (*)()>(startNewPDFPageFP);
 }
 
 void callJsFunction()

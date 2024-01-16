@@ -18,8 +18,8 @@
 #include <stdarg.h>
 #include <string>
 
-void _LogLevelAndTag(const char* logLevel, const char* tag, const char* format, va_list args);
-void _LogLevel(const char* logLevel, const char* format, ...);
+void _LogLevelAndTag(const std::string& colorFormat, const char* logLevel, const char* tag, const char* format, va_list args);
+void _LogLevel(const std::string& colorFormat, const char* logLevel, const char* format, ...);
 
 #define LOG_LEVEL_STR_V "V"
 #define LOG_LEVEL_STR_D "Debug"
