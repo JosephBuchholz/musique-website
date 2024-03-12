@@ -141,14 +141,14 @@ export default function EditorPage() {
 
                 var text = module.UTF16ToString(textStrPtr);
 
-                Renderer.drawText(context, text, posX, posY, paint);
+                //renderer.drawText(context, text, posX, posY, paint);
             }
 
             function drawGlyphCpp(codePoint, posX, posY, paintStrPtr) {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                Renderer.drawGlyph(context, codePoint, posX, posY, paint);
+                renderer.drawGlyph(codePoint, posX, posY, paint);
             }
 
             function drawCubicCurveCpp(
@@ -165,8 +165,7 @@ export default function EditorPage() {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                Renderer.drawCubicCurve(
-                    context,
+                renderer.drawCubicCurve(
                     posX1,
                     posY1,
                     posX2,

@@ -1,4 +1,6 @@
 import Renderer from "./renderer";
+import { open_sansNormal } from "./open_sans-normal";
+import { bravuraNormal } from "./bravura-normal";
 
 export default class PDFRenderer extends Renderer {
     constructor(
@@ -14,75 +16,99 @@ export default class PDFRenderer extends Renderer {
         this.pageHeight = pageHeight;
         this.pdfPageWidth = pdfPageWidth;
         this.pdfPageHeight = pdfPageHeight;
+
+        this.scale =
+            super.getScale() *
+            0.25 *
+            (this.pdfPageWidth / (this.pageWidth * 0.25));
+
+        this.width = this.pdfPageWidth;
+        this.height =
+            (1 / (this.pageWidth / this.pageHeight)) * this.pdfPageWidth;
+
+        this.offsetY = (this.pdfPageHeight - this.height) / 2;
+
+        this.pdfDocument.addFileToVFS("open_sans-normal.ttf", open_sansNormal);
+        this.pdfDocument.addFont("open_sans-normal.ttf", "open_sans", "normal");
+
+        this.pdfDocument.addFileToVFS("bravura-normal.ttf", bravuraNormal);
+        this.pdfDocument.addFont("bravura-normal.ttf", "bravura", "normal");
     }
 
     usePaint(paint) {
-        this.pdfDocument.setLineWidth(paint.strokeWidth * super.getScale());
+        this.pdfDocument.setLineWidth(paint.strokeWidth * this.scale);
         this.pdfDocument.setLineCap(paint.strokeCap);
-        this.pdfDocument.setFontA;
     }
 
     drawLine(startX, startY, endX, endY, paint) {
         this.usePaint(paint);
 
-        var width = this.pdfPageWidth;
-        var height =
-            (1 / (this.pageWidth / this.pageHeight)) * this.pdfPageWidth;
-
-        var posY = (this.pdfPageHeight - height) / 2;
-
-        var scale = super.getScale();
-
         this.pdfDocument.line(
-            startX *
-                scale *
-                0.25 *
-                (this.pdfPageWidth / (this.pageWidth * 0.25)),
-            startY *
-                scale *
-                0.25 *
-                (this.pdfPageWidth / (this.pageWidth * 0.25)) +
-                posY,
-            endX * scale * 0.25 * (this.pdfPageWidth / (this.pageWidth * 0.25)),
-            endY *
-                scale *
-                0.25 *
-                (this.pdfPageWidth / (this.pageWidth * 0.25)) +
-                posY
+            startX * this.scale,
+            startY * this.scale + this.offsetY,
+            endX * this.scale,
+            endY * this.scale + this.offsetY
         );
     }
 
     drawText(text, posX, posY, paint) {
-        var width = this.pdfPageWidth;
-        var height =
-            (1 / (this.pageWidth / this.pageHeight)) * this.pdfPageWidth;
-
-        var y = (this.pdfPageHeight - height) / 2;
-
-        var scale = super.getScale();
-
-        this.pdfDocument.setFont("Times-Roman");
+        this.pdfDocument.setFont("Times", "Roman");
 
         this.pdfDocument.setFontSize(
-            paint.textSize *
-                2.0 *
-                scale *
-                0.25 *
-                (this.pdfPageWidth / (this.pageWidth * 0.25)) *
-                2.83465
+            paint.textSize * 2.0 * this.scale * 2.83465
         );
 
         this.pdfDocument.text(
             text,
-            posX * scale * 0.25 * (this.pdfPageWidth / (this.pageWidth * 0.25)),
-            posY *
-                scale *
-                0.25 *
-                (this.pdfPageWidth / (this.pageWidth * 0.25)) +
-                y,
+            posX * this.scale,
+            posY * this.scale + this.offsetY,
             {
-                align: paint.textAlign,
+                align: paint.align,
             }
+        );
+    }
+
+    drawGlyph(codePoint, posX, posY, paint) {
+        this.pdfDocument.setFont("bravura", "normal");
+
+        this.pdfDocument.setFontSize(
+            paint.glyphSizeFactor * 40.0 * this.scale * 2.83465
+        );
+
+        this.pdfDocument.text(
+            String.fromCodePoint(codePoint),
+            posX * this.scale,
+            posY * this.scale + this.offsetY,
+            {
+                align: "left",
+            }
+        );
+    }
+
+    drawCubicCurve(
+        posX1,
+        posY1,
+        posX2,
+        posY2,
+        posX3,
+        posY3,
+        posX4,
+        posY4,
+        paint
+    ) {
+        this.pdfDocument.lines(
+            [
+                [
+                    (posX2 - posX1) * this.scale,
+                    (posY2 - posY1) * this.scale,
+                    (posX3 - posX1) * this.scale,
+                    (posY3 - posY1) * this.scale,
+                    (posX4 - posX1) * this.scale,
+                    (posY4 - posY1) * this.scale,
+                ],
+            ],
+            posX1 * this.scale,
+            posY1 * this.scale + this.offsetY
         );
     }
 }

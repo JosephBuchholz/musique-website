@@ -12,4 +12,16 @@ export default class Renderer {
 
     drawLine(startX, startY, endX, endY, paint) {}
     drawText(text, posX, posY, paint) {}
+    drawGlyph(codePoint, posX, posY, paint) {}
+    drawCubicCurve(
+        posX1,
+        posY1,
+        posX2,
+        posY2,
+        posX3,
+        posY3,
+        posX4,
+        posY4,
+        paint
+    ) {}
 }
