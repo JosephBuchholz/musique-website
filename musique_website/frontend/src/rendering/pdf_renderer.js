@@ -40,23 +40,90 @@ export default class PDFRenderer extends Renderer {
         this.pdfDocument.setLineCap(paint.strokeCap);
     }
 
-    drawLine(startX, startY, endX, endY, paint) {
-        this.usePaint(paint);
+    // gets the correct font style string for the given font and bold/italic parameters
+    getFontStyleString(font, isBold, isItalic) {
+        if (font == "Times") {
+            if (isBold && isItalic) {
+                return "BoldItalic";
+            } else if (isBold) {
+                return "Bold";
+            } else if (isItalic) {
+                return "Italic";
+            } else {
+                return "Roman";
+            }
+        }
 
-        this.pdfDocument.line(
-            startX * this.scale,
-            startY * this.scale + this.offsetY,
-            endX * this.scale,
-            endY * this.scale + this.offsetY
-        );
+        return "normal";
     }
 
-    drawText(text, posX, posY, paint) {
-        this.pdfDocument.setFont("Times", "Roman");
+    setFont(paint) {
+        //console.log(this.pdfDocument.getFontList());
+
+        var font = "Times";
+
+        // sets font and font style
+        this.pdfDocument.setFont(
+            font,
+            this.getFontStyleString(font, paint.isBold, paint.isItalic)
+        );
 
         this.pdfDocument.setFontSize(
             paint.textSize * 2.0 * this.scale * 2.83465
         );
+    }
+
+    drawLine(startX, startY, endX, endY, paint) {
+        this.usePaint(paint);
+
+        if (paint.verticalEnds) {
+            var width = paint.strokeWidth;
+
+            this.pdfDocument.path([
+                {
+                    op: "m",
+                    c: [
+                        startX * this.scale,
+                        (startY + width / 2) * this.scale + this.offsetY,
+                    ],
+                },
+                {
+                    op: "l",
+                    c: [
+                        endX * this.scale,
+                        (endY + width / 2) * this.scale + this.offsetY,
+                    ],
+                },
+                {
+                    op: "l",
+                    c: [
+                        endX * this.scale,
+                        (endY - width / 2) * this.scale + this.offsetY,
+                    ],
+                },
+                {
+                    op: "l",
+                    c: [
+                        startX * this.scale,
+                        (startY - width / 2) * this.scale + this.offsetY,
+                    ],
+                },
+                { op: "h", c: [] },
+            ]);
+
+            this.pdfDocument.fill();
+        } else {
+            this.pdfDocument.line(
+                startX * this.scale,
+                startY * this.scale + this.offsetY,
+                endX * this.scale,
+                endY * this.scale + this.offsetY
+            );
+        }
+    }
+
+    drawText(text, posX, posY, paint) {
+        this.setFont(paint);
 
         this.pdfDocument.text(
             text,
@@ -96,6 +163,8 @@ export default class PDFRenderer extends Renderer {
         posY4,
         paint
     ) {
+        this.usePaint(paint);
+
         this.pdfDocument.lines(
             [
                 [

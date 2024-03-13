@@ -277,10 +277,13 @@ export default function EditorPage() {
             const pdfPageWidth = 210;
             const pdfPageHeight = 297;
 
+            var isFirstPage = true;
+
             function startPDFRender() {
                 context = pdfContext;
 
                 isRenderingPDF = true;
+                isFirstPage = true;
                 console.log("Starting to render PDF!!!!");
 
                 pdfDocument = new jsPDF("p", "mm", "a4");
@@ -327,9 +330,14 @@ export default function EditorPage() {
 
                 pdfDocument.addImage(img, "PNG", 0, posY, width, height);
 
-                pdfDocument.addPage("p", "mm", "a4");
+                if (!isFirstPage) {
+                    pdfDocument.addPage("p", "mm", "a4");
+                } else {
+                    // a page was already added when document was created
+                    isFirstPage = false;
+                }
 
-                console.log("Start new PDF page");
+                console.log("Started new PDF page");
             }
 
             var clearFP = module.addFunction(clearCanvasCpp, "v");

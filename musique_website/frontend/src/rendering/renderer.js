@@ -1,3 +1,6 @@
+/**
+ * The parent Renderer class.
+ */
 export default class Renderer {
     millimeters = 6.35;
     tenths = 40.0;
