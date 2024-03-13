@@ -376,6 +376,15 @@ export default function EditorPage() {
                 endPDFRenderFP,
                 startNewPDFPageFP
             );
+
+            /*fetch("/song/get?key=ABC123&method=get_file&id=37&file_index=0")
+                .then((response) => response.text())
+                .then((data) => {
+                    var ptr = module.stringToNewUTF8(data);
+                    var fileType = module.stringToNewUTF8("txt");
+                    var result = module.loadSong(ptr, fileType);
+                    console.log("Loaded song: " + result);
+                });*/
         });
     });
 
@@ -435,40 +444,44 @@ export default function EditorPage() {
                 </button>
 
                 <button
-                    onClick={() => {
-                        const doc = new jsPDF("p", "mm", "a4");
-
-                        var img = pdfCanvasRef.current.toDataURL();
-
-                        doc.addImage(img, "PNG", 0, 0, 210, 297);
-
-                        doc.text("Hello world!", 10, 10);
-                        doc.save("a4.pdf");
-                    }}
-                >
-                    PDF
-                </button>
-
-                <button
                     onClick={async () => {
                         if (moduleIsCreated) {
                             module.onButtonEvent(
                                 ButtonType.DownloadPDF.value,
                                 ButtonEventType.Pressed.value
                             );
-
-                            /*const doc = new jsPDF("p", "mm", "a4");
-
-                            var img = pdfCanvasRef.current.toDataURL();
-
-                            doc.addImage(img, "PNG", 0, 0, 210, 297);
-
-                            doc.text("Hello world!", 10, 10);
-                            doc.save("a4.pdf");*/
                         }
                     }}
                 >
                     Render PDF
+                </button>
+
+                <button
+                    onClick={async () => {
+                        console.log("Get/Load Song button pressed!!!");
+
+                        /*fetch("/song/get?key=ABC123&method=all")
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(data);
+                            });*/
+
+                        fetch(
+                            "/song/get?key=ABC123&method=get_file&id=37&file_index=0"
+                        )
+                            .then((response) => response.text())
+                            .then((data) => {
+                                if (moduleIsCreated) {
+                                    var ptr = module.stringToNewUTF8(data);
+                                    var fileType =
+                                        module.stringToNewUTF8("txt");
+                                    var result = module.loadSong(ptr, fileType);
+                                    console.log("Loaded song: " + result);
+                                }
+                            });
+                    }}
+                >
+                    Get/Load Song
                 </button>
             </div>
         </>

@@ -7008,6 +7008,7 @@ function dbg(text) {
 
 
 
+
   var FSNode = /** @constructor */ function(parent, name, mode, rdev) {
     if (!parent) {
       parent = this;  // root node sets parent to itself
@@ -7162,9 +7163,9 @@ var wasmImports = {
 };
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors');
+var _free = createExportWrapper('free');
 var _main = Module['_main'] = createExportWrapper('main');
 var _malloc = Module['_malloc'] = createExportWrapper('malloc');
-var _free = createExportWrapper('free');
 var ___getTypeName = createExportWrapper('__getTypeName');
 var ___errno_location = createExportWrapper('__errno_location');
 var _fflush = Module['_fflush'] = createExportWrapper('fflush');
@@ -7192,6 +7193,7 @@ Module['setValue'] = setValue;
 Module['getValue'] = getValue;
 Module['UTF8ToString'] = UTF8ToString;
 Module['UTF16ToString'] = UTF16ToString;
+Module['stringToNewUTF8'] = stringToNewUTF8;
 var missingLibrarySymbols = [
   'writeI53ToI64',
   'writeI53ToI64Clamped',
@@ -7463,7 +7465,6 @@ var unexportedSymbols = [
   'UTF32ToString',
   'stringToUTF32',
   'lengthBytesUTF32',
-  'stringToNewUTF8',
   'JSEvents',
   'specialHTMLTargets',
   'maybeCStringToJsString',
