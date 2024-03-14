@@ -16,6 +16,11 @@ export default class PDFRenderer extends Renderer {
         this.pageHeight = pageHeight;
         this.pdfPageWidth = pdfPageWidth;
         this.pdfPageHeight = pdfPageHeight;
+        this.canvasCurrentFont = "plainfont";
+
+        var millimeters = 6.35;
+        var tenths = 40.0;
+        this.canvasScale = (millimeters / tenths) * 4;
 
         this.scale =
             super.getScale() *
@@ -52,6 +57,8 @@ export default class PDFRenderer extends Renderer {
             } else {
                 return "Roman";
             }
+        } else if ((font = "bravura")) {
+            return "normal";
         }
 
         return "normal";
@@ -61,6 +68,7 @@ export default class PDFRenderer extends Renderer {
         //console.log(this.pdfDocument.getFontList());
 
         var font = "Times";
+        if (paint.useMusicFont) font = "bravura";
 
         // sets font and font style
         this.pdfDocument.setFont(
@@ -135,6 +143,13 @@ export default class PDFRenderer extends Renderer {
         );
     }
 
+    drawUTF16Text(text, posX, posY, paint) {
+        //paint.useMusicFont = true;
+        console.log("hellloooooo");
+        console.log("JS: text: " + text);
+        this.drawText(text, posX, posY, paint);
+    }
+
     drawGlyph(codePoint, posX, posY, paint) {
         this.pdfDocument.setFont("bravura", "normal");
 
@@ -179,5 +194,40 @@ export default class PDFRenderer extends Renderer {
             posX1 * this.scale,
             posY1 * this.scale + this.offsetY
         );
+    }
+
+    clear() {
+        console.log("clearing pdf canvas!!!");
+    }
+
+    usePaintCanvas(context, paint) {
+        context.strokeStyle = "#" + paint.color.toString(16).padStart(8, "0");
+        context.fillStyle = "#" + paint.color.toString(16).padStart(8, "0");
+        context.lineWidth = paint.strokeWidth * this.canvasScale;
+        context.lineCap = paint.strokeCap;
+        context.textAlign = "left";
+    }
+
+    usePaintForGlyphCanvas(context, paint) {
+        this.canvasCurrentFont = "musicFont";
+        this.usePaintCanvas(context, paint);
+        var fontSize = 40.0 * paint.glyphSizeFactor * this.canvasScale;
+        context.font = fontSize.toString() + "px " + this.canvasCurrentFont;
+    }
+
+    measureText(context, text, paint) {
+        this.canvasCurrentFont = "plainFont";
+        this.usePaintCanvas(context, paint);
+
+        var textMetrics = context.measureText(text);
+        return textMetrics;
+    }
+
+    measureGlyph(context, codePoint, paint) {
+        this.usePaintForGlyphCanvas(context, paint);
+
+        var textMetrics = context.measureText(String.fromCodePoint(codePoint));
+
+        return textMetrics;
     }
 }

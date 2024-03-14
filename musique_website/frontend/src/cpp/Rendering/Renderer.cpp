@@ -95,6 +95,8 @@ void Renderer::DrawSpannableText(const SpannableText& spannableText)
 
         ASSERT(text != nullptr);
 
+        //LOGD("spannable text: %s", text);
+
         DrawUTF16TextCallback(text, currentPosition.x, currentPosition.y, EncodePaintObject(span.paint, scale).c_str());
 
         currentPosition.x += MeasureUTF16Text(text, span.paint).size.x;

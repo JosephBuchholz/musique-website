@@ -7,19 +7,33 @@
 #include "Paint.h"
 #include "../Collisions/Vec2.h"
 
+class Span
+{
+public:
+    Span() {}
+
+    Span(uint16_t startIndex, uint16_t endIndex, int type = 0)
+            : startIndex(startIndex), endIndex(endIndex), type(type) {
+    }
+
+    uint16_t startIndex = 0;
+    uint16_t endIndex = 0;
+
+    int type = 0;
+};
+
 /**
  * An object that represents a span for spannable text
  */
-struct TextSpan
+class TextSpan : public Span
 {
+public:
     TextSpan() {}
 
-    TextSpan(unsigned int startIndex, unsigned int endIndex, Paint paint = Paint())
-            : startIndex(startIndex), endIndex(endIndex), paint(paint) {
+    TextSpan(uint16_t startIndex, uint16_t endIndex, Paint paint = Paint())
+            : Span(startIndex, endIndex), paint(paint) {
     }
 
-    unsigned int startIndex = 0;
-    unsigned int endIndex = 0;
     Paint paint = Paint();
 };
 

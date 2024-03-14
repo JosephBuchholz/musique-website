@@ -86,6 +86,10 @@ export class CanvasRenderer extends Renderer {
         this.context.fillText(text, posX * scale, posY * scale);
     }
 
+    drawUTF16Text(text, posX, posY, paint) {
+        this.drawText(text, posX, posY, paint);
+    }
+
     usePaintForGlyph(paint) {
         this.currentFont = "musicFont";
         this.usePaint(paint);
@@ -159,45 +163,36 @@ export class CanvasRenderer extends Renderer {
             }
         }
     }
+
+    clear() {
+        console.log("clearing canvas!!!");
+        this.context.clearRect(
+            0,
+            0,
+            this.context.canvas.width,
+            this.context.canvas.height
+        );
+    }
+
+    measureText(context, text, paint) {
+        this.currentFont = "plainFont";
+        this.usePaint(paint);
+
+        var textMetrics = this.context.measureText(text);
+        return textMetrics;
+    }
+
+    measureGlyph(context, codePoint, paint) {
+        this.usePaintForGlyph(paint);
+
+        var textMetrics = this.context.measureText(
+            String.fromCodePoint(codePoint)
+        );
+
+        return textMetrics;
+    }
 }
 
 var millimeters = 6.35;
 var tenths = 40.0;
 export var scale = (millimeters / tenths) * 4;
-var currentFont = "musicFont";
-
-export function usePaint(context, paint) {
-    context.strokeStyle = "#" + paint.color.toString(16).padStart(8, "0");
-    context.fillStyle = "#" + paint.color.toString(16).padStart(8, "0");
-    context.lineWidth = paint.strokeWidth * scale;
-    context.lineCap = paint.strokeCap;
-    context.textAlign = "left";
-}
-
-export function usePaintForGlyph(context, paint) {
-    currentFont = "musicFont";
-    usePaint(context, paint);
-    var fontSize = 40.0 * paint.glyphSizeFactor * scale;
-    context.font = fontSize.toString() + "px " + currentFont;
-}
-
-export function clearCanvas(context) {
-    console.log("clearing canvas!!!");
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-}
-
-export function measureText(context, text, paint) {
-    currentFont = "plainFont";
-    usePaint(context, paint);
-
-    var textMetrics = context.measureText(text);
-    return textMetrics;
-}
-
-export function measureGlyph(context, codePoint, paint) {
-    usePaintForGlyph(context, paint);
-
-    var textMetrics = context.measureText(String.fromCodePoint(codePoint));
-
-    return textMetrics;
-}

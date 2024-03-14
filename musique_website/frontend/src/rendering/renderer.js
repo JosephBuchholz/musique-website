@@ -15,6 +15,7 @@ export default class Renderer {
 
     drawLine(startX, startY, endX, endY, paint) {}
     drawText(text, posX, posY, paint) {}
+    drawUTF16Text(text, posX, posY, paint) {}
     drawGlyph(codePoint, posX, posY, paint) {}
     drawCubicCurve(
         posX1,
@@ -27,4 +28,10 @@ export default class Renderer {
         posY4,
         paint
     ) {}
+
+    clear() {}
+
+    // TODO: get rid of context parameter
+    measureText(context, text, paint) {}
+    measureGlyph(context, codePoint, paint) {}
 }

@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Module from "../cpp.js";
 import * as Tone from "tone";
 import handleMidiMessage from "../audio/midi.js";
-import * as Renderer from "../rendering/rendering.js";
+import * as Renderer from "../rendering/canvas_renderer.js";
 import { jsPDF } from "jspdf";
 import PDFRenderer from "../rendering/pdf_renderer.js";
 
@@ -141,6 +141,7 @@ export default function EditorPage() {
 
                 var text = module.UTF16ToString(textStrPtr);
 
+                renderer.drawUTF16Text(text, posX, posY, paint);
                 //renderer.drawText(context, text, posX, posY, paint);
             }
 
@@ -184,7 +185,7 @@ export default function EditorPage() {
 
                 var text = module.UTF8ToString(textStrPtr);
 
-                var textMetrics = Renderer.measureText(context, text, paint);
+                var textMetrics = renderer.measureText(context, text, paint);
 
                 const boundingBoxArray = new Float32Array([
                     -textMetrics.actualBoundingBoxLeft / Renderer.scale, // posX
@@ -208,7 +209,7 @@ export default function EditorPage() {
 
                 var text = module.UTF16ToString(textStrPtr);
 
-                var textMetrics = Renderer.measureText(context, text, paint);
+                var textMetrics = renderer.measureText(context, text, paint);
 
                 const boundingBoxArray = new Float32Array([
                     -textMetrics.actualBoundingBoxLeft / Renderer.scale, // posX
@@ -230,7 +231,7 @@ export default function EditorPage() {
                 var paintString = module.UTF8ToString(paintStrPtr);
                 var paint = JSON.parse(paintString);
 
-                var textMetrics = Renderer.measureGlyph(
+                var textMetrics = renderer.measureGlyph(
                     context,
                     codePoint,
                     paint
@@ -270,8 +271,7 @@ export default function EditorPage() {
             }
 
             function clearCanvasCpp() {
-                Renderer.clearCanvas(context);
-                Renderer.clearCanvas(pdfContext);
+                renderer.clear();
             }
 
             const pdfPageWidth = 210;
@@ -468,6 +468,7 @@ export default function EditorPage() {
 
                         fetch(
                             "/song/get?key=ABC123&method=get_file&id=37&file_index=0"
+                            //"/song/get?key=ABC123&method=get_file&id=13&file_index=0"
                         )
                             .then((response) => response.text())
                             .then((data) => {

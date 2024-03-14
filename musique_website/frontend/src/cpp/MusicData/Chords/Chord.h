@@ -46,6 +46,9 @@ private:
     std::vector<uint16_t> GetHarmonyStringWithSymbols() const;
     std::vector<uint16_t> GetHarmonyStringWithoutSymbols() const;
 
+    // adds spans for the chord symbol string
+    void AddSpansForChordString();
+
     static std::vector<uint16_t> GetTextFromPitch(const Pitch& pitch);
 
     static SMuFLID GetChordSymbolAccidentalSMuFLID(int alter);
@@ -60,6 +63,12 @@ public:
     float beatPositionInSong = 0.0f; // the position of the note in the song(not counting repeats) in beats(quarter notes)
 
     std::vector<uint16_t> chordNameString;
+    std::vector<Span> spans;
+
+    enum class SpanType {
+        NormalText = 0, MusicText = 1
+    };
+
     String chordName = String();
     Pitch rootPitch;
 

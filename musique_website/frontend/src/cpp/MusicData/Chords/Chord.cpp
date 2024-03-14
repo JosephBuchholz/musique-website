@@ -10,22 +10,10 @@ void Chord::Render(RenderData& renderData, const Settings& settings, Vec2<float>
     TextualElement::ModifyPaint(paint);
 
     // render
-    //renderData.AddText(Text(chordName.string, position.x + measurePositionX + offsetX, position.y + measurePositionY + offsetY, paint));
-
     if (chordDiagram && settings.showChordDiagram == Settings::ShowChordDiagram::Auto)
         chordDiagram->Render(renderData, position + measurePosition);
 
-    std::vector<uint16_t> chars;
-    chars.push_back((uint16_t)SMuFLID::csymAccidentalFlat);
-
-    for (auto& c : chordName.string)
-    {
-        if (c == '\0')
-            break;
-        chars.push_back(c);
-    }
-
-    std::vector<TextSpan> spans;
+    std::vector<TextSpan> textSpans;
     Paint glyphPaint = Paint(color.color);
     glyphPaint.useMusicFont = true;
     glyphPaint.textSize = paint.textSize;
@@ -35,10 +23,13 @@ void Chord::Render(RenderData& renderData, const Settings& settings, Vec2<float>
     normalPaint.textSize = paint.textSize;
     normalPaint.align = Paint::Align::Left;
 
-    spans.emplace_back(0, chordNameString.size(), glyphPaint);
-    //spans.emplace_back(1, 10, normalPaint);
+    // convert Spans to TextSpans
+    for (auto span : spans)
+    {
+        textSpans.emplace_back(span.startIndex, span.endIndex, (span.type == (uint16_t)SpanType::MusicText) ? glyphPaint : normalPaint);
+    }
 
-    renderData.AddSpannableText(SpannableText(chordNameString, position + measurePosition, spans, paint));
+    renderData.AddSpannableText(SpannableText(chordNameString, position + measurePosition, textSpans, paint));
 }
 
 void Chord::RenderDebug(RenderData& renderData, const Settings& settings, Vec2<float> measurePosition) const
@@ -275,6 +266,94 @@ void Chord::CalculateChordName(const Settings& settings)
     {
         chordNameString.push_back((uint16_t)SMuFLID::csymAlteredBassSlash);
         AddCharsToString(chordNameString, GetTextFromPitch(bassPitch));
+    }
+
+    AddSpansForChordString();
+}
+
+
+void Chord::AddSpansForChordString()
+{
+    spans.clear();
+
+    // assuming first character is not a musical one (will cause problem if first character was a musical character)
+    bool isMusicTextSpan = false;
+    Span currentSpan;
+    currentSpan.type = (uint16_t)SpanType::NormalText;
+    currentSpan.startIndex = 0;
+
+    int index = 0;
+    for (uint16_t c : chordNameString)
+    {
+        switch (c)
+        {
+            // if it is a musical symbol
+            case (uint16_t)SMuFLID::csymAccidentalFlat:
+            case (uint16_t)SMuFLID::csymAccidentalDoubleFlat:
+            case (uint16_t)SMuFLID::csymAccidentalSharp:
+            case (uint16_t)SMuFLID::csymAccidentalDoubleSharp:
+            case (uint16_t)SMuFLID::csymAccidentalNatural:
+            case (uint16_t)SMuFLID::csymAlteredBassSlash:
+            case (uint16_t)SMuFLID::csymBracketLeftTall:
+            case (uint16_t)SMuFLID::csymBracketRightTall:
+            case (uint16_t)SMuFLID::csymParensLeftTall:
+            case (uint16_t)SMuFLID::csymParensRightTall:
+            case (uint16_t)SMuFLID::csymMajorSeventh:
+            case (uint16_t)SMuFLID::csymMinor:
+            case (uint16_t)SMuFLID::csymAugmented:
+            case (uint16_t)SMuFLID::csymDiminished:
+            case (uint16_t)SMuFLID::csymHalfDiminished:
+            {
+                if (!isMusicTextSpan) // if span is not music text
+                {
+                    // push back current span
+                    currentSpan.endIndex = index;
+                    spans.push_back(currentSpan);
+
+                    // create new span
+                    currentSpan = Span();
+                    currentSpan.startIndex = index;
+                    currentSpan.type = (uint16_t)SpanType::MusicText;
+
+                    isMusicTextSpan = true;
+                }
+
+                break;
+            }
+
+            // it is not a musical symbol
+            default:
+            {
+                if (isMusicTextSpan) // if current span is music text
+                {
+                    // push back current span
+                    currentSpan.endIndex = index;
+                    spans.push_back(currentSpan);
+
+                    // create new span
+                    currentSpan = Span();
+                    currentSpan.startIndex = index;
+                    currentSpan.type = (uint16_t)SpanType::NormalText;
+
+
+                    isMusicTextSpan = false;
+                }
+                
+                break;
+            }
+        }
+
+        index++;
+    }
+
+    // push back last span
+    currentSpan.endIndex = index;
+    spans.push_back(currentSpan);
+
+    LOGI("spans: ");
+    for (auto span : spans)
+    {
+        LOGD("span: start: %d, end: %d, type: %d, string: %d", span.startIndex, span.endIndex, span.type);
     }
 }
 
