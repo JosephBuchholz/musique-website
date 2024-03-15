@@ -177,8 +177,10 @@ export class CanvasRenderer extends Renderer {
     measureText(context, text, paint) {
         this.currentFont = "plainFont";
         this.usePaint(paint);
+        this.setFont(paint);
 
         var textMetrics = this.context.measureText(text);
+
         return textMetrics;
     }
 
@@ -190,6 +192,46 @@ export class CanvasRenderer extends Renderer {
         );
 
         return textMetrics;
+    }
+
+    drawBox(boxArray, offsetX, offsetY, paint) {
+        var linePaint = paint;
+        linePaint.strokeWidth = 2.0;
+
+        var x = offsetX;
+        var y = offsetY;
+
+        this.drawLine(
+            boxArray[0] + x,
+            boxArray[1] + y,
+            boxArray[0] + boxArray[2] + x,
+            boxArray[1] + y,
+            linePaint
+        );
+
+        this.drawLine(
+            boxArray[0] + boxArray[2] + x,
+            boxArray[1] + boxArray[3] + y,
+            boxArray[0] + boxArray[2] + x,
+            boxArray[1] + y,
+            linePaint
+        );
+
+        this.drawLine(
+            boxArray[0] + x,
+            boxArray[1] + boxArray[3] + y,
+            boxArray[0] + x,
+            boxArray[1] + y,
+            linePaint
+        );
+
+        this.drawLine(
+            boxArray[0] + x,
+            boxArray[1] + boxArray[3] + y,
+            boxArray[0] + boxArray[2] + x,
+            boxArray[1] + boxArray[3] + y,
+            linePaint
+        );
     }
 }
 

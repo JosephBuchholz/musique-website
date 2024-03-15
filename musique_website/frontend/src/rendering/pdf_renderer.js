@@ -219,6 +219,19 @@ export default class PDFRenderer extends Renderer {
         this.canvasCurrentFont = "plainFont";
         this.usePaintCanvas(context, paint);
 
+        if (paint.isBold && paint.isItalic)
+            this.canvasCurrentFont = "boldItalicFont";
+        else if (paint.isBold) this.canvasCurrentFont = "boldFont";
+        else if (paint.isItalic) this.canvasCurrentFont = "italicFont";
+        else if (paint.useMusicFont) this.canvasCurrentFont = "musicFont";
+        else this.canvasCurrentFont = "plainFont";
+
+        context.font =
+            paint.textSize * 2.0 * this.canvasScale +
+            "px " +
+            this.canvasCurrentFont;
+        context.textAlign = paint.align;
+
         var textMetrics = context.measureText(text);
         return textMetrics;
     }

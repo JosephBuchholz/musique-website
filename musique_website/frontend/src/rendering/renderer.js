@@ -31,6 +31,8 @@ export default class Renderer {
 
     clear() {}
 
+    drawBox(boxArray, offsetX, offsetY, paint) {}
+
     // TODO: get rid of context parameter
     measureText(context, text, paint) {}
     measureGlyph(context, codePoint, paint) {}

@@ -142,7 +142,6 @@ export default function EditorPage() {
                 var text = module.UTF16ToString(textStrPtr);
 
                 renderer.drawUTF16Text(text, posX, posY, paint);
-                //renderer.drawText(context, text, posX, posY, paint);
             }
 
             function drawGlyphCpp(codePoint, posX, posY, paintStrPtr) {

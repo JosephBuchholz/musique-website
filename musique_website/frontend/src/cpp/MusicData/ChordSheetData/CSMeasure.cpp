@@ -108,7 +108,7 @@ void CSMeasure::Init()
             width = lyricPosition.x + dimensions.x;
         }
 
-        LOGE("dimensions: %s, lyricPos: %s", dimensions.GetPrintableString().c_str(), lyricPosition.GetPrintableString().c_str());
+        LOGD("dimensions: %s, lyricPos: %s", dimensions.GetPrintableString().c_str(), lyricPosition.GetPrintableString().c_str());
 
         lyric->Init(lyricPosition);
 

@@ -84,8 +84,6 @@ void Renderer::DrawSpannableText(const SpannableText& spannableText)
 
     for (const TextSpan& span : spannableText.spans)
     {
-        LOGD("Drawing a span: start: %d, end: %d", span.startIndex, span.endIndex);
-
         uint16_t* text = nullptr;
 
         if (span.endIndex <= spannableText.textSize)
@@ -94,8 +92,6 @@ void Renderer::DrawSpannableText(const SpannableText& spannableText)
             text = NewSubString(spannableText.text, spannableText.textSize, span.startIndex, spannableText.textSize);
 
         ASSERT(text != nullptr);
-
-        //LOGD("spannable text: %s", text);
 
         DrawUTF16TextCallback(text, currentPosition.x, currentPosition.y, EncodePaintObject(span.paint, scale).c_str());
 

@@ -349,12 +349,6 @@ void Chord::AddSpansForChordString()
     // push back last span
     currentSpan.endIndex = index;
     spans.push_back(currentSpan);
-
-    LOGI("spans: ");
-    for (auto span : spans)
-    {
-        LOGD("span: start: %d, end: %d, type: %d, string: %d", span.startIndex, span.endIndex, span.type);
-    }
 }
 
 void Chord::CalculatePositionAsPaged(const MusicDisplayConstants& displayConstants, float defaultX, float defaultY)
