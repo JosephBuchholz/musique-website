@@ -43,6 +43,7 @@ class Measure : public VisibleElement
     friend class Staff;
     friend class Song;
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

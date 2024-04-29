@@ -29,6 +29,7 @@ public:
 class BracketDirection : public DurationDirection, public LineElement
 {
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

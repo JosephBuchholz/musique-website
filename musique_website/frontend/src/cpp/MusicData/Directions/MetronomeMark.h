@@ -18,6 +18,7 @@
 class MetronomeMark : public TextualElement
 {
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

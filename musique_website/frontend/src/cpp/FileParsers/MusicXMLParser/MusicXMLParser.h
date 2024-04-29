@@ -2,8 +2,9 @@
  * This files contains the definition for the `MusicXMLParser` class which parses a file in the format of MusicXML.
  */
 
-#ifndef MUSIQUE_MUSICXMLPARSER_H
-#define MUSIQUE_MUSICXMLPARSER_H
+#pragma once
+
+#include "../FileParser.h"
 
 #include <string>
 #include <unordered_map>
@@ -20,7 +21,7 @@ using namespace tinyxml2;
 /**
  * A 'singleton' that parses MusicXML formatted files.
  */
-class MusicXMLParser
+class MusicXMLParser : public FileParser
 {
     friend class XMLHelper;
     friend class NoteElementParser;
@@ -67,15 +68,4 @@ private:
 protected:
     static void AddError(std::string title, std::string desc, ErrorLevel errorLevel = ErrorLevel::Error) { m_Errors.emplace_back(title, desc, "MusicXMLParser", errorLevel); }
     static void AddErrorIf(bool condition, std::string title, std::string desc, ErrorLevel errorLevel = ErrorLevel::Error) { if (condition) m_Errors.emplace_back(title, desc, "MusicXMLParser", errorLevel); }
-
-private:
-
-
-    //static std::vector<std::shared_ptr<DynamicWedge>> currentDynamicWedges;
-    //static int currentDynamicWedgesCount;
 };
-
-//std::unordered_map<int, std::shared_ptr<DynamicWedge>> MusicXMLParser::currentDynamicWedges = std::unordered_map<int, std::shared_ptr<DynamicWedge>>();
-//int MusicXMLParser::currentDynamicWedgesCount = 0;
-
-#endif // MUSIQUE_MUSICXMLPARSER_H

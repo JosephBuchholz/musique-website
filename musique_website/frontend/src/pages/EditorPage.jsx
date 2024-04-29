@@ -24,6 +24,7 @@ class ButtonType {
     static Reset = new ButtonType(2);
     static Metronome = new ButtonType(3);
     static DownloadPDF = new ButtonType(4);
+    static Export = new ButtonType(5);
 
     constructor(value) {
         this.value = value;
@@ -339,6 +340,26 @@ export default function EditorPage() {
                 console.log("Started new PDF page");
             }
 
+            function downloadText(nameStr, dataStr) {
+                var name = module.UTF8ToString(nameStr);
+                var data = module.UTF8ToString(dataStr);
+
+                const file = new File([data], name, {
+                    type: "text/plain",
+                });
+
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(file);
+
+                link.href = url;
+                link.download = file.name;
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }
+
             var clearFP = module.addFunction(clearCanvasCpp, "v");
 
             var drawLineFP = module.addFunction(drawLineCpp, "vffffi");
@@ -375,6 +396,9 @@ export default function EditorPage() {
                 endPDFRenderFP,
                 startNewPDFPageFP
             );
+
+            var downloadTextFP = module.addFunction(downloadText, "vii");
+            module.addCallbackFunctionsToCpp(downloadTextFP);
 
             /*fetch("/song/get?key=ABC123&method=get_file&id=37&file_index=0")
                 .then((response) => response.text())
@@ -482,6 +506,21 @@ export default function EditorPage() {
                     }}
                 >
                     Get/Load Song
+                </button>
+
+                <button
+                    onClick={async () => {
+                        console.log("Export button pressed!!!");
+
+                        if (moduleIsCreated) {
+                            module.onButtonEvent(
+                                ButtonType.Export.value,
+                                ButtonEventType.Pressed.value
+                            );
+                        }
+                    }}
+                >
+                    Export Song
                 </button>
             </div>
         </>

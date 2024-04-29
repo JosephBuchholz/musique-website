@@ -30,7 +30,7 @@ class ButtonEvent : public InputEvent
 public:
     enum class ButtonType
     {
-        None, Play, Reset, Metronome, DownloadPDF
+        None, Play, Reset, Metronome, DownloadPDF, Export
     } buttonType = ButtonType::None;
 
     enum class EventType

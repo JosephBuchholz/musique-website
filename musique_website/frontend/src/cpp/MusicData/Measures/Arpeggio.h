@@ -18,6 +18,7 @@ class Arpeggio : public VisibleElement
 {
     friend class Measure;
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

@@ -9,6 +9,7 @@
 #include "Rendering/SMuFLGlyph.h"
 #include "Collisions/Vec2.h"
 #include "Rendering/Renderer.h"
+#include "Callbacks.h"
 #include "MusicPlayers/MidiCallbacks.h"
 #include "MusicData/Types.h"
 
@@ -119,8 +120,16 @@ void AddFunctionsToCpp(int clearFP, int drawLineFP, int drawTextFP, int drawUTF1
     renderer.StartNewPDFPageCallback = reinterpret_cast<void (*)()>(startNewPDFPageFP);
 }
 
+void AddCallbackFunctionsToCpp(int downloadTextFP)
+{
+    Callbacks& callbacks = Callbacks::GetInstance();
+
+    callbacks.DownloadTextCallback = reinterpret_cast<void (*)(const char*, const char*)>(downloadTextFP);
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("addFunctionsToCpp", &AddFunctionsToCpp);
+    emscripten::function("addCallbackFunctionsToCpp", &AddCallbackFunctionsToCpp);
     emscripten::function("addAudioCallbacksToCpp", &AddAudioCallbacksToCpp);
     emscripten::function("onButtonEvent", &OnButtonEvent);
     emscripten::function("loadSong", &LoadSong);

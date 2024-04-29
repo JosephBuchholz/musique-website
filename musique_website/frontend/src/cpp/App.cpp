@@ -8,6 +8,8 @@
 #include "Debugging/Debug.h"
 #include "Exceptions/Exceptions.h"
 #include "FileParsers/ChordSheetParser/ChordSheetParser.h"
+#include "FileParsers/HarmonyXMLParser/HarmonyXMLParser.h"
+#include "FileParsers/HarmonyXMLParser/HarmonyXMLExporter.h"
 #include "Rendering/PrintRenderData.h"
 #include "Callbacks.h"
 
@@ -99,6 +101,28 @@ void App::LoadSongFromString(const std::string& extension, const std::string& st
 
         song = std::make_shared<Song>();
         ChordSheetParser::ParseChordSheet(string, song);
+
+        if (song)
+        {
+            song->settings = settings;
+            UpdateSongData(song->songData);
+        }
+
+        songUpdated = false;
+        isUpdating = true;
+        musicRenderer->updateRenderData = true;
+        updateMusicPlayer = false;
+        allowRendering = true;
+        allowFrameDataRendering = false;
+        songLoaded = true;
+        doCollisions = false;
+    }
+    else if (extension == "harmonyxml")
+    {
+        LOGI("Harmony xml format!!!!");
+        
+        song = std::make_shared<Song>();
+        HarmonyXMLParser::ParseHarmonyXML(string, song);
 
         if (song)
         {
@@ -415,6 +439,17 @@ bool App::OnButtonEvent(const ButtonEvent& event)
                 }
 
                 UpdatePrintRenderData(printRenderData);
+            }
+
+            break;
+        }
+        case ButtonEvent::ButtonType::Export:
+        {
+            if (event.eventType == ButtonEvent::EventType::Pressed)
+            {
+                std::string data = HarmonyXMLExporter::ExportHarmonyXML(song);
+
+                Callbacks::GetInstance().DownloadText("song", data);
             }
 
             break;

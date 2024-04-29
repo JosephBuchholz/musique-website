@@ -42,6 +42,7 @@ add_executable(
         MusicData/ChordSheetData/CSChord.cpp
         MusicData/ChordSheetData/CSLyric.cpp
 
+
         MusicData/BaseElements/LineElement.cpp
         MusicData/BaseElements/TextualElement.cpp
         MusicData/BaseElements/VisibleElement.cpp
@@ -122,6 +123,9 @@ add_executable(
         FileParsers/MusicXMLParser/ParseError.cpp
         FileParsers/MusicXMLParser/NoteElementParser.cpp
         FileParsers/MusicXMLParser/BaseElementParser.cpp
+
+        FileParsers/HarmonyXMLParser/HarmonyXMLParser.cpp
+        FileParsers/HarmonyXMLParser/HarmonyXMLExporter.cpp
 
         Utils/Math.cpp
         Utils/Converters.cpp

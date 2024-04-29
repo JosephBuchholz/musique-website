@@ -22,6 +22,7 @@ class Dynamic : public TextualElement
 {
     friend class Song;
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

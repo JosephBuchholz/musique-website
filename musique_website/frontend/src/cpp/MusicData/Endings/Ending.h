@@ -21,6 +21,7 @@ public:
 class Ending : public TextualElement, public LineElement
 {
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

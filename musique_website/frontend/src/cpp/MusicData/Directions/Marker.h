@@ -18,6 +18,7 @@
 class Marker : public VisibleElement
 {
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 

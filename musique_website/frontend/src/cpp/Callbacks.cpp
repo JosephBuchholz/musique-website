@@ -165,3 +165,14 @@ void OnTempoChangedCallback(float tempo)
 {
     LOGD("Callbacks: Update On Tempo Changed function called");
 }
+
+Callbacks& Callbacks::GetInstance()
+{
+    static Callbacks instance;
+    return instance;
+}
+
+void Callbacks::DownloadText(const std::string& name, const std::string& data)
+{
+    DownloadTextCallback(name.c_str(), data.c_str());
+}

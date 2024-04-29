@@ -23,4 +23,26 @@ void SetMidiReverb(int reverb);
 
 void OnTempoChangedCallback(float tempo);
 
+class Callbacks
+{
+public:
+	static Callbacks& GetInstance();
+
+private:
+	Callbacks() {}
+
+	Callbacks(Callbacks const&) = delete;
+	void operator=(Callbacks const&) = delete;
+
+public:
+    void DownloadText(const std::string& name, const std::string& data);
+
+private:
+	void (*DownloadTextCallback)(const char* name, const char* data);
+
+public:
+
+	friend void AddCallbackFunctionsToCpp(int);
+};
+
 #endif // MUSIQUE_CALLBACKS_H

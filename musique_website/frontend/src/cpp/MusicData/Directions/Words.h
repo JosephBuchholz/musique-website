@@ -19,6 +19,7 @@
 class Words : public TextualElement
 {
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
     Words() {  }

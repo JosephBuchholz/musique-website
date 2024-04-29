@@ -13,7 +13,7 @@ function NavigationBar() {
                         to="/"
                         className="text-3xl font-bold text-black m-6 p-1"
                     >
-                        Musique
+                        Harmonically
                     </Link>
                 </div>
 

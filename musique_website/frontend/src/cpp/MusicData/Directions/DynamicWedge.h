@@ -29,6 +29,7 @@ public:
 class DynamicWedge : public DurationDirection, public LineElement
 {
     friend class MusicXMLParser;
+    friend class HarmonyXMLParser;
 
 public:
 
