@@ -26,6 +26,8 @@ public:
 
     bool isFirstMeasureOfSystem = false;
 
+    int divisions = 0;
+
     std::vector<std::shared_ptr<CSChord>> chords;
     std::vector<std::shared_ptr<CSLyric>> lyrics;
 };

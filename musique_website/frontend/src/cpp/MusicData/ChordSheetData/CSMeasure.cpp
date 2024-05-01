@@ -11,6 +11,7 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
     for (const auto& chord : chords)
     {
         chord->Render(renderData, settings, parentPosition + position);
+        LOGD_TAG("CSMeasure", "Beat position: %f, in song: %f", chord->beatPosition, chord->beatPositionInSong);
     }
 
     if (isFirstMeasureOfSystem && !lyrics.empty())
@@ -38,6 +39,7 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
 
 void CSMeasure::Init()
 {
+    float defaultWidth = width;
     Vec2<float> previousPosition = { 10.0f, 0.0f };
     for (const auto& chord : chords)
     {
@@ -125,6 +127,10 @@ void CSMeasure::Init()
         lyricPosX = lyrics.back()->lyricText.GetDimensions(Paint()).x + lyrics.back()->position.x;
 
     width = std::max(chordPosX, lyricPosX);
+    /*if (defaultWidth != 0.0f)
+    {
+        width = defaultWidth;
+    }*/
 }
 
 float CSMeasure::GetPositionXFromBeatPositionOfChords(float beatPosition) const

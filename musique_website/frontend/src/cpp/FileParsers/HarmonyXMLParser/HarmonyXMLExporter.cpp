@@ -2,6 +2,7 @@
 
 #include "../../Utils/Converters.h"
 #include <memory>
+#include <algorithm>
 
 #include "../../Collisions/Vec2.h"
 #include "../MusicXMLParser/BaseElementParser.h"
@@ -11,6 +12,8 @@
 #include "../../MusicData/Directions/Words.h"
 
 #include "../../libs/tinyxml2/tinyxml2.h"
+
+#include "HarmonyXMLExportHelper.h"
 
 using namespace tinyxml2;
 
@@ -25,14 +28,65 @@ XMLElement* ExportLyric(XMLDocument& doc, const std::shared_ptr<CSLyric>& lyric)
 {
     XMLElement* lyricElement = doc.NewElement("lyric");
 
+    // relative to measure
+    lyricElement->SetAttribute("default-x", lyric->position.x);
+    lyricElement->SetAttribute("default-y", lyric->position.y);
+
+    lyricElement->SetAttribute("is-pickup", HarmonyXMLExportHelper::FromBoolToYesNo(lyric->isPickupToNextMeasure));
+
     // syllabic element
-    std::string syllabicValue = "single";
-    lyricElement->InsertEndChild(NewTextElement(doc, "syllabic", syllabicValue));
+    if (lyric->parentSyllableGroup)
+    {
+        if (lyric->parentSyllableGroup->lyrics.size() != 0)
+        {
+            std::string syllabicValue = "";
+            if (lyric->parentSyllableGroup->lyrics.size() == 1) // only this lyric
+            {
+                syllabicValue = "single";
+            }
+            else if (lyric->parentSyllableGroup->lyrics[0] == lyric) // lyric is the start
+            {
+                syllabicValue = "start";
+            }
+            else if (lyric->parentSyllableGroup->lyrics.back() == lyric) // lyric is at the end
+            {
+                syllabicValue = "end";
+            }
+
+            if (syllabicValue != "")
+                lyricElement->InsertEndChild(NewTextElement(doc, "syllabic", syllabicValue));
+        }
+    }
 
     // text element
     XMLElement* lyricTextElement = doc.NewElement("text");
     lyricTextElement->SetText(lyric->lyricText.text.c_str());
     lyricElement->InsertEndChild(lyricTextElement);
+
+    // phrase element
+    if (lyric->parentLyricalPhrase)
+    {
+        if (lyric->parentLyricalPhrase->lyrics.size() != 0)
+        {
+            std::string phraseValue = "";
+            if (lyric->parentLyricalPhrase->lyrics.size() == 1) // only one lyric in phrase
+            {
+                phraseValue = "single";
+            }
+            else if (lyric->parentLyricalPhrase->lyrics[0] == lyric) // is the first lyric in the lyrical phrase
+            {
+                phraseValue = "start";
+            }
+            else if (lyric->parentLyricalPhrase->lyrics.back() == lyric) // is the last lyric
+            {
+                phraseValue = "end";
+            }
+
+
+            if (phraseValue != "")
+                lyricElement->InsertEndChild(NewTextElement(doc, "phrase", phraseValue));
+        }
+    }
 
     return lyricElement;
 }
@@ -40,6 +94,10 @@ XMLElement* ExportLyric(XMLDocument& doc, const std::shared_ptr<CSLyric>& lyric)
 XMLElement* ExportChord(XMLDocument& doc, const std::shared_ptr<CSChord>& chord)
 {
     XMLElement* chordElement = doc.NewElement("chord-symbol");
+
+    // relative to the measure
+    chordElement->SetAttribute("default-x", chord->position.x);
+    chordElement->SetAttribute("default-y", chord->position.y);
     
     int divisions = 16;
 
@@ -121,36 +179,83 @@ XMLElement* ExportChord(XMLDocument& doc, const std::shared_ptr<CSChord>& chord)
     return chordElement;
 }
 
-XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index)
+XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<System>& currentSystem)
 {
     XMLElement* measureElement = doc.NewElement("measure");
 
     //measureElement->SetAttribute("number", measure->number);
     measureElement->SetAttribute("width", measure->width);
 
+    if (measure->isFirstMeasureOfSystem)
+    {
+        XMLElement* printElement = doc.NewElement("print");
+
+        printElement->SetAttribute("new-system", "yes");
+        
+        XMLElement* systemLayoutElement = doc.NewElement("system-layout");
+        XMLElement* systemMarginsElement = doc.NewElement("system-margins");
+        systemMarginsElement->InsertEndChild(NewTextElement(doc, "left-margin", ToString(currentSystem->layout.systemLeftMargin)));
+        systemMarginsElement->InsertEndChild(NewTextElement(doc, "right-margin", ToString(currentSystem->layout.systemRightMargin)));
+        systemLayoutElement->InsertEndChild(systemMarginsElement);
+
+        systemLayoutElement->InsertEndChild(NewTextElement(doc, "system-distance", ToString(currentSystem->layout.systemDistance)));
+
+        printElement->InsertEndChild(systemLayoutElement);
+
+        measureElement->InsertEndChild(printElement);
+    }
+
     if (index == 0)
     {
         XMLElement* attributesElement = doc.NewElement("attributes");
-        attributesElement->InsertEndChild(NewTextElement(doc, "divisions", ToString(4)));
+        attributesElement->InsertEndChild(NewTextElement(doc, "divisions", ToString(16)));
 
         measureElement->InsertEndChild(attributesElement);
     }
+
+    int divisions = 16;
+
+    struct TimedElement
+    {
+        XMLElement* element = nullptr;
+        int timeInMeasure = 0;
+    };
     
-    std::vector<XMLElement*> elements;
+    std::vector<TimedElement> elements;
 
     for (auto lyric : measure->lyrics)
     {
-        elements.push_back(ExportLyric(doc, lyric));
+        TimedElement newElement;
+        newElement.element = ExportLyric(doc, lyric);
+        newElement.timeInMeasure = lyric->beatPosition * divisions;
+        elements.push_back(newElement);
     }
 
     for (auto chord : measure->chords)
     {
-        elements.push_back(ExportChord(doc, chord));
+        TimedElement newElement;
+        newElement.element = ExportChord(doc, chord);
+        newElement.timeInMeasure = chord->beatPosition * divisions;
+        elements.push_back(newElement);
     }
-
+    
+    std::sort(elements.begin(), elements.end(), [](TimedElement a, TimedElement b)
+        {
+            return a.timeInMeasure < b.timeInMeasure;
+        });
+    
+    int previousTime = 0;
     for (auto element : elements)
     {
-        measureElement->InsertEndChild(element);
+        if (element.timeInMeasure > previousTime)
+        {
+            XMLElement* forwardElement = doc.NewElement("forward");
+            forwardElement->InsertEndChild(NewTextElement(doc, "duration", ToString(element.timeInMeasure - previousTime)));
+            measureElement->InsertEndChild(forwardElement);
+            previousTime = element.timeInMeasure;
+        }
+
+        measureElement->InsertEndChild(element.element);
     }
 
     return measureElement;
@@ -166,6 +271,7 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
     XMLElement* root = doc.NewElement("score-partwise");
     root->SetAttribute("version", 1.0);
 
+    // work
     XMLElement* work = doc.NewElement("work");
     XMLElement* workTitle = doc.NewElement("work-title");
     workTitle->SetText(song->songData.songTitle.c_str());
@@ -173,6 +279,48 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
 
     root->InsertFirstChild(work);
 
+    // credits
+    for (auto credit : song->credits)
+    {
+        XMLElement* creditElement = doc.NewElement("credit");
+
+        creditElement->SetAttribute("page", credit.pageNumber);
+
+        XMLElement* creditTypeElement = doc.NewElement("credit-type");
+
+        std::string creditTypeString = "";
+        switch (credit.creditType)
+        {
+            case Credit::CreditType::PageNumber: creditTypeString = "page number"; break;
+            case Credit::CreditType::Title: creditTypeString = "title"; break;
+            case Credit::CreditType::Subtitle: creditTypeString = "subtitle"; break;
+            case Credit::CreditType::Composer: creditTypeString = "composer"; break;
+            case Credit::CreditType::Arranger: creditTypeString = "arranger"; break;
+            case Credit::CreditType::Lyricist: creditTypeString = "lyricist"; break;
+            case Credit::CreditType::Rights: creditTypeString = "rights"; break;
+            case Credit::CreditType::PartName: creditTypeString = "part name"; break;
+            case Credit::CreditType::Transcriber: creditTypeString = "transcriber"; break;
+
+            case Credit::CreditType::None:
+            default: creditTypeString = "composer"; break;
+        }
+        creditTypeElement->SetText(creditTypeString.c_str());
+
+        creditElement->InsertEndChild(creditTypeElement);
+
+        XMLElement* creditWordsElement = doc.NewElement("credit-words");
+
+        creditWordsElement->SetText(credit.words.text.c_str());
+        creditWordsElement->SetAttribute("default-x", credit.words.positionX);
+        creditWordsElement->SetAttribute("default-y", credit.words.positionY);
+        HarmonyXMLExportHelper::SetTextualAttributes(creditWordsElement, credit.words);
+
+        creditElement->InsertEndChild(creditWordsElement);
+
+        root->InsertEndChild(creditElement);
+    }
+
+    // part list
     XMLElement* partList = doc.NewElement("part-list");
     
     for (const auto& instrument : song->instruments)
@@ -182,7 +330,8 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
         scorePart->SetAttribute("id", instrument->id.c_str());
 
         scorePart->InsertEndChild(NewTextElement(doc, "part-name", instrument->name.string));
-        scorePart->InsertEndChild(NewTextElement(doc, "part-abbreviation", instrument->nameAbbreviation.string));
+        if (instrument->nameAbbreviation.string != "")
+            scorePart->InsertEndChild(NewTextElement(doc, "part-abbreviation", instrument->nameAbbreviation.string));
 
         partList->InsertEndChild(scorePart);
     }
@@ -199,10 +348,16 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
         {
             if (staff->type == Staff::StaffType::ChordSheet && staff->csStaff)
             {
+                int systemIndex = -1;
                 int i = 0;
                 for (const auto& measure : staff->csStaff->measures)
                 {
-                    XMLElement* m = ExportMeasure(doc, measure, i);
+                    if (measure->isFirstMeasureOfSystem)
+                    {
+                        systemIndex++;
+                    }
+
+                    XMLElement* m = ExportMeasure(doc, measure, i, song->systems[systemIndex]);
                     part->InsertEndChild(m);
                     i++;
                 }

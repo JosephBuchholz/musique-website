@@ -47,8 +47,184 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
         throw ParseException("Document error");
     }
 
-    // TODO: will create problems if it is socre-timewise
     XMLElement* root = doc.FirstChildElement("score-partwise");
+    if (root)
+    {
+        LOGD("ROOT!!");
+
+        song->version = root->Attribute("version");
+        
+        // work
+        XMLElement* workElement = root->FirstChildElement("work");
+        if (workElement)
+        {
+            ParseWorkElement(workElement, song->songData.songTitle, song->songData.workNumber);
+        }
+
+        // credits
+        XMLNode* previousCreditNode = root->FirstChildElement("credit");
+        while (true)
+        {
+            if (previousCreditNode)
+            {
+                XMLElement* creditElement = previousCreditNode->ToElement();
+                song->credits.push_back(ParseCreditElement(creditElement));
+            }
+            else
+            {
+                break;
+            }
+
+            previousCreditNode = previousCreditNode->NextSiblingElement("credit");
+        }
+
+        // part list
+        XMLElement* partList = root->FirstChildElement("part-list");
+        if (partList)
+        {
+            // score parts
+            XMLNode* previousScorePartElement = partList->FirstChildElement("score-part");
+            while (true)
+            {
+                if (previousScorePartElement)
+                {
+                    XMLElement* scorePart = previousScorePartElement->ToElement();
+                    std::shared_ptr<Instrument> instrument = std::make_shared<Instrument>();
+                    song->instruments.push_back(instrument);
+
+                    LOGD("id");
+
+                    // part id
+                    instrument->id = scorePart->Attribute("id");
+
+                    LOGD("part name");
+
+                    // part name
+                    XMLElement* partName = scorePart->FirstChildElement("part-name");
+                    if (partName)
+                    {
+                        instrument->name.string = partName->GetText();
+                        instrument->name.print = XMLHelper::GetBoolAttribute(partName, "print-object", true);
+                    }
+
+
+                    LOGD("part name abbrev.");
+
+                    // part name abbreviation
+                    /*XMLElement* partAbbreviation = scorePart->FirstChildElement("part-abbreviation");
+                    if (partAbbreviation)
+                    {
+                        instrument->nameAbbreviation.string = partAbbreviation->GetText();
+                        instrument->nameAbbreviation.print = XMLHelper::GetBoolAttribute(partAbbreviation, "print-object", true);
+                    }*/
+
+
+                    LOGD("midi inst.");
+
+                    // midi instrument
+                    XMLElement* midiInstrumentElement = scorePart->FirstChildElement("midi-instrument");
+                    if (midiInstrumentElement)
+                    {
+                        instrument->midiInstrument.id = XMLHelper::GetStringAttribute(midiInstrumentElement, "id", "");
+
+                        // midi channel
+                        XMLElement* channelElement = midiInstrumentElement->FirstChildElement("midi-channel");
+                        if (channelElement)
+                        {
+                            instrument->midiInstrument.channel = ToInt(channelElement->GetText()) - 1;
+                        }
+
+                        // midi program
+                        XMLElement* programElement = midiInstrumentElement->FirstChildElement("midi-program");
+                        if (programElement)
+                        {
+                            instrument->midiInstrument.program = ToInt(programElement->GetText()) - 1;
+                        }
+
+                        // volume
+                        XMLElement* volumeElement = midiInstrumentElement->FirstChildElement("volume");
+                        if (volumeElement)
+                        {
+                            instrument->midiInstrument.volume = ToInt(volumeElement->GetText());
+                        }
+
+                        // pan
+                        XMLElement* panElement = midiInstrumentElement->FirstChildElement("pan");
+                        if (panElement)
+                        {
+                            instrument->midiInstrument.pan = ToInt(panElement->GetText());
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+
+                previousScorePartElement = previousScorePartElement->NextSiblingElement("score-part");
+            }
+        }
+        else
+        {
+            AddError("Parse Failed", "No part-list");
+        }
+
+        // parts
+        bool isFirstPart = true;
+        XMLNode* previous = root->FirstChildElement("part");
+        while (true) // looping through all parts
+        {
+            if (previous)
+            {
+                XMLElement* part = previous->ToElement();
+
+                ParsePart(song, part, isFirstPart, displayConstants);
+
+                isFirstPart = false;
+            }
+            else
+            {
+                break;
+            }
+
+            previous = previous->NextSiblingElement("part");
+        }
+    }
+
+    // add new system
+    /*int systemIndex = 0;
+    LOGD("adding new system!!!");
+    std::shared_ptr<System> newSystem = std::make_shared<System>();
+    if (!song->systems.empty())
+        newSystem->beginningMeasureIndex = song->systems.back()->endingMeasureIndex + 1;
+    else
+        newSystem->beginningMeasureIndex = 0;
+
+    newSystem->endingMeasureIndex = 57;
+
+    for (int i = newSystem->beginningMeasureIndex; i <= newSystem->endingMeasureIndex; i++)
+    {
+        SystemMeasure systemMeasure;
+        systemMeasure.measureIndex = i;
+        newSystem->systemMeasures.push_back(systemMeasure);
+    }
+
+    newSystem->position = { 150.0f, 200.0f + ((float)systemIndex * 75.0f) };
+
+    song->systems.push_back(newSystem);*/
+
+    song->songData = SongData();
+    InstrumentInfo instrumentInfo;
+    instrumentInfo.visible = true;
+    song->songData.instrumentInfos.push_back(instrumentInfo);
+
+    song->displayConstants = displayConstants;
+
+    // TODO: fix dangerous line of code
+    song->systems[song->systems.size() - 1]->endingMeasureIndex = song->instruments[0]->staves[0]->csStaff->measures.size() - 1;
+
+    // TODO: will create problems if it is socre-timewise
+    /*XMLElement* root = doc.FirstChildElement("score-partwise");
     if (root)
     {
         song->musicXMLVersion = root->Attribute("version");
@@ -250,7 +426,7 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
         {
             currentEndingGroup->endings[currentEndingGroup->endings.size() - 1]->isLastEndingInGroup = true;
         }
-    }
+    }*/
 
     LOGD("Finished");
     doc.Clear();
@@ -260,6 +436,175 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
     currentDashes.clear();
 
     ParseError::PrintErrors();
+}
+
+void HarmonyXMLParser::ParseChordSymbol(XMLElement* element, const std::shared_ptr<CSMeasure>& currentMeasure, float currentTimeInMeasure)
+{
+    std::shared_ptr<CSChord> chord = std::make_shared<CSChord>();
+
+    chord->beatPosition = currentTimeInMeasure;
+    
+    XMLElement* durationElement = element->FirstChildElement("duration");
+    if (durationElement)
+    {
+        //int divisions = 16;
+        chord->duration = (float)ToInt(durationElement->GetText()) / (float)currentMeasure->divisions;
+    }
+    else
+    {
+        LOGE("Error: no duration element in chord symbol");
+    }
+
+    Chord newChord;
+
+    XMLElement* harmonyElement = element;
+
+    // root note
+    XMLElement* rootElement = harmonyElement->FirstChildElement("root");
+    if (rootElement)
+    {
+        XMLElement* rootStepElement = rootElement->FirstChildElement("root-step");
+        if (rootStepElement)
+        {
+            newChord.rootPitch.step = DiatonicNoteFromString(XMLHelper::GetStringValue(rootStepElement, DiatonicNoteToString(newChord.rootPitch.step)));
+        }
+        else
+            ; // TODO: error: this element is required
+
+        newChord.rootPitch.alter = XMLHelper::GetFloatValue("root-alter", rootElement, newChord.rootPitch.alter);
+    }
+
+    // bass note
+    XMLElement* bassElement = harmonyElement->FirstChildElement("bass");
+    if (bassElement)
+    {
+        XMLElement* bassStepElement = bassElement->FirstChildElement("bass-step");
+        if (bassStepElement)
+        {
+            newChord.bassPitch.step = DiatonicNoteFromString(XMLHelper::GetStringValue(bassStepElement, DiatonicNoteToString(newChord.bassPitch.step)));
+        }
+        else
+            ; // TODO: error: this element is required
+
+        newChord.bassPitch.alter = XMLHelper::GetFloatValue("bass-alter", bassElement, newChord.bassPitch.alter);
+
+        newChord.bassSeparator.string = XMLHelper::GetStringValue("bass-separator", bassElement, newChord.bassSeparator.string);
+
+        std::string bassPosStr = XMLHelper::GetStringAttribute(bassElement, "arrangement", "");
+        if (bassPosStr == "horizontal")
+            newChord.bassPos = Chord::BassPos::Horizontal;
+        else if (bassPosStr == "vertical")
+            newChord.bassPos = Chord::BassPos::Vertical;
+        else if (bassPosStr == "diagonal")
+            newChord.bassPos = Chord::BassPos::Diagonal;
+        else if (bassPosStr.empty())
+            newChord.bassPos = Chord::BassPos::None;
+        else
+            ; // TODO: error: this is not possible
+
+        newChord.hasBassNote = true;
+    }
+
+    // kind note
+    XMLElement* kindElement = harmonyElement->FirstChildElement("kind");
+    if (kindElement)
+    {
+        std::string typeString = XMLHelper::GetStringValue(kindElement, "");
+
+        newChord.harmonyType = MusicXMLHelper::GetHarmonyTypeFromString(typeString);
+
+        newChord.brackets = XMLHelper::GetBoolAttribute(kindElement, "bracket-degrees", newChord.brackets);
+        newChord.parentheses = XMLHelper::GetBoolAttribute(kindElement, "parentheses-degrees", newChord.parentheses);
+        newChord.stackDegrees = XMLHelper::GetBoolAttribute(kindElement, "stack-degrees", newChord.stackDegrees);
+        newChord.useSymbols = XMLHelper::GetBoolAttribute(kindElement, "use-symbols", newChord.useSymbols);
+        newChord.harmonyTypeText = XMLHelper::GetStringAttribute(kindElement, "text", newChord.harmonyTypeText);
+    }
+    else
+        ; // TODO: error: this element is required
+
+    // loop through all degree elements
+    XMLNode* previousElement = harmonyElement->FirstChildElement(); // first element
+    while (true)
+    {
+        if (previousElement) {
+            XMLElement* element = previousElement->ToElement();
+            const char* value = element->Value();
+            if (strcmp(value, "degree") == 0)
+            {
+                XMLElement* degreeElement = element;
+                ChordDegree newDegree = ChordDegree();
+
+                BaseElementParser::ParsePrintableElement(degreeElement, newDegree);
+
+                // degree value element
+                XMLElement* degreeValueElement = degreeElement->FirstChildElement("degree-value");
+                if (degreeValueElement)
+                {
+                    BaseElementParser::ParseVisibleElement(degreeValueElement, newDegree.degree);
+                    newDegree.degree.degree = XMLHelper::GetUnsignedIntValue(degreeValueElement, newDegree.degree.degree);
+                }
+
+                // degree type element
+                XMLElement* degreeTypeElement = degreeElement->FirstChildElement("degree-type");
+                if (degreeTypeElement)
+                {
+                    BaseElementParser::ParseVisibleElement(degreeTypeElement, newDegree.degreeType);
+                    std::string s = XMLHelper::GetStringValue(degreeTypeElement, "");
+                    if (s == "add")
+                        newDegree.degreeType.type = DegreeType::Type::Add;
+                    else if (s == "subtract")
+                        newDegree.degreeType.type = DegreeType::Type::Subtract;
+                    else if (s == "alter")
+                        newDegree.degreeType.type = DegreeType::Type::Alter;
+                    else if (s.empty())
+                        newDegree.degreeType.type = DegreeType::Type::None;
+                    else
+                        ; // TODO: error not a valid value
+                }
+
+                // degree alter element
+                XMLElement* degreeAlterElement = degreeElement->FirstChildElement("degree-alter");
+                if (degreeAlterElement)
+                {
+                    BaseElementParser::ParseVisibleElement(degreeAlterElement, newDegree.degreeAlter);
+                    newDegree.degreeAlter.alter = XMLHelper::GetFloatValue(degreeAlterElement, newDegree.degreeAlter.alter);
+                }
+
+                newChord.degrees.push_back(newDegree);
+            }
+        }
+        else
+        {
+            break;
+        }
+        previousElement = previousElement->NextSiblingElement();
+    }
+
+    newChord.CalculateChordName(Settings());
+
+    chord->chordSymbol = newChord;
+
+    currentMeasure->chords.push_back(chord);
+}
+
+void HarmonyXMLParser::ParseLyric(XMLElement* element, const std::shared_ptr<CSMeasure>& currentMeasure, float currentTimeInMeasure)
+{
+    std::shared_ptr<CSLyric> lyric = std::make_shared<CSLyric>();
+
+    lyric->beatPosition = currentTimeInMeasure;
+
+    if (element)
+    {
+        XMLElement* textElement = element->FirstChildElement("text");
+        if (textElement)
+        {
+            TextElement lyricText = TextElement();
+            lyricText.text = textElement->GetText();
+            lyric->lyricText = lyricText;
+        }
+    }
+
+    currentMeasure->lyrics.push_back(lyric);
 }
 
 // ---- Parse Functions ----
@@ -1128,8 +1473,8 @@ Credit HarmonyXMLParser::ParseCreditElement(XMLElement* creditElement)
             CreditWords words = CreditWords();
             BaseElementParser::ParseTextualElement(creditWordsElement, words);
             words.text = XMLHelper::GetStringValue(creditWordsElement, words.text);
-            words.defaultX = XMLHelper::GetFloatAttribute(creditWordsElement, "default-x", words.defaultX);
-            words.defaultY = XMLHelper::GetFloatAttribute(creditWordsElement, "default-y", words.defaultY);
+            words.positionX = XMLHelper::GetFloatAttribute(creditWordsElement, "default-x", words.positionY);
+            words.positionY = XMLHelper::GetFloatAttribute(creditWordsElement, "default-y", words.positionX);
 
             credit.words = words;
         }
@@ -1638,7 +1983,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
 
 
     XMLNode* previousMeasureElement = part->FirstChildElement("measure");
-    std::vector<std::shared_ptr<Measure>> previousMeasures;
+    std::vector<std::shared_ptr<CSMeasure>> previousMeasures;
 
     while (true)
     {
@@ -1655,7 +2000,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             bool startNewSystem = false;
             bool startNewPage = false;
 
-            std::vector<std::shared_ptr<Measure>> currentMeasures;
+            std::vector<std::shared_ptr<CSMeasure>> currentMeasures;
 
             // adding staves
             if (firstMeasure)
@@ -1674,7 +2019,10 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     // adding staves
                     for (int i = 0; i < numStaves; i++)
                     {
-                        currentInst->staves.push_back(std::make_shared<Staff>());
+                        std::shared_ptr<Staff> newStaff = std::make_shared<Staff>();
+                        newStaff->csStaff = std::make_shared<CSStaff>();
+                        newStaff->type = Staff::StaffType::ChordSheet;
+                        currentInst->staves.push_back(newStaff);
 
                         staffIsTabInfo.push_back(false);
                     }
@@ -1683,6 +2031,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                 }
             }
 
+            // instrument/multi-stave brackets
             if (currentInst->staves.size() >= 2)
             {
                 currentInst->instrumentBracket = std::make_shared<InstrumentBracket>();
@@ -1692,8 +2041,9 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             // creating measures for each staff
             for (int i = 0; i < currentInst->staves.size(); i++)
             {
-                std::shared_ptr<Measure> newMeasure = std::make_shared<Measure>();
-                newMeasure->measureNumber = MeasureNumber(measureNumber);
+                std::shared_ptr<CSMeasure> newMeasure = std::make_shared<CSMeasure>();
+                newMeasure->width = measureWidth;
+                /*newMeasure->measureNumber = MeasureNumber(measureNumber);
                 newMeasure->implicit = implicitMeasure;
                 newMeasure->index = measureIndex;
                 newMeasure->staff = i+1;
@@ -1714,7 +2064,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                         newMeasure->measureRepeat->measureRepeatLength = previousMeasures[i]->measureRepeat->measureRepeatLength;
                         newMeasure->measureRepeat->measureRepeatSlashes = previousMeasures[i]->measureRepeat->measureRepeatSlashes;
                     }
-                }
+                }*/
 
                 currentMeasures.push_back(newMeasure);
             }
@@ -1736,7 +2086,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                 if (firstMeasure)
                     startNewSystem = true, startNewPage = true;
 
-                for (const auto& m : currentMeasures) { m->startNewSystem = startNewSystem; m->startNewPage = startNewPage; }
+                for (const auto& m : currentMeasures) { m->isFirstMeasureOfSystem = startNewSystem; m->isFirstMeasureOfSystem = startNewPage; }
 
                 if ((firstMeasure || startNewSystem) && isFirstPart)
                 {
@@ -1787,14 +2137,14 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     systemIndex++;
                 }
 
-                XMLElement* staffLayoutElement = print->FirstChildElement("staff-layout");
+                /*XMLElement* staffLayoutElement = print->FirstChildElement("staff-layout");
                 if (staffLayoutElement)
                 {
                     unsigned int staffNumber = XMLHelper::GetUnsignedIntAttribute(staffLayoutElement, "number", 1); // the number of the staff that this layout applies to
 
                     // staff distance (the distance from the bottom line of the previous staff to the top line of the current staff)
                     currentMeasures[staffNumber-1]->defStaffDistance = XMLHelper::GetFloatValue("staff-distance", staffLayoutElement, currentMeasures[staffNumber-1]->defStaffDistance);
-                }
+                }*/
             }
 
             float currentTimeInMeasure = 0.0f; // keeps track of the current time that has passed in the current measure in beats(quarter notes)
@@ -1823,7 +2173,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                 }
 
                 // key signature
-                XMLElement* keySignatureElement = attributes->FirstChildElement("key");
+                /*XMLElement* keySignatureElement = attributes->FirstChildElement("key");
                 if (keySignatureElement)
                 {
                     KeySignature keySignature = KeySignature(0);
@@ -2095,24 +2445,24 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                             throw InvalidValueException();
                         }
                     }
-                }
+                }*/
             }
             else
             {
-                if (firstMeasure)
-                    currentInst->staves.push_back(std::make_shared<Staff>());
+                //if (firstMeasure)
+                //    currentInst->staves.push_back(std::make_shared<Staff>());
 
                 if (!previousMeasures.empty() && previousMeasures.size() == currentMeasures.size())
                 {
                     int i = 0;
                     for (const auto& m : currentMeasures)
                     {
-                        m->timeSignature = previousMeasures[i]->timeSignature;
-                        m->CalculateDuration();
-                        m->keySignature = previousMeasures[i]->keySignature;
-                        m->clef = previousMeasures[i]->clef;
+                        //m->timeSignature = previousMeasures[i]->timeSignature;
+                        //m->CalculateDuration();
+                        //m->keySignature = previousMeasures[i]->keySignature;
+                        //m->clef = previousMeasures[i]->clef;
                         m->divisions = previousMeasures[i]->divisions;
-                        m->transpose = previousMeasures[i]->transpose;
+                        //m->transpose = previousMeasures[i]->transpose;
                         i++;
                     }
                 }
@@ -2131,9 +2481,9 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     const char* value = element->Value();
                     if (strcmp(value, "note") == 0) // note
                     {
-                        std::shared_ptr<Note> currentNote = std::make_shared<Note>();
+                        /*std::shared_ptr<Note> currentNote = std::make_shared<Note>();
                         NoteElementParser::ParseNoteElement(element, currentTimeInMeasure, staffIsTabInfo, currentNote, previousNote, currentMeasures, measureNumber);
-                        previousNote = currentNote;
+                        previousNote = currentNote;*/
                     }
                     else if (strcmp(value, "backup") == 0) // backup time in measure
                     {
@@ -2159,10 +2509,10 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                             AddError("Missing Element", "Backup element has no duration");
                         }
                     }
-                    else if (strcmp(value, "harmony") == 0) // harmony element (i.e. chords)
+                    /*else if (strcmp(value, "harmony") == 0) // harmony element (i.e. chords)
                     {
                         ParseHarmonyElement(element, currentTimeInMeasure, currentMeasures);
-                    }
+                    }*/
                     else if (strcmp(value, "forward") == 0) // increment time in measure
                     {
                         // duration
@@ -2187,15 +2537,15 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                             AddError("Missing Element", "Forward element has no duration");
                         }
                     }
-                    else if (strcmp(value, "direction") == 0) // direction
+                    /*else if (strcmp(value, "direction") == 0) // direction
                     {
                         // duration direction
                         bool isNewDurationDirection;
                         std::shared_ptr<DurationDirection> durationDirection = ParseDurationDirection(element, isNewDurationDirection, currentTimeInMeasure, measureIndex);
                         if (isNewDurationDirection && durationDirection)
                         {
-                            /*durationDirection->beatPositionStart = currentTimeInMeasure;
-                            durationDirection->startMeasureIndex = measureIndex;*/
+                            //durationDirection->beatPositionStart = currentTimeInMeasure;
+                            //durationDirection->startMeasureIndex = measureIndex;
                             currentInst->staves[0]->durationDirections.push_back(durationDirection);
                         }
 
@@ -2255,6 +2605,14 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                         {
                             ParseEndingElement(endingElement, song, currentMeasures);
                         }
+                    }*/
+                    else if (strcmp(value, "chord-symbol") == 0) // chord symbol
+                    {
+                        ParseChordSymbol(element, currentMeasures[0], currentTimeInMeasure);
+                    }
+                    else if (strcmp(value, "lyric") == 0) // lyric
+                    {
+                        ParseLyric(element, currentMeasures[0], currentTimeInMeasure);
                     }
                 }
                 else
@@ -2290,7 +2648,8 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             // adding measures to correct staves
             for (const auto& m : currentMeasures)
             {
-                currentInst->staves[m->staff-1]->measures.push_back(m);
+                //currentInst->staves[m->staff-1]->measures.push_back(m);
+                currentInst->staves[0]->csStaff->measures.push_back(m);
             }
 
             previousMeasures = currentMeasures;

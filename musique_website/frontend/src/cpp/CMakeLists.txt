@@ -126,6 +126,7 @@ add_executable(
 
         FileParsers/HarmonyXMLParser/HarmonyXMLParser.cpp
         FileParsers/HarmonyXMLParser/HarmonyXMLExporter.cpp
+        FileParsers/HarmonyXMLParser/HarmonyXMLExportHelper.cpp
 
         Utils/Math.cpp
         Utils/Converters.cpp

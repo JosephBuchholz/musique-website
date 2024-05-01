@@ -63,6 +63,10 @@ private:
 
     static std::shared_ptr<Marker> ParseCodaSegnoElement(XMLElement* element);
 
+    // harmony-xml exclusive
+    static void ParseChordSymbol(XMLElement* element, const std::shared_ptr<CSMeasure>& currentMeasure, float currentTimeInMeasure);
+    static void ParseLyric(XMLElement* element, const std::shared_ptr<CSMeasure>& currentMeasure, float currentTimeInMeasure);
+
 protected:
     static void AddError(std::string title, std::string desc, ErrorLevel errorLevel = ErrorLevel::Error) { m_Errors.emplace_back(title, desc, "MusicXMLParser", errorLevel); }
     static void AddErrorIf(bool condition, std::string title, std::string desc, ErrorLevel errorLevel = ErrorLevel::Error) { if (condition) m_Errors.emplace_back(title, desc, "MusicXMLParser", errorLevel); }

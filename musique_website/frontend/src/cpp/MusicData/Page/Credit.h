@@ -10,6 +10,7 @@ class CreditWords : public TextualElement
     friend class MusicXMLParser;
     friend class Credit;
     friend class HarmonyXMLParser;
+    friend class HarmonyXMLExporter;
 
 public:
 

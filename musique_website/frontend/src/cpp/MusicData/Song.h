@@ -285,6 +285,7 @@ public:
 
     Settings settings;
 
+    std::string version = "1.0";
     std::string musicXMLVersion = "1.0";
 
     SongData songData = SongData();

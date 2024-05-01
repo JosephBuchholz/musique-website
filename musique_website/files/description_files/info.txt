@@ -1,0 +1,7 @@
+title: Divine Romance
+artists: Phil Wickham
+album: Phil Wickham
+release_date: 2006
+instruments: Acoustic Guitar
+tags: Solo,Fingerstyle Guitar
+difficulty: 7.0
