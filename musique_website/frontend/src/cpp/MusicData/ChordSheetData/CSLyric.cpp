@@ -20,4 +20,6 @@ void CSLyric::Render(RenderData& renderData, const Settings& settings, Vec2<floa
 #endif*/
 }
 
-
+void CSLyric::UpdateBoundingBox()
+{
+}

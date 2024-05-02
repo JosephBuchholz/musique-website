@@ -105,7 +105,7 @@ struct Color
     operator int() const { return color; }
     operator uint32_t() const { return color; }
 
-    uint32_t color = 0xff000000;
+    uint32_t color = 0x000000FF;
 };
 
 enum class TablatureDisplayType {

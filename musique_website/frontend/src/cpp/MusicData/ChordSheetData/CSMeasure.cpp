@@ -18,14 +18,17 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
     {
         std::shared_ptr<LyricalPhrase> lyricalPhrase = lyrics[0]->parentLyricalPhrase;
 
-        for (const auto& lyric : lyricalPhrase->lyrics)
+        if (lyricalPhrase)
         {
-            if (lyric->isPickupToNextMeasure)
+            for (const auto& lyric : lyricalPhrase->lyrics)
             {
-                lyric->Render(renderData, settings, currentPosition);
+                if (lyric->isPickupToNextMeasure)
+                {
+                    lyric->Render(renderData, settings, currentPosition);
+                }
+                else
+                    break;
             }
-            else
-                break;
         }
     }
 
@@ -62,20 +65,23 @@ void CSMeasure::Init()
     {
         std::shared_ptr<LyricalPhrase> lyricalPhrase = lyrics[0]->parentLyricalPhrase;
 
-        Vec2<float> prevPos = { 0.0f, 0.0f };
-        for (int i = (int)lyricalPhrase->lyrics.size() - 1; i >= 0; i--)
+        if (lyricalPhrase)
         {
-            std::shared_ptr<CSLyric> lyric = lyricalPhrase->lyrics[i];
-
-            if (lyric->isPickupToNextMeasure)
+            Vec2<float> prevPos = { 0.0f, 0.0f };
+            for (int i = (int)lyricalPhrase->lyrics.size() - 1; i >= 0; i--)
             {
-                Vec2<float> dimensions = lyric->lyricText.GetDimensions(Paint());
+                std::shared_ptr<CSLyric> lyric = lyricalPhrase->lyrics[i];
 
-                Vec2<float> lyricPosition = { prevPos.x - dimensions.x, 55.0f };
+                if (lyric->isPickupToNextMeasure)
+                {
+                    Vec2<float> dimensions = lyric->lyricText.GetDimensions(Paint());
 
-                lyric->Init(lyricPosition);
+                    Vec2<float> lyricPosition = { prevPos.x - dimensions.x, 55.0f };
 
-                prevPos = lyricPosition;
+                    lyric->Init(lyricPosition);
+
+                    prevPos = lyricPosition;
+                }
             }
         }
     }

@@ -26,12 +26,11 @@
             <attributes>
                 <divisions>16</divisions>
             </attributes>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
-                <text>How</text>
+            <lyric default-x="-49.640182" default-y="55" is-pickup="yes">
+                <text>How,</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>long</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -45,19 +44,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
-                <text>I</text>
+            <lyric default-x="-7.8740158" default-y="55" is-pickup="yes">
+                <text>ZEBRA</text>
             </lyric>
             <lyric default-x="46.580219" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>to</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="64.735275" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>breathe</text>
             </lyric>
             <chord-symbol default-x="64.735275" default-y="25">
@@ -72,40 +68,35 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="125.72951" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="152.30974" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>air</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="174.61732" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>of</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-104.32544" default-y="55" is-pickup="yes">
                 <text>Where</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-50.462616" default-y="55" is-pickup="yes">
                 <text>pain</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-13.430642" default-y="55" is-pickup="yes">
                 <text>is</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
-                <text>Heaven</text>
+                <text>Heaven!!</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -127,7 +118,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>gone,</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -142,14 +132,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="53.601303" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>and</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="83.501846" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>mercy</text>
             </lyric>
             <chord-symbol default-x="83.501846" default-y="25">
@@ -164,29 +152,26 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="136.07092" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>fills</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="167.27495" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-58.424149" default-y="55" is-pickup="yes">
                 <text>To</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-36.580219" default-y="55" is-pickup="yes">
                 <text>look</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>streets</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -208,7 +193,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>upon</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -223,14 +207,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="52.598381" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="79.178619" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>one</text>
             </lyric>
             <chord-symbol default-x="79.178619" default-y="25">
@@ -245,39 +227,33 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="108.62741" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="145.66916" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>bled</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="182.70114" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>to</text>
             </lyric>
         </measure>
         <measure width="190.58392">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-116.67211" default-y="55" is-pickup="yes">
                 <text>And</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-79.630356" default-y="55" is-pickup="yes">
                 <text>walk</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-38.155022" default-y="55" is-pickup="yes">
                 <text>with</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>save</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -292,8 +268,8 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="55.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>me</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="55.748032" default-y="25">
                 <duration>16</duration>
@@ -326,7 +302,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Him</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -341,14 +316,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="48.89761" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>for</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="73.431747" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>all</text>
             </lyric>
             <chord-symbol default-x="73.431747" default-y="25">
@@ -363,14 +336,15 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="94.16452" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>eterni</text>
             </lyric>
         </measure>
         <measure width="201.51556">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>ty</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>48</duration>
@@ -393,20 +367,17 @@
             </chord-symbol>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-112.68051" default-y="55" is-pickup="yes">
                 <text>There</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-65.477844" default-y="55" is-pickup="yes">
                 <text>will</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-32.04723" default-y="55" is-pickup="yes">
                 <text>be</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-11.023623" default-y="55" is-pickup="yes">
                 <text>a</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -429,7 +400,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>day</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -444,14 +414,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="39.900547" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>when</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="85.819244" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>all</text>
             </lyric>
             <chord-symbol default-x="85.819244" default-y="25">
@@ -466,27 +434,25 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="106.55202" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="139.98264" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>bow</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="177.30545" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>be</text>
             </lyric>
         </measure>
         <measure width="237.68588">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>fore</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -501,28 +467,24 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="42.769077" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Him.</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="84.624893" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>There</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="131.82756" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>44</duration>
             </forward>
             <lyric default-x="165.25818" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>be</text>
             </lyric>
             <chord-symbol default-x="165.25818" default-y="25">
@@ -537,8 +499,8 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="186.28178" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>a</text>
+                <phrase>end</phrase>
             </lyric>
         </measure>
         <measure width="312.93826">
@@ -552,8 +514,8 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
-                <text>day</text>
+                <text>DAY</text>
+                <phrase>start</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -567,14 +529,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="39.900547" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>when</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="85.819244" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>death</text>
             </lyric>
             <chord-symbol default-x="85.819244" default-y="25">
@@ -589,41 +549,35 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="130.15335" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="163.58397" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>be</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="184.60757" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>no</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="207.20599" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>more.</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="254.59891" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Standing</text>
             </lyric>
         </measure>
         <measure width="116.29053">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>face</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -638,8 +592,8 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="43.862835" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>to</text>
+                <phrase>end</phrase>
             </lyric>
             <forward>
                 <duration>47</duration>
@@ -664,8 +618,8 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>face</text>
+                <phrase>start</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -679,14 +633,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="43.862835" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>with</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="82.017853" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>He</text>
             </lyric>
             <chord-symbol default-x="82.017853" default-y="25">
@@ -701,43 +653,38 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="107.48482" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="144.52658" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>died</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="179.98375" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>and</text>
             </lyric>
         </measure>
         <measure width="190.58392">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
                 <text>(1)</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>(to</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>Verse</text>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>2)</text>
+                <phrase>end</phrase>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>rose</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -752,7 +699,7 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="55.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>a</text>
             </lyric>
             <chord-symbol default-x="55.748032" default-y="25">
@@ -767,8 +714,9 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="114.8359" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>gain</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="114.8359" default-y="25">
                 <duration>32</duration>
@@ -790,7 +738,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy,</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -805,7 +752,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -820,21 +766,19 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="128.34641" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="141.77705" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="203.92377">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lord</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>16</duration>
@@ -868,21 +812,20 @@
             </chord-symbol>
         </measure>
         <measure width="174.83591">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
                 <text>(2)</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>(to</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>Verse</text>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>3)</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -915,7 +858,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy,</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -930,7 +872,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -945,21 +886,19 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="128.34641" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="141.77705" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="201.51556">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lord</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>48</duration>
@@ -982,12 +921,11 @@
             </chord-symbol>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-82.479378" default-y="55" is-pickup="yes">
                 <text>And</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-45.437622" default-y="55" is-pickup="yes">
                 <text>every</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1010,7 +948,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>prayer</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1025,14 +962,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="63.862804" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="89.329773" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>prayed</text>
             </lyric>
             <chord-symbol default-x="89.329773" default-y="25">
@@ -1047,33 +982,31 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="146.34218" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>in</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="162.92242" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>desper</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-98.346359" default-y="55" is-pickup="yes">
                 <text>The</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-66.680763" default-y="55" is-pickup="yes">
                 <text>songs</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-21.023607" default-y="55" is-pickup="yes">
                 <text>of</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>ation,</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -1095,7 +1028,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>faith</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1110,14 +1042,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="47.67395" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="73.140915" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>sang</text>
             </lyric>
             <chord-symbol default-x="73.140915" default-y="25">
@@ -1132,36 +1062,32 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="110.82465" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>through</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="175.63977" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>doubt</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="221.93893" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>and</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-44.263992" default-y="55" is-pickup="yes">
                 <text>In</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-26.580235" default-y="55" is-pickup="yes">
                 <text>the</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>fear</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -1183,7 +1109,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>end</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1198,21 +1123,18 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="39.900547" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="65.367516" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>29</duration>
             </forward>
             <lyric default-x="98.798126" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>see</text>
             </lyric>
             <chord-symbol default-x="98.798126" default-y="25">
@@ -1227,39 +1149,34 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="124.90707" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>that</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="157.21463" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>it</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="169.07047" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>was</text>
             </lyric>
         </measure>
         <measure width="190.58392">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-91.928223" default-y="55" is-pickup="yes">
                 <text>When</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-43.150726" default-y="55" is-pickup="yes">
                 <text>He</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-17.68376" default-y="55" is-pickup="yes">
+                <syllabic>start</syllabic>
                 <text>re</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>worth</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1274,8 +1191,8 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="59.258518" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>it</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="59.258518" default-y="25">
                 <duration>16</duration>
@@ -1308,7 +1225,7 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>turns</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1323,14 +1240,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="51.665554" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>to</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="69.820602" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>wipe</text>
             </lyric>
             <chord-symbol default-x="69.820602" default-y="25">
@@ -1345,13 +1260,11 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="110.84418" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>away</text>
             </lyric>
         </measure>
         <measure width="123.64152">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>our</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1366,8 +1279,8 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="37.873985" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>tears</text>
+                <phrase>end</phrase>
             </lyric>
             <forward>
                 <duration>47</duration>
@@ -1382,16 +1295,14 @@
             </chord-symbol>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-90.372932" default-y="55" is-pickup="yes">
                 <text>And</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-53.331177" default-y="55" is-pickup="yes">
                 <text>on</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-32.307568" default-y="55" is-pickup="yes">
                 <text>that</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1414,7 +1325,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>day</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1429,14 +1339,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="39.900547" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="65.367516" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>join</text>
             </lyric>
             <chord-symbol default-x="65.367516" default-y="25">
@@ -1451,33 +1359,32 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="100.65398" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="127.23421" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>resur</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-101.30572" default-y="55" is-pickup="yes">
                 <text>And</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-64.263962" default-y="55" is-pickup="yes">
                 <text>stand</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-21.023607" default-y="55" is-pickup="yes">
+                <syllabic>start</syllabic>
                 <text>be</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>rection</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -1499,7 +1406,7 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>side</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1514,14 +1421,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="42.788616" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="69.368851" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>heroes</text>
             </lyric>
             <chord-symbol default-x="69.368851" default-y="25">
@@ -1536,33 +1441,29 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="123.23166" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>of</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="144.25526" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-104.64557" default-y="55" is-pickup="yes">
                 <text>And</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-67.603813" default-y="55" is-pickup="yes">
                 <text>with</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-29.44879" default-y="55" is-pickup="yes">
                 <text>one</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>faith</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -1584,7 +1485,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>voice</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1599,14 +1499,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="55.457157" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>a</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="66.480782" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>thousand</text>
             </lyric>
             <chord-symbol default-x="66.480782" default-y="25">
@@ -1621,25 +1519,23 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="141.2959" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>gener</text>
             </lyric>
         </measure>
         <measure width="190.58392">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-62.237404" default-y="55" is-pickup="yes">
                 <text>(1)</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-37.703266" default-y="55" is-pickup="yes">
                 <text>Sing</text>
             </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
                 <text>(repeat)</text>
+                <phrase>single</phrase>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>a</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1654,8 +1550,9 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="55.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>tions,</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="55.748032" default-y="25">
                 <duration>16</duration>
@@ -1688,7 +1585,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>worthy</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1703,21 +1599,18 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="69.258499" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="82.68914" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>29</duration>
             </forward>
             <lyric default-x="109.26938" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lamb</text>
             </lyric>
             <chord-symbol default-x="109.26938" default-y="25">
@@ -1732,29 +1625,26 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="158.51816" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="195.55991" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>was</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-62.237404" default-y="55" is-pickup="yes">
                 <text>(2)</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-37.703266" default-y="55" is-pickup="yes">
                 <text>Sing</text>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>slain</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -1776,7 +1666,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>worthy</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1791,21 +1680,18 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="69.258499" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="82.68914" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>29</duration>
             </forward>
             <lyric default-x="109.26938" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lamb</text>
             </lyric>
             <chord-symbol default-x="109.26938" default-y="25">
@@ -1820,25 +1706,24 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="158.51816" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="195.55991" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>was</text>
             </lyric>
         </measure>
         <measure width="174.83591">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-30.571836" default-y="55" is-pickup="yes">
+                <syllabic>start</syllabic>
                 <text>For</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>slain</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -1871,7 +1756,7 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>ever</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1886,7 +1771,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>He</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -1901,21 +1785,21 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="111.215" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>shall</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="149.73094" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>re</text>
             </lyric>
         </measure>
         <measure width="201.51556">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>ign</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>48</duration>
@@ -1938,24 +1822,21 @@
             </chord-symbol>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-93.913925" default-y="55" is-pickup="yes">
                 <text>So</text>
+                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-71.767273" default-y="55" is-pickup="yes">
                 <text>let</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-51.034496" default-y="55" is-pickup="yes">
                 <text>it</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-39.178658" default-y="55" is-pickup="yes">
                 <text>be</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-18.155052" default-y="55" is-pickup="yes">
+                <syllabic>start</syllabic>
                 <text>to</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1978,7 +1859,7 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>day</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -1993,14 +1874,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="39.900547" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="65.367516" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>shout</text>
             </lyric>
             <chord-symbol default-x="65.367516" default-y="25">
@@ -2015,27 +1894,23 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="109.44987" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="136.03011" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>hymn</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="184.18513" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>of</text>
             </lyric>
         </measure>
         <measure width="241.19858">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Heaven.</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -2050,21 +1925,18 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="77.373344" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>With</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="117.58638" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>angles</text>
             </lyric>
             <forward>
                 <duration>45</duration>
             </forward>
             <lyric default-x="168.77087" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>and</text>
             </lyric>
             <chord-symbol default-x="168.77087" default-y="25">
@@ -2079,8 +1951,8 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="198.67142" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
+                <phrase>end</phrase>
             </lyric>
         </measure>
         <measure width="183.73782">
@@ -2094,8 +1966,8 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Saints</text>
+                <phrase>start</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -2109,14 +1981,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="58.987225" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="84.454193" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>raise</text>
             </lyric>
             <chord-symbol default-x="84.454193" default-y="25">
@@ -2131,20 +2001,17 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="124.35471" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>a</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="135.37833" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>mighty</text>
             </lyric>
         </measure>
         <measure width="167.50432">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>roar.</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -2159,14 +2026,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="47.392899" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Glory</text>
             </lyric>
             <forward>
                 <duration>47</duration>
             </forward>
             <lyric default-x="95.076614" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>to</text>
             </lyric>
             <chord-symbol default-x="95.076614" default-y="25">
@@ -2181,8 +2046,8 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="113.23167" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>our</text>
+                <phrase>end</phrase>
             </lyric>
         </measure>
         <measure width="193.63063">
@@ -2196,8 +2061,8 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>God</text>
+                <phrase>start</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -2211,14 +2076,12 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="45.466953" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
             <lyric default-x="82.508713" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>gave</text>
             </lyric>
             <chord-symbol default-x="82.508713" default-y="25">
@@ -2233,31 +2096,29 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="120.83444" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>us</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="140.28325" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>life</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
             <lyric default-x="167.50546" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>start</syllabic>
                 <text>bey</text>
             </lyric>
         </measure>
         <measure width="190.58392">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
                 <text>(1)</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
+                <syllabic>end</syllabic>
                 <text>ond</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -2272,7 +2133,6 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="55.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
             <chord-symbol default-x="55.748032" default-y="25">
@@ -2287,8 +2147,8 @@
                 <duration>16</duration>
             </forward>
             <lyric default-x="114.8359" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>grave</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="114.8359" default-y="25">
                 <duration>32</duration>
@@ -2310,7 +2170,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy,</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -2325,7 +2184,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -2340,25 +2198,23 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="128.34641" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="141.77705" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="145.74803">
-            <lyric default-x="0" default-y="0" is-pickup="yes">
-                <syllabic>single</syllabic>
+            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
                 <text>(2)</text>
+                <phrase>start</phrase>
             </lyric>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lord</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>
@@ -2380,7 +2236,6 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy,</text>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
@@ -2395,7 +2250,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -2410,21 +2264,19 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="128.34641" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="141.77705" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="201.51556">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lord</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -2457,8 +2309,8 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy,</text>
+                <phrase>start</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -2472,7 +2324,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -2487,21 +2338,19 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="128.34641" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="141.77705" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="201.51556">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lord</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -2534,8 +2383,8 @@
                 </system-layout>
             </print>
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy,</text>
+                <phrase>start</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>32</duration>
@@ -2549,7 +2398,6 @@
                 <duration>32</duration>
             </forward>
             <lyric default-x="85.748032" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Holy</text>
             </lyric>
             <chord-symbol default-x="85.748032" default-y="25">
@@ -2564,21 +2412,19 @@
                 <duration>1</duration>
             </forward>
             <lyric default-x="128.34641" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
             <lyric default-x="141.77705" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>the</text>
             </lyric>
         </measure>
         <measure width="145.74803">
             <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>single</syllabic>
                 <text>Lord</text>
+                <phrase>end</phrase>
             </lyric>
             <chord-symbol default-x="10" default-y="25">
                 <duration>64</duration>

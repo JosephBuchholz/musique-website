@@ -32,10 +32,21 @@ class ButtonType {
 }
 
 class ButtonEventType {
-    static None = new ButtonType(0);
-    static Pressed = new ButtonType(1);
-    static ToggledOn = new ButtonType(2);
-    static ToggledOff = new ButtonType(3);
+    static None = new ButtonEventType(0);
+    static Pressed = new ButtonEventType(1);
+    static ToggledOn = new ButtonEventType(2);
+    static ToggledOff = new ButtonEventType(3);
+
+    constructor(value) {
+        this.value = value;
+    }
+}
+
+class PointerEventType {
+    static None = new PointerEventType(0);
+    static Down = new PointerEventType(1);
+    static Up = new PointerEventType(2);
+    static Move = new PointerEventType(3);
 
     constructor(value) {
         this.value = value;
@@ -409,6 +420,54 @@ export default function EditorPage() {
                     console.log("Loaded song: " + result);
                 });*/
         });
+
+        document.addEventListener(
+            "keydown",
+            (e) => {
+                const key = e.key;
+                console.log("key: " + key);
+            },
+            true
+        );
+
+        canvas.addEventListener("pointerdown", (event) => {
+            if (moduleIsCreated) {
+                var millimeters = 6.35;
+                var tenths = 40.0;
+                var scale = (millimeters / tenths) * 4;
+
+                module.onPointerEvent(
+                    PointerEventType.Down.value,
+                    event.offsetX / scale,
+                    event.offsetY / scale
+                );
+            }
+            /*console.log("screenPos: " + event.screenX + ", " + event.screenY);
+            console.log("offsetPos: " + event.offsetX + ", " + event.offsetY);
+            console.log("pagePos: " + event.pageX + ", " + event.pageY);
+            console.log("pos: " + event.x + ", " + event.y);
+            console.log("ClientPos: " + event.clientX + ", " + event.clientY);*/
+        });
+
+        canvas.addEventListener("pointermove", (event) => {
+            if (moduleIsCreated) {
+                module.onPointerEvent(
+                    PointerEventType.Move.value,
+                    event.offsetX,
+                    event.offsetY
+                );
+            }
+        });
+
+        canvas.addEventListener("pointerup", (event) => {
+            if (moduleIsCreated) {
+                module.onPointerEvent(
+                    PointerEventType.Up.value,
+                    event.offsetX,
+                    event.offsetY
+                );
+            }
+        });
     });
 
     const [isPlaying, setIsPlaying] = useState(false);
@@ -490,7 +549,7 @@ export default function EditorPage() {
                             });*/
 
                         fetch(
-                            "/song/get?key=ABC123&method=get_file&id=37&file_index=0"
+                            "/song/get?key=ABC123&method=get_file&id=38&file_index=0"
                             //"/song/get?key=ABC123&method=get_file&id=13&file_index=0"
                         )
                             .then((response) => response.text())
@@ -498,7 +557,7 @@ export default function EditorPage() {
                                 if (moduleIsCreated) {
                                     var ptr = module.stringToNewUTF8(data);
                                     var fileType =
-                                        module.stringToNewUTF8("txt");
+                                        module.stringToNewUTF8("harmonyxml");
                                     var result = module.loadSong(ptr, fileType);
                                     console.log("Loaded song: " + result);
                                 }
@@ -522,6 +581,21 @@ export default function EditorPage() {
                 >
                     Export Song
                 </button>
+
+                <label>
+                    Type Somthing:
+                    <input
+                        onChange={async (event) => {
+                            console.log(event.target.value);
+                            if (moduleIsCreated) {
+                                var ptr = module.stringToNewUTF8(
+                                    event.target.value
+                                );
+                                module.onTextFieldEvent(0, ptr);
+                            }
+                        }}
+                    />
+                </label>
             </div>
         </>
     );

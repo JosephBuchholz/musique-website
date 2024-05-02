@@ -89,6 +89,29 @@ bool OnButtonEvent(int buttonType, int eventType)
     return app.OnButtonEvent(buttonEvent);
 }
 
+bool OnPointerEvent(int pointerEventType, float positionX, float positionY)
+{
+    App& app = App::GetInstance();
+
+    PointerEvent event;
+    event.type = InputEvent::InputEventType::Pointer;
+    event.eventType = (PointerEvent::PointerEventType)pointerEventType;
+    event.position = { positionX, positionY };
+
+    return app.OnPointerEvent(event);
+}
+
+bool OnTextFieldEvent(int id, int inputStringPtr)
+{
+    App& app = App::GetInstance();
+
+    char* inputStringChar = reinterpret_cast<char*>(inputStringPtr); 
+    std::string inputString = inputStringChar; 
+
+    free(inputStringChar);
+
+    return app.editor->OnTextFieldEvent(id, inputString);
+}
 
 void AddAudioCallbacksToCpp(int writeMidiFP)
 {
@@ -132,5 +155,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("addCallbackFunctionsToCpp", &AddCallbackFunctionsToCpp);
     emscripten::function("addAudioCallbacksToCpp", &AddAudioCallbacksToCpp);
     emscripten::function("onButtonEvent", &OnButtonEvent);
+    emscripten::function("onPointerEvent", &OnPointerEvent);
+    emscripten::function("onTextFieldEvent", &OnTextFieldEvent);
     emscripten::function("loadSong", &LoadSong);
 }

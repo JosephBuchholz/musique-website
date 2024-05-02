@@ -81,8 +81,6 @@ export class CanvasRenderer extends Renderer {
         this.usePaint(paint);
         this.setFont(paint);
 
-        this.context.fillStyle = "#000000FF";
-
         this.context.fillText(text, posX * scale, posY * scale);
     }
 

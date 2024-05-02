@@ -8,6 +8,7 @@ class BaseElement {
 
 public:
     BaseElement() {}
+    virtual ~BaseElement() {}
 
 public:
     std::string id = "";

@@ -7,7 +7,7 @@ class InputEvent
 {
 public:
     enum class InputEventType {
-        None, Tap, MouseScroll, Button
+        None, Tap, MouseScroll, Button, Pointer, Keyboard
     } type = InputEventType::None;
 };
 
@@ -37,6 +37,17 @@ public:
     {
         None, Pressed, ToggledOn, ToggledOff
     } eventType = EventType::Pressed;
+};
+
+class PointerEvent : public InputEvent
+{
+public:
+    enum class PointerEventType
+    {
+        None, Down, Up, Move
+    } eventType = PointerEventType::Down;
+
+    Vec2<float> position;
 };
 
 #endif //MUSIQUE_INPUTEVENT_H

@@ -14,6 +14,8 @@ public:
 
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;
 
+    void UpdateBoundingBox();
+
 public:
 
     float beatPosition = 0.0f;

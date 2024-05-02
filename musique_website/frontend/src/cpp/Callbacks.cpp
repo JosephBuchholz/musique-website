@@ -23,7 +23,7 @@ void UpdateRender(const RenderData& renderData)
     for (const Text& text : renderData.m_texts)
     {
         Paint paint = text.paint;
-        paint.color = 0x000000FF;
+        //paint.color = 0x000000FF;
 
         renderer.DrawText(text.text, text.position, paint);
 

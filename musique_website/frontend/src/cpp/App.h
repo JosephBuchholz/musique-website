@@ -16,6 +16,8 @@
 #include "Rendering/MusicRenderer.h"
 #include "MusicPlayers/MusicPlayer.h"
 
+#include "Editor/Editor.h"
+
 /**
  * This class acts like an interface between Kotlin and C++.
  */
@@ -63,9 +65,12 @@ public:
 
     bool OnMouseScrollEvent(const MouseScrollEvent& event);
     bool OnButtonEvent(const ButtonEvent& event);
+    bool OnPointerEvent(const PointerEvent& event);
 
     int OnCalculateNumPages();
 
+    // TODO: move back to private
+    std::shared_ptr<Editor> editor;
 private:
 
     std::shared_ptr<MusicRenderer> musicRenderer;
