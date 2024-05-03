@@ -69,6 +69,8 @@ public:
 
     int OnCalculateNumPages();
 
+    void Rerender();
+
     // TODO: move back to private
     std::shared_ptr<Editor> editor;
 private:

@@ -6,6 +6,7 @@
 #include "FrameData/FrameData.h"
 #include "ViewModelData.h"
 #include "MusicData/SongData.h"
+#include "Editor/Properties.h"
 
 void UpdateRender(const RenderData& renderData);
 
@@ -37,12 +38,15 @@ private:
 public:
     void DownloadText(const std::string& name, const std::string& data);
 
+    void UpdateProperties(const Properties& properties);
+
 private:
 	void (*DownloadTextCallback)(const char* name, const char* data);
+	void (*UpdatePropertiesCallback)(const char* data);
 
 public:
 
-	friend void AddCallbackFunctionsToCpp(int);
+	friend void AddCallbackFunctionsToCpp(int, int);
 };
 
 #endif // MUSIQUE_CALLBACKS_H

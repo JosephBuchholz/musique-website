@@ -7,11 +7,9 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
     renderData.AddLine(Line(currentPosition, { currentPosition.x, currentPosition.y + 40.0f }, Paint()));
     renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, { currentPosition.x + width, currentPosition.y + 40.0f }, Paint()));
 
-    LOGV_TAG("CSMeasure", "Rendering Measure!");
     for (const auto& chord : chords)
     {
         chord->Render(renderData, settings, parentPosition + position);
-        LOGD_TAG("CSMeasure", "Beat position: %f, in song: %f", chord->beatPosition, chord->beatPositionInSong);
     }
 
     if (isFirstMeasureOfSystem && !lyrics.empty())
@@ -34,7 +32,6 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
 
     for (const auto& lyric : lyrics)
     {
-        LOGI_TAG("CSMeasure", "Rendering lyric: %s, beatPos: %f", lyric->lyricText.text.c_str(), lyric->beatPosition);
         if (!lyric->isPickupToNextMeasure)
             lyric->Render(renderData, settings, currentPosition);
     }
@@ -115,8 +112,6 @@ void CSMeasure::Init()
         {
             width = lyricPosition.x + dimensions.x;
         }
-
-        LOGD("dimensions: %s, lyricPos: %s", dimensions.GetPrintableString().c_str(), lyricPosition.GetPrintableString().c_str());
 
         lyric->Init(lyricPosition);
 

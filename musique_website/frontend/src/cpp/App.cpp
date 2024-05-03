@@ -471,39 +471,6 @@ bool App::OnButtonEvent(const ButtonEvent& event)
 
 bool App::OnPointerEvent(const PointerEvent& event)
 {
-    /*switch (event.eventType)
-    {
-        case PointerEvent::PointerEventType::Down:
-        {
-            LOGD("Down: %f", musicRenderer->zoom);
-            std::shared_ptr<Measure> selectedMeasure = song->GetMeasureAtPoint(event.position, musicRenderer->systemPositions);
-            //selectedMeasure->c = 0xFF0000FF;
-
-            musicRenderer->m_RenderData.AddDebugDot(event.position / musicRenderer->zoom);
-            musicRenderer->updateRenderData = true;
-            musicRenderer->RenderWithRenderData();
-
-            break;
-        }
-        case PointerEvent::PointerEventType::Up:
-        {
-            LOGD("Up");
-            break;
-        }
-        case PointerEvent::PointerEventType::Move:
-        {
-            //LOGD("Move");
-
-            break;
-        }
-        default:
-        {
-            return false;
-        }
-    }
-
-    return true;*/
-
     return editor->OnPointerEvent(event);
 }
 
@@ -522,4 +489,12 @@ void App::OnTranspose(const TranspositionRequest& transpositionRequest)
     song->Transpose(tr);
     musicRenderer->updateRenderData = true;
     musicRenderer->layoutCalculated = false;
+}
+
+void App::Rerender()
+{
+    musicRenderer->updateRenderData = true;
+    //musicRenderer->layoutCalculated = false;
+    //musicRenderer->Render(song, song->settings);
+    musicRenderer->RenderWithRenderData();
 }

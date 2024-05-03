@@ -82,6 +82,10 @@ function createModule() {
 export default function EditorPage() {
     const canvasRef = useRef(null);
     const pdfCanvasRef = useRef(null);
+    const canvasDiv = useRef(null);
+    const propertiesList = useRef(null);
+
+    const [editableProperties, setEditableProperties] = useState("");
 
     const pageWidthTenths = 1233.87;
     const pageHeightTenths = 1596.77;
@@ -295,7 +299,6 @@ export default function EditorPage() {
 
                 isRenderingPDF = true;
                 isFirstPage = true;
-                console.log("Starting to render PDF!!!!");
 
                 pdfDocument = new jsPDF("p", "mm", "a4");
 
@@ -325,8 +328,6 @@ export default function EditorPage() {
                 pdfDocument.save("song.pdf");
 
                 renderer = new Renderer.CanvasRenderer(context);
-
-                console.log("Ending the render of PDF!");
             }
 
             function startNewPDFPage() {
@@ -347,8 +348,6 @@ export default function EditorPage() {
                     // a page was already added when document was created
                     isFirstPage = false;
                 }
-
-                console.log("Started new PDF page");
             }
 
             function downloadText(nameStr, dataStr) {
@@ -370,6 +369,22 @@ export default function EditorPage() {
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(url);
             }
+
+            function updateProperties(propertiesStr) {
+                console.log("updating properties!!");
+                setEditableProperties(
+                    JSON.parse(module.UTF8ToString(propertiesStr))
+                );
+            }
+
+            function updateCanvasSize() {
+                canvas.width = canvasDiv.current.offsetWidth;
+                canvas.height = canvasDiv.current.offsetHeight;
+                module.onCanvasResize(canvas.width, canvas.height);
+            }
+            canvas.width = canvasDiv.current.offsetWidth;
+            canvas.height = canvasDiv.current.offsetHeight;
+            window.addEventListener("resize", updateCanvasSize);
 
             var clearFP = module.addFunction(clearCanvasCpp, "v");
 
@@ -409,28 +424,23 @@ export default function EditorPage() {
             );
 
             var downloadTextFP = module.addFunction(downloadText, "vii");
-            module.addCallbackFunctionsToCpp(downloadTextFP);
+            var updatePropertiesFP = module.addFunction(updateProperties, "vi");
+            module.addCallbackFunctionsToCpp(
+                downloadTextFP,
+                updatePropertiesFP
+            );
 
-            /*fetch("/song/get?key=ABC123&method=get_file&id=37&file_index=0")
-                .then((response) => response.text())
-                .then((data) => {
-                    var ptr = module.stringToNewUTF8(data);
-                    var fileType = module.stringToNewUTF8("txt");
-                    var result = module.loadSong(ptr, fileType);
-                    console.log("Loaded song: " + result);
-                });*/
+            module.onCanvasResize(canvas.width, canvas.height);
         });
 
-        document.addEventListener(
-            "keydown",
-            (e) => {
-                const key = e.key;
-                console.log("key: " + key);
-            },
-            true
-        );
+        // --- Event Listeners ---
 
-        canvas.addEventListener("pointerdown", (event) => {
+        function keydownEventListener(event) {
+            const key = event.key;
+            console.log("key: " + key);
+        }
+
+        function pointerDownEventListener(event) {
             if (moduleIsCreated) {
                 var millimeters = 6.35;
                 var tenths = 40.0;
@@ -442,14 +452,9 @@ export default function EditorPage() {
                     event.offsetY / scale
                 );
             }
-            /*console.log("screenPos: " + event.screenX + ", " + event.screenY);
-            console.log("offsetPos: " + event.offsetX + ", " + event.offsetY);
-            console.log("pagePos: " + event.pageX + ", " + event.pageY);
-            console.log("pos: " + event.x + ", " + event.y);
-            console.log("ClientPos: " + event.clientX + ", " + event.clientY);*/
-        });
+        }
 
-        canvas.addEventListener("pointermove", (event) => {
+        function pointerMoveEventListener(event) {
             if (moduleIsCreated) {
                 module.onPointerEvent(
                     PointerEventType.Move.value,
@@ -457,9 +462,9 @@ export default function EditorPage() {
                     event.offsetY
                 );
             }
-        });
+        }
 
-        canvas.addEventListener("pointerup", (event) => {
+        function pointerUpEventListener(event) {
             if (moduleIsCreated) {
                 module.onPointerEvent(
                     PointerEventType.Up.value,
@@ -467,28 +472,36 @@ export default function EditorPage() {
                     event.offsetY
                 );
             }
-        });
-    });
+        }
 
-    const [isPlaying, setIsPlaying] = useState(false);
+        document.addEventListener("keydown", keydownEventListener, true);
+        canvas.addEventListener("pointerdown", pointerDownEventListener);
+        canvas.addEventListener("pointermove", pointerMoveEventListener);
+        canvas.addEventListener("pointerup", pointerUpEventListener);
+
+        return () => {
+            document.removeEventListener("keydown", keydownEventListener, true);
+            canvas.removeEventListener("pointerdown", pointerDownEventListener);
+            canvas.removeEventListener("pointermove", pointerMoveEventListener);
+            canvas.removeEventListener("pointerup", pointerUpEventListener);
+        };
+    });
 
     return (
         <>
             <div className="flex flex-col h-screen">
                 <Header></Header>
 
-                <h1 className="text-3xl font-bold text-blue-950">
-                    Hello, this is the editor!
-                </h1>
-
-                <div className="flex-1 flex justify-center items-center">
-                    <canvas
-                        ref={canvasRef}
-                        className="border-2"
-                        id="canvas"
-                        width="776"
-                        height="600"
-                    ></canvas>
+                <div className="fixed top-0 left-0 w-3/4 h-full pt-16 pb-20">
+                    <div ref={canvasDiv} className="border-2 w-full h-full">
+                        <canvas
+                            ref={canvasRef}
+                            className="w-full h-full"
+                            id="canvas"
+                            width="776"
+                            height="600"
+                        ></canvas>
+                    </div>
 
                     <canvas
                         ref={pdfCanvasRef}
@@ -499,116 +512,317 @@ export default function EditorPage() {
                     ></canvas>
                 </div>
 
-                <button
-                    onClick={async () => {
-                        await Tone.start();
+                <ButtonTray />
 
+                <Sidebar
+                    properties={editableProperties}
+                    onPropertiesChange={(newProperties) => {
                         if (moduleIsCreated) {
-                            if (isPlaying) {
-                                console.log("is playing so pausing");
-                                setIsPlaying(false);
-                                module.onButtonEvent(
-                                    ButtonType.Play.value,
-                                    ButtonEventType.ToggledOff.value
-                                );
-                            } else {
-                                console.log("is paused so playing");
-                                setIsPlaying(true);
-                                module.onButtonEvent(
-                                    ButtonType.Play.value,
-                                    ButtonEventType.ToggledOn.value
-                                );
-                            }
-                        }
-                    }}
-                >
-                    Play
-                </button>
-
-                <button
-                    onClick={async () => {
-                        if (moduleIsCreated) {
-                            module.onButtonEvent(
-                                ButtonType.DownloadPDF.value,
-                                ButtonEventType.Pressed.value
+                            var ptr = module.stringToNewUTF8(
+                                JSON.stringify(newProperties)
                             );
+                            module.onPropertiesUpdated(ptr);
                         }
+
+                        setEditableProperties(newProperties);
                     }}
-                >
-                    Render PDF
-                </button>
-
-                <button
-                    onClick={async () => {
-                        console.log("Get/Load Song button pressed!!!");
-
-                        /*fetch("/song/get?key=ABC123&method=all")
-                            .then((response) => response.json())
-                            .then((data) => {
-                                console.log(data);
-                            });*/
-
-                        fetch(
-                            "/song/get?key=ABC123&method=get_file&id=38&file_index=0"
-                            //"/song/get?key=ABC123&method=get_file&id=13&file_index=0"
-                        )
-                            .then((response) => response.text())
-                            .then((data) => {
-                                if (moduleIsCreated) {
-                                    var ptr = module.stringToNewUTF8(data);
-                                    var fileType =
-                                        module.stringToNewUTF8("harmonyxml");
-                                    var result = module.loadSong(ptr, fileType);
-                                    console.log("Loaded song: " + result);
-                                }
-                            });
-                    }}
-                >
-                    Get/Load Song
-                </button>
-
-                <button
-                    onClick={async () => {
-                        console.log("Export button pressed!!!");
-
-                        if (moduleIsCreated) {
-                            module.onButtonEvent(
-                                ButtonType.Export.value,
-                                ButtonEventType.Pressed.value
-                            );
-                        }
-                    }}
-                >
-                    Export Song
-                </button>
-
-                <label>
-                    Type Somthing:
-                    <input
-                        onChange={async (event) => {
-                            console.log(event.target.value);
-                            if (moduleIsCreated) {
-                                var ptr = module.stringToNewUTF8(
-                                    event.target.value
-                                );
-                                module.onTextFieldEvent(0, ptr);
-                            }
-                        }}
-                    />
-                </label>
+                />
             </div>
         </>
     );
 }
 
-function Canvas() {
-    const canvasRef = useRef(null);
+function ButtonTray() {
+    return (
+        <div className="fixed bottom-0 w-3/4 flex border-t-2 bg-slate-50">
+            <TrayToggleButton
+                icon1="/static/icons/pause_icon.svg"
+                icon2="/static/icons/play_icon.svg"
+                alt="play button"
+                onClick={async () => {
+                    await Tone.start();
 
-    useEffect(() => {});
+                    if (moduleIsCreated) {
+                        if (isPlaying) {
+                            console.log("is playing so pausing");
+                            setIsPlaying(false);
+                            module.onButtonEvent(
+                                ButtonType.Play.value,
+                                ButtonEventType.ToggledOff.value
+                            );
+                        } else {
+                            console.log("is paused so playing");
+                            setIsPlaying(true);
+                            module.onButtonEvent(
+                                ButtonType.Play.value,
+                                ButtonEventType.ToggledOn.value
+                            );
+                        }
+                    }
+                }}
+            />
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onButtonEvent(
+                            ButtonType.DownloadPDF.value,
+                            ButtonEventType.Pressed.value
+                        );
+                    }
+                }}
+            >
+                <img src="/static/icons/printer_icon.svg" alt="download pdf" />
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    console.log("Get/Load Song button pressed!!!");
+
+                    /*fetch("/song/get?key=ABC123&method=all")
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(data);
+                            });*/
+
+                    fetch(
+                        "/song/get?key=ABC123&method=get_file&id=38&file_index=0"
+                        //"/song/get?key=ABC123&method=get_file&id=13&file_index=0"
+                    )
+                        .then((response) => response.text())
+                        .then((data) => {
+                            if (moduleIsCreated) {
+                                var ptr = module.stringToNewUTF8(data);
+                                var fileType =
+                                    module.stringToNewUTF8("harmonyxml");
+                                var result = module.loadSong(ptr, fileType);
+                                console.log("Loaded song: " + result);
+                            }
+                        });
+                }}
+            >
+                <img src="/static/icons/plus.svg" alt="get song" />
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    console.log("Export button pressed!!!");
+
+                    if (moduleIsCreated) {
+                        module.onButtonEvent(
+                            ButtonType.Export.value,
+                            ButtonEventType.Pressed.value
+                        );
+                    }
+                }}
+            >
+                Export Song
+            </TrayButton>
+        </div>
+    );
+}
+
+function Sidebar({ properties, onPropertiesChange }) {
+    var items = [];
+    for (var key in properties) {
+        var value = properties[key];
+
+        if (typeof value == "boolean") {
+            items.push(
+                <li>
+                    <CheckboxField
+                        label={key}
+                        value={value}
+                        onChange={async (event, k) => {
+                            var newProperties = JSON.parse(
+                                JSON.stringify(properties)
+                            ); // deep copy
+
+                            newProperties[k] = event.target.checked;
+
+                            onPropertiesChange(newProperties);
+                        }}
+                    ></CheckboxField>
+                </li>
+            );
+        } else if (typeof value == "string") {
+            items.push(
+                <li>
+                    <TextField
+                        label={key}
+                        value={value}
+                        onChange={async (event, k) => {
+                            var newProperties = JSON.parse(
+                                JSON.stringify(properties)
+                            ); // deep copy
+                            newProperties[k] = event.target.value;
+                            onPropertiesChange(newProperties);
+                        }}
+                    ></TextField>
+                </li>
+            );
+        } else if (typeof value == "number") {
+            items.push(
+                <li>
+                    <NumberField
+                        label={key}
+                        value={value}
+                        onChange={async (event, k) => {
+                            var newProperties = JSON.parse(
+                                JSON.stringify(properties)
+                            ); // deep copy
+                            newProperties[k] = parseFloat(event.target.value);
+                            onPropertiesChange(newProperties);
+                        }}
+                    ></NumberField>
+                </li>
+            );
+        }
+    }
 
     return (
         <>
-            <canvas ref={canvasRef} className="border-2"></canvas>
+            <div className="fixed top-0 right-0 w-1/4 h-full pt-16">
+                <div className="border-l-2 bg-slate-50 w-full h-full">
+                    <ul className="m-2 space-y-2">
+                        <SidebarHeading>Properties</SidebarHeading>
+
+                        {items}
+                    </ul>
+                </div>
+            </div>
         </>
+    );
+}
+
+function SidebarHeading({ children }) {
+    return (
+        <>
+            <p className="text-center font-medium">{children}</p>
+            <hr />
+        </>
+    );
+}
+
+function TextField({
+    label,
+    value = "",
+    onChange = (e, k) => {},
+    className = "",
+}) {
+    className +=
+        " h-7 rounded-sm border-2 hover:border-blue-200 active:border-blue-500";
+
+    return (
+        <label className="m-2">
+            {label}
+            <input
+                className={className}
+                value={value}
+                onChange={(e) => {
+                    onChange(e, label);
+                }}
+                type="text"
+            />
+        </label>
+    );
+}
+
+function NumberField({
+    label,
+    value = 0,
+    onChange = () => {},
+    className = "",
+}) {
+    className +=
+        " h-7 rounded-sm border-2 hover:border-blue-200 active:border-blue-500";
+
+    return (
+        <label className="m-2">
+            {label}
+            <input
+                className={className}
+                value={value}
+                onChange={(e) => {
+                    onChange(e, label);
+                }}
+                type="number"
+            />
+        </label>
+    );
+}
+
+function CheckboxField({
+    label,
+    value = false,
+    onChange = () => {},
+    className = "",
+}) {
+    className +=
+        " h-7 rounded-sm border-2 hover:border-blue-200 active:border-blue-500";
+
+    return (
+        <label className="m-2">
+            {label}
+            <input
+                className={className}
+                checked={value}
+                onChange={(e) => {
+                    onChange(e, label);
+                }}
+                type="checkbox"
+            />
+        </label>
+    );
+}
+
+function Button({ children, onClick = () => {}, className = "" }) {
+    className += " bg-white text-black";
+
+    return (
+        <button className={className} onClick={onClick}>
+            {children}
+        </button>
+    );
+}
+
+function TrayButton({ children, onClick = () => {} }) {
+    return (
+        <Button
+            className="w-16 h-16 rounded-sm m-2 hover:border-2 hover:border-slate-200 active:border-blue-300"
+            onClick={onClick}
+        >
+            <center>{children}</center>
+        </Button>
+    );
+}
+
+function TrayToggleButton({ icon1, icon2, alt, onClick = () => {} }) {
+    const [toggled, setToggled] = useState(false);
+
+    var icon;
+    if (toggled) icon = icon1;
+    else icon = icon2;
+
+    return (
+        <Button
+            className="w-16 h-16 rounded-sm m-2 hover:border-2 hover:border-slate-200 active:border-blue-300"
+            onClick={() => {
+                setToggled(!toggled);
+                onClick();
+            }}
+        >
+            <center>
+                <img src={icon} alt={alt}></img>
+            </center>
+        </Button>
+    );
+}
+
+function TextButton({ text, onClick = () => {} }) {
+    return (
+        <button class="" onClick={onClick}>
+            {text}
+        </button>
     );
 }

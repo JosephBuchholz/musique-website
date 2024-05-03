@@ -73,7 +73,6 @@ void MusicRenderer::Render(const std::shared_ptr<Song>& song, const Settings& se
 
 void MusicRenderer::CalculateRenderForPagedLayout(const std::shared_ptr<Song>& song, const Settings& settings)
 {
-    LOGI("Calculating Paged Layout");
     m_RenderData = RenderData();
 
     pagePositions.clear();
@@ -151,7 +150,7 @@ void MusicRenderer::RenderMusicToPage(const std::shared_ptr<Song>& song, int pag
 
         int systemIndex = song->GetSystemIndex(startingMeasureIndex);
 
-        LOGD_TAG("MusicRenderer", "page: %d, start measure: %d, systemIndex: %d, pages: %d", page, startingMeasureIndex, systemIndex, song->GetNumPages());
+        //LOGD_TAG("MusicRenderer", "page: %d, start measure: %d, systemIndex: %d, pages: %d", page, startingMeasureIndex, systemIndex, song->GetNumPages());
 
         bool drawFullInstNames = true;
 
@@ -185,8 +184,6 @@ void MusicRenderer::RenderMusicToPage(const std::shared_ptr<Song>& song, int pag
             {
                 startNewSystem = true;
             }
-
-            LOGD_TAG("MusicRenderer", "measureIndex: %d, systemIndex: %d, measureCount: %d, startNewSystem: %d", i, systemIndex, measureCount, startNewSystem);
 
             if ((startNewSystem || i == measureCount) && i != 0 && systemIndex < song->systems.size()) // render system
             {
@@ -296,8 +293,6 @@ void MusicRenderer::RenderDebugToPage(const std::shared_ptr<Song>& song, int pag
 
 Vec2<float> MusicRenderer::RenderSystem(RenderData& renderData, const Settings& settings, const std::shared_ptr<Song>& song, unsigned int startMeasure, unsigned int endMeasure, int systemIndex, Vec2<float> systemPosition, Vec2<float> pagePosition, bool drawFullInstNames)
 {
-    LOGD("Rendering System: startMeasure: %d, endMeasure: %d", startMeasure, endMeasure);
-
     std::shared_ptr<Instrument> prevInstrument = nullptr;
     int instrumentIndex = 0;
     float instPositionY = systemPosition.y;
@@ -472,6 +467,8 @@ void MusicRenderer::RenderWithRenderData()
 {
     if (updateRenderData)
     {
+        m_RenderData.zoom = zoom;
+
         UpdateRender(m_RenderData);
         updateRenderData = false;
     }
@@ -482,8 +479,6 @@ void MusicRenderer::RenderLineOfMeasures(RenderData& renderData, const Settings&
     bool multiMeasureRest = false; // whether the measure is part of a multi measure rest
     unsigned int numberOfMeasuresInMultiMeasureRest = 0; // number of measures left in multi measure rest
     unsigned int measureThatStartedMultiMeasureRest = 0; // the index of the measure that started the multi measure rest
-
-    LOGD("startMeasure: %d, endMeasure: %d", startMeasure, endMeasure);
 
     int measureIndex = (int)startMeasure;
     int measureNumber = (int)startMeasure;

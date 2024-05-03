@@ -68,7 +68,6 @@ uint16_t* NewSubString(uint16_t* string, int size, int startIndex, int endIndex)
     for (int i = startIndex; i < endIndex; i++)
     {
         subString[j] = string[i];
-        LOGD("string at %d: %d", i, string[i]);
         j++;
     }
 

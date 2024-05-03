@@ -3,6 +3,8 @@
 #include "Rendering/Renderer.h"
 #include "MusicPlayers/MidiCallbacks.h"
 
+#include "FileParsers/Json/JsonHelper.h"
+
 void UpdateRender(const RenderData& renderData)
 {
     LOGI("Updating Render!!! %f", renderData.zoom);
@@ -34,7 +36,6 @@ void UpdateRender(const RenderData& renderData)
 
     for (const SpannableText& text : renderData.m_spannableTexts)
     {
-        LOGD("Drawing spannable text! size: %d", text.textSize);
         renderer.DrawSpannableText(text);
     }
 
@@ -175,4 +176,30 @@ Callbacks& Callbacks::GetInstance()
 void Callbacks::DownloadText(const std::string& name, const std::string& data)
 {
     DownloadTextCallback(name.c_str(), data.c_str());
+}
+
+void Callbacks::UpdateProperties(const Properties& properties)
+{
+    std::string data;
+
+    data += "{";
+
+    JsonHelper::AddStringValueToJson(data, "text", properties.textProperties[0].text);
+    data += ",";
+    JsonHelper::AddBooleanValueToJson(data, "isBold", properties.textProperties[0].isBold);
+    data += ",";
+    JsonHelper::AddBooleanValueToJson(data, "isItalic", properties.textProperties[0].isItalic);
+    data += ",";
+    JsonHelper::AddFloatValueToJson(data, "text size", properties.textProperties[0].size);
+    data += ",";
+    JsonHelper::AddIntValueToJson(data, "text color", properties.textProperties[0].color);
+    data += ",";
+    JsonHelper::AddFloatValueToJson(data, "posx", properties.positionProperties[0].position.x);
+    data += ",";
+    JsonHelper::AddFloatValueToJson(data, "posy", properties.positionProperties[0].position.y);
+
+    data += "}";
+
+    LOGD("Updateing properties (from c++)");
+    UpdatePropertiesCallback(data.c_str());
 }

@@ -7,7 +7,7 @@ export default function Header() {
 function NavigationBar() {
     return (
         <>
-            <div className="flex bg-gray-100 top-0 w-screen h-16 justify-between">
+            <div className="flex bg-gray-100 top-0 w-screen h-16 justify-between z-50">
                 <div className="flex justify-center items-center text-center">
                     <Link
                         to="/"

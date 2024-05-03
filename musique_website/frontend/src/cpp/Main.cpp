@@ -113,6 +113,24 @@ bool OnTextFieldEvent(int id, int inputStringPtr)
     return app.editor->OnTextFieldEvent(id, inputString);
 }
 
+void OnPropertiesUpdated(int stringPtr)
+{
+    App& app = App::GetInstance();
+
+    char* c = reinterpret_cast<char*>(stringPtr); 
+    std::string propertiesString = c; 
+
+    free(c);
+
+    app.editor->OnPropertiesUpdated(propertiesString);
+}
+
+void OnCanvasResize(float width, float height)
+{
+    App& app = App::GetInstance();
+    app.Rerender();
+}
+
 void AddAudioCallbacksToCpp(int writeMidiFP)
 {
     MidiCallbacks& midiCallbacks = MidiCallbacks::GetInstance();
@@ -143,11 +161,12 @@ void AddFunctionsToCpp(int clearFP, int drawLineFP, int drawTextFP, int drawUTF1
     renderer.StartNewPDFPageCallback = reinterpret_cast<void (*)()>(startNewPDFPageFP);
 }
 
-void AddCallbackFunctionsToCpp(int downloadTextFP)
+void AddCallbackFunctionsToCpp(int downloadTextFP, int updatePropertiesFP)
 {
     Callbacks& callbacks = Callbacks::GetInstance();
 
     callbacks.DownloadTextCallback = reinterpret_cast<void (*)(const char*, const char*)>(downloadTextFP);
+    callbacks.UpdatePropertiesCallback = reinterpret_cast<void (*)(const char*)>(updatePropertiesFP);
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {
@@ -157,5 +176,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("onButtonEvent", &OnButtonEvent);
     emscripten::function("onPointerEvent", &OnPointerEvent);
     emscripten::function("onTextFieldEvent", &OnTextFieldEvent);
+    emscripten::function("onPropertiesUpdated", &OnPropertiesUpdated);
+    emscripten::function("onCanvasResize", &OnCanvasResize);
     emscripten::function("loadSong", &LoadSong);
 }

@@ -129,6 +129,9 @@ add_executable(
         FileParsers/HarmonyXMLParser/HarmonyXMLExportHelper.cpp
 
         Editor/Editor.cpp
+        Editor/Properties.cpp
+
+        FileParsers/Json/JsonHelper.cpp
 
         Utils/Math.cpp
         Utils/Converters.cpp

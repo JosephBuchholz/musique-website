@@ -1,14 +1,17 @@
 #include "Editor.h"
 
+#include "Properties.h"
+#include "../Callbacks.h"
+
+#include "../libs/nlohmann/json.hpp"
+using json = nlohmann::json;
+
 bool Editor::OnPointerEvent(const PointerEvent& event)
 {
     switch (event.eventType)
     {
         case PointerEvent::PointerEventType::Down:
         {
-            LOGD("Down: %f", musicRenderer->zoom);
-            //selectedMeasure->c = 0xFF0000FF;
-
             Vec2<float> point = event.position / musicRenderer->zoom;
 
             std::shared_ptr<BaseElement> selectedElement = nullptr;
@@ -44,35 +47,66 @@ bool Editor::OnPointerEvent(const PointerEvent& event)
                                     if (bb.DoesOverlapWithPoint(point))
                                     {
                                         musicRenderer->m_RenderData.AddDebugDot(bb.position);
-                                        lyric->lyricText.color = 0x3333EEFF;
                                         selectedElement = lyric;
+                                        break;
                                     }
                                 }
+                                
+                                if (selectedElement)
+                                    break;
 
                                 measurePositionX += measure->width;
                             }
                         }
 
+                        if (selectedElement)
+                            break;
+
                         staffIndex++;
                     }
+
+                    if (selectedElement)
+                        break;
 
                     instrumentIndex++;
                 }
 
+                if (selectedElement)
+                    break;
+
                 systemIndex++;
             }
 
+            // deselect elements
+            for (int i = selectedElements.size() - 1; i >= 0; i--)
+            {
+                std::shared_ptr<BaseElement> element = selectedElements[i];
+                std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(element);
+                lyric->lyricText.color = 0x000000FF;
+                selectedElements.erase(selectedElements.begin() + i);
+            }
+
+            // select elements
             if (selectedElement)
             {
-                for (int i = selectedElements.size() - 1; i >= 0; i--)
-                {
-                    std::shared_ptr<BaseElement> element = selectedElements[i];
-                    std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(element);
-                    lyric->lyricText.color = 0x000000FF;
-                    selectedElements.erase(selectedElements.begin() + i);
-                }
+                std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(selectedElement);
+                lyric->lyricText.color = 0x3333EEFF;
 
                 selectedElements.push_back(selectedElement);
+
+                Properties properties;
+                TextProperties text;
+                text.text = lyric->lyricText.text;
+                text.isBold = (int)lyric->lyricText.fontWeight - 1;
+                text.isItalic = (int)lyric->lyricText.fontStyle - 1;
+                text.size = lyric->lyricText.fontSize.size;
+                text.color = lyric->lyricText.color;
+                PositionProperties pos;
+                pos.position = lyric->position;
+                properties.textProperties.push_back(text);
+                properties.positionProperties.push_back(pos);
+
+                Callbacks::GetInstance().UpdateProperties(properties);
             }
 
             //musicRenderer->m_RenderData.AddDebugDot(event.position / musicRenderer->zoom);
@@ -85,13 +119,10 @@ bool Editor::OnPointerEvent(const PointerEvent& event)
         }
         case PointerEvent::PointerEventType::Up:
         {
-            LOGD("Up");
             break;
         }
         case PointerEvent::PointerEventType::Move:
         {
-            //LOGD("Move");
-
             break;
         }
         default:
@@ -116,4 +147,33 @@ bool Editor::OnTextFieldEvent(int id, const std::string& input)
     musicRenderer->Render(song, song->settings);
 
     return true;
+}
+
+void Editor::OnPropertiesUpdated(const std::string& propertiesString)
+{
+    json jsonObject = json::parse(propertiesString);
+
+    for (auto e : selectedElements)
+    {
+        std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(e);
+
+        LOGW("props: %s", propertiesString.c_str());
+
+        lyric->lyricText.text = jsonObject["text"];
+        bool fontWeight = jsonObject["isBold"];
+        bool fontStyle = jsonObject["isItalic"];
+        LOGW("fontWeight: %d, fontStyle: %d", fontWeight, fontStyle);
+
+        lyric->lyricText.fontWeight = (FontWeight)(1 + fontWeight);
+        lyric->lyricText.fontStyle = (FontStyle)(1 + fontStyle);
+        lyric->lyricText.fontSize.size = jsonObject["text size"];
+        lyric->lyricText.color.color = jsonObject["text color"];
+
+        lyric->position.x = jsonObject["posx"];
+        lyric->position.y = jsonObject["posy"];
+    }
+
+    musicRenderer->updateRenderData = true;
+    musicRenderer->layoutCalculated = false;
+    musicRenderer->Render(song, song->settings);
 }
