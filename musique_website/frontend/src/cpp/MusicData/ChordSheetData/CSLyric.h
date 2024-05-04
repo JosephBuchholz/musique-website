@@ -10,6 +10,10 @@
 class CSLyric : public TextualElement
 {
 public:
+
+    CSLyric()
+        : BaseElement(BaseElement::ElementType::CSLyric) {}
+
     void Init(Vec2<float> pos);
 
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;

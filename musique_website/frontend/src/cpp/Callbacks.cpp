@@ -178,28 +178,8 @@ void Callbacks::DownloadText(const std::string& name, const std::string& data)
     DownloadTextCallback(name.c_str(), data.c_str());
 }
 
-void Callbacks::UpdateProperties(const Properties& properties)
+void Callbacks::UpdateProperties(const std::string& propertiesString)
 {
-    std::string data;
-
-    data += "{";
-
-    JsonHelper::AddStringValueToJson(data, "text", properties.textProperties[0].text);
-    data += ",";
-    JsonHelper::AddBooleanValueToJson(data, "isBold", properties.textProperties[0].isBold);
-    data += ",";
-    JsonHelper::AddBooleanValueToJson(data, "isItalic", properties.textProperties[0].isItalic);
-    data += ",";
-    JsonHelper::AddFloatValueToJson(data, "text size", properties.textProperties[0].size);
-    data += ",";
-    JsonHelper::AddIntValueToJson(data, "text color", properties.textProperties[0].color);
-    data += ",";
-    JsonHelper::AddFloatValueToJson(data, "posx", properties.positionProperties[0].position.x);
-    data += ",";
-    JsonHelper::AddFloatValueToJson(data, "posy", properties.positionProperties[0].position.y);
-
-    data += "}";
-
-    LOGD("Updateing properties (from c++)");
-    UpdatePropertiesCallback(data.c_str());
+    LOGD("Updateing properties (from c++): %s", propertiesString.c_str());
+    UpdatePropertiesCallback(propertiesString.c_str());
 }

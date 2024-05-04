@@ -3,6 +3,8 @@
 void VisibleElement::ModifyPaint(Paint& paint) const
 {
     paint.color = color.color;
+    if (selectedColor.color != 0x000000FF)
+        paint.color = selectedColor.color;
     paint.glyphSizeFactor = sizeFactor;
 }
 

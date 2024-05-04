@@ -14,12 +14,12 @@ void Chord::Render(RenderData& renderData, const Settings& settings, Vec2<float>
         chordDiagram->Render(renderData, position + measurePosition);
 
     std::vector<TextSpan> textSpans;
-    Paint glyphPaint = Paint(color.color);
+    Paint glyphPaint = Paint(paint.color);
     glyphPaint.useMusicFont = true;
     glyphPaint.textSize = paint.textSize;
     glyphPaint.align = Paint::Align::Left;
 
-    Paint normalPaint = Paint(color.color);
+    Paint normalPaint = Paint(paint.color);
     normalPaint.textSize = paint.textSize;
     normalPaint.align = Paint::Align::Left;
 

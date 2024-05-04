@@ -5,7 +5,7 @@
 void TextElement::Render(RenderData& renderData, Vec2<float> parentPosition, Paint parentPaint) const
 {
     TextualElement::ModifyPaint(parentPaint);
-    parentPaint.color = color;
+    //parentPaint.color = color;
 
     renderData.AddText(Text(text, position.x + parentPosition.x, position.y + parentPosition.y, parentPaint));
 }

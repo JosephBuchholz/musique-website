@@ -38,7 +38,7 @@ private:
 public:
     void DownloadText(const std::string& name, const std::string& data);
 
-    void UpdateProperties(const Properties& properties);
+    void UpdateProperties(const std::string& propertiesString);
 
 private:
 	void (*DownloadTextCallback)(const char* name, const char* data);

@@ -10,6 +10,9 @@ class CSMeasure : public VisibleElement
 {
 public:
 
+    CSMeasure()
+        : BaseElement(BaseElement::ElementType::CSMeasure) {}
+
     void Init();
 
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;

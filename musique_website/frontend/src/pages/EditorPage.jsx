@@ -624,10 +624,80 @@ function ButtonTray() {
 
 function Sidebar({ properties, onPropertiesChange }) {
     var items = [];
-    for (var key in properties) {
-        var value = properties[key];
+    for (var heading in properties) {
+        var value = properties[heading];
 
-        if (typeof value == "boolean") {
+        if (typeof value == "object") {
+            items.push(<SidebarHeading>{heading}</SidebarHeading>);
+
+            for (var propertyKey in value) {
+                var property = value[propertyKey];
+
+                if (property.type == "bool") {
+                    items.push(
+                        <li>
+                            <CheckboxField
+                                label={property.name}
+                                value={property.value}
+                                k1={heading}
+                                k2={propertyKey}
+                                onChange={async (event, k1, k2) => {
+                                    var newProperties = JSON.parse(
+                                        JSON.stringify(properties)
+                                    ); // deep copy
+
+                                    newProperties[k1][k2].value =
+                                        event.target.checked;
+
+                                    onPropertiesChange(newProperties);
+                                }}
+                            ></CheckboxField>
+                        </li>
+                    );
+                } else if (property.type == "text") {
+                    items.push(
+                        <li>
+                            <TextField
+                                label={property.name}
+                                value={property.value}
+                                k1={heading}
+                                k2={propertyKey}
+                                onChange={async (event, k1, k2) => {
+                                    var newProperties = JSON.parse(
+                                        JSON.stringify(properties)
+                                    ); // deep copy
+                                    newProperties[k1][k2].value =
+                                        event.target.value;
+                                    onPropertiesChange(newProperties);
+                                }}
+                            ></TextField>
+                        </li>
+                    );
+                } else if (property.type == "float") {
+                    items.push(
+                        <li>
+                            <NumberField
+                                label={property.name}
+                                value={property.value}
+                                k1={heading}
+                                k2={propertyKey}
+                                onChange={async (event, k1, k2) => {
+                                    var newProperties = JSON.parse(
+                                        JSON.stringify(properties)
+                                    ); // deep copy
+                                    newProperties[k1][k2].value = parseFloat(
+                                        event.target.value
+                                    );
+                                    onPropertiesChange(newProperties);
+                                }}
+                            ></NumberField>
+                        </li>
+                    );
+                }
+            }
+        }
+
+        /*if (typeof value == "boolean") {
             items.push(
                 <li>
                     <CheckboxField
@@ -677,7 +747,7 @@ function Sidebar({ properties, onPropertiesChange }) {
                     ></NumberField>
                 </li>
             );
-        }
+        }*/
     }
 
     return (
@@ -707,6 +777,8 @@ function SidebarHeading({ children }) {
 function TextField({
     label,
     value = "",
+    k1 = "",
+    k2 = "",
     onChange = (e, k) => {},
     className = "",
 }) {
@@ -720,7 +792,7 @@ function TextField({
                 className={className}
                 value={value}
                 onChange={(e) => {
-                    onChange(e, label);
+                    onChange(e, k1, k2);
                 }}
                 type="text"
             />
@@ -731,6 +803,8 @@ function TextField({
 function NumberField({
     label,
     value = 0,
+    k1 = "",
+    k2 = "",
     onChange = () => {},
     className = "",
 }) {
@@ -744,7 +818,7 @@ function NumberField({
                 className={className}
                 value={value}
                 onChange={(e) => {
-                    onChange(e, label);
+                    onChange(e, k1, k2);
                 }}
                 type="number"
             />
@@ -755,6 +829,8 @@ function NumberField({
 function CheckboxField({
     label,
     value = false,
+    k1 = "",
+    k2 = "",
     onChange = () => {},
     className = "",
 }) {
@@ -768,7 +844,7 @@ function CheckboxField({
                 className={className}
                 checked={value}
                 onChange={(e) => {
-                    onChange(e, label);
+                    onChange(e, k1, k2);
                 }}
                 type="checkbox"
             />

@@ -10,6 +10,9 @@ class CSChord : public VisibleElement
 {
 public:
 
+    CSChord()
+        : BaseElement(BaseElement::ElementType::CSChord) {}
+
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> measurePosition) const;
 
     void Init(Vec2<float> pos);
