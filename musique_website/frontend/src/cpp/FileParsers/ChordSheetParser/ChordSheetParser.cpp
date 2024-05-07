@@ -171,6 +171,7 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
     }
 
     std::shared_ptr<CSMeasure> currentMeasure = std::make_shared<CSMeasure>();
+    currentMeasure->parent = staff->csStaff;
     int currentMeasureIndex = 0;
     int systemIndex = 0;
     float currentBeatPositionInMeasure = 0.0f;
@@ -245,6 +246,7 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
                     currentMeasure->width += 50.0f;
                     staff->csStaff->measures.push_back(currentMeasure);
                     currentMeasure = std::make_shared<CSMeasure>();
+                    currentMeasure->parent = staff->csStaff;
                     currentMeasureIndex++;
 
                     currentBeatPositionInMeasure = 0.0f;

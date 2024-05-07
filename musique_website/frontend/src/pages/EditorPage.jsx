@@ -53,6 +53,16 @@ class PointerEventType {
     }
 }
 
+class KeyboardEventType {
+    static None = new KeyboardEventType(0);
+    static Down = new KeyboardEventType(1);
+    static Up = new KeyboardEventType(2);
+
+    constructor(value) {
+        this.value = value;
+    }
+}
+
 var module;
 var moduleIsCreated = false;
 
@@ -113,6 +123,9 @@ export default function EditorPage() {
 
         let canvas = canvasRef.current;
         if (canvas == null) throw Error("canvas is null");
+        canvas.onselectstart = () => {
+            return false;
+        };
 
         let mainContext = canvas.getContext("2d");
         if (mainContext == null) throw Error("canvas is null");
@@ -438,6 +451,13 @@ export default function EditorPage() {
         function keydownEventListener(event) {
             const key = event.key;
             console.log("key: " + key);
+
+            if (moduleIsCreated) {
+                module.onKeyboardEvent(
+                    KeyboardEventType.Down.value,
+                    module.stringToNewUTF8(event.key)
+                );
+            }
         }
 
         function pointerDownEventListener(event) {
@@ -456,34 +476,49 @@ export default function EditorPage() {
 
         function pointerMoveEventListener(event) {
             if (moduleIsCreated) {
+                var millimeters = 6.35;
+                var tenths = 40.0;
+                var scale = (millimeters / tenths) * 4;
+
+                var rect = canvas.getBoundingClientRect();
+
                 module.onPointerEvent(
                     PointerEventType.Move.value,
-                    event.offsetX,
-                    event.offsetY
+                    (event.pageX - rect.left) / scale,
+                    (event.pageY - rect.top) / scale
                 );
             }
         }
 
         function pointerUpEventListener(event) {
             if (moduleIsCreated) {
+                var millimeters = 6.35;
+                var tenths = 40.0;
+                var scale = (millimeters / tenths) * 4;
+
+                var rect = canvas.getBoundingClientRect();
+
                 module.onPointerEvent(
                     PointerEventType.Up.value,
-                    event.offsetX,
-                    event.offsetY
+                    (event.pageX - rect.left) / scale,
+                    (event.pageY - rect.top) / scale
                 );
             }
         }
 
         document.addEventListener("keydown", keydownEventListener, true);
         canvas.addEventListener("pointerdown", pointerDownEventListener);
-        canvas.addEventListener("pointermove", pointerMoveEventListener);
-        canvas.addEventListener("pointerup", pointerUpEventListener);
+        document.addEventListener("pointermove", pointerMoveEventListener);
+        document.addEventListener("pointerup", pointerUpEventListener);
 
         return () => {
             document.removeEventListener("keydown", keydownEventListener, true);
             canvas.removeEventListener("pointerdown", pointerDownEventListener);
-            canvas.removeEventListener("pointermove", pointerMoveEventListener);
-            canvas.removeEventListener("pointerup", pointerUpEventListener);
+            document.removeEventListener(
+                "pointermove",
+                pointerMoveEventListener
+            );
+            document.removeEventListener("pointerup", pointerUpEventListener);
         };
     });
 
@@ -492,7 +527,7 @@ export default function EditorPage() {
             <div className="flex flex-col h-screen">
                 <Header></Header>
 
-                <div className="fixed top-0 left-0 w-3/4 h-full pt-16 pb-20">
+                <div className="fixed top-0 left-1/4 w-1/2 h-full pt-16 pb-20">
                     <div ref={canvasDiv} className="border-2 w-full h-full">
                         <canvas
                             ref={canvasRef}
@@ -511,6 +546,8 @@ export default function EditorPage() {
                         height={pageHeight}
                     ></canvas>
                 </div>
+
+                <ComponentsSidebar />
 
                 <ButtonTray />
 
@@ -622,6 +659,70 @@ function ButtonTray() {
     );
 }
 
+function ComponentsSidebar() {
+    return (
+        <>
+            <div className="fixed top-0 left-0 w-1/4 h-full pt-16">
+                <div className="border-l-2 bg-slate-50 w-full h-full">
+                    <ul className="m-2 space-y-2">
+                        <SidebarHeading>Components</SidebarHeading>
+
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(0);
+                                }
+                            }}
+                        >
+                            Add Lyric
+                        </TextButton>
+
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(1);
+                                }
+                            }}
+                        >
+                            Add Chord
+                        </TextButton>
+
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(2);
+                                }
+                            }}
+                        >
+                            Insert Measure Before
+                        </TextButton>
+
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(3);
+                                }
+                            }}
+                        >
+                            Insert Measure After
+                        </TextButton>
+
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(4);
+                                }
+                            }}
+                        >
+                            Append Measure
+                        </TextButton>
+                    </ul>
+                </div>
+            </div>
+        </>
+    );
+}
+
 function Sidebar({ properties, onPropertiesChange }) {
     var items = [];
     for (var heading in properties) {
@@ -696,58 +797,6 @@ function Sidebar({ properties, onPropertiesChange }) {
                 }
             }
         }
-
-        /*if (typeof value == "boolean") {
-            items.push(
-                <li>
-                    <CheckboxField
-                        label={key}
-                        value={value}
-                        onChange={async (event, k) => {
-                            var newProperties = JSON.parse(
-                                JSON.stringify(properties)
-                            ); // deep copy
-
-                            newProperties[k] = event.target.checked;
-
-                            onPropertiesChange(newProperties);
-                        }}
-                    ></CheckboxField>
-                </li>
-            );
-        } else if (typeof value == "string") {
-            items.push(
-                <li>
-                    <TextField
-                        label={key}
-                        value={value}
-                        onChange={async (event, k) => {
-                            var newProperties = JSON.parse(
-                                JSON.stringify(properties)
-                            ); // deep copy
-                            newProperties[k] = event.target.value;
-                            onPropertiesChange(newProperties);
-                        }}
-                    ></TextField>
-                </li>
-            );
-        } else if (typeof value == "number") {
-            items.push(
-                <li>
-                    <NumberField
-                        label={key}
-                        value={value}
-                        onChange={async (event, k) => {
-                            var newProperties = JSON.parse(
-                                JSON.stringify(properties)
-                            ); // deep copy
-                            newProperties[k] = parseFloat(event.target.value);
-                            onPropertiesChange(newProperties);
-                        }}
-                    ></NumberField>
-                </li>
-            );
-        }*/
     }
 
     return (
@@ -862,6 +911,17 @@ function Button({ children, onClick = () => {}, className = "" }) {
     );
 }
 
+function TextButton({ children, onClick = () => {} }) {
+    return (
+        <button
+            className="rounded-sm bg-emerald-500 text-black p-4 m-2 hover:border-2 hover:border-emerald-600 active:border-emerald-800"
+            onClick={onClick}
+        >
+            {children}
+        </button>
+    );
+}
+
 function TrayButton({ children, onClick = () => {} }) {
     return (
         <Button
@@ -892,13 +952,5 @@ function TrayToggleButton({ icon1, icon2, alt, onClick = () => {} }) {
                 <img src={icon} alt={alt}></img>
             </center>
         </Button>
-    );
-}
-
-function TextButton({ text, onClick = () => {} }) {
-    return (
-        <button class="" onClick={onClick}>
-            {text}
-        </button>
     );
 }

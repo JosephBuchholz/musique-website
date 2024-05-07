@@ -474,6 +474,11 @@ bool App::OnPointerEvent(const PointerEvent& event)
     return editor->OnPointerEvent(event);
 }
 
+bool App::OnKeyboardEvent(const KeyboardEvent& event)
+{
+    return editor->OnKeyboardEvent(event);
+}
+
 int App::OnCalculateNumPages()
 {
     return musicRenderer->OnCalculateNumPages(song);

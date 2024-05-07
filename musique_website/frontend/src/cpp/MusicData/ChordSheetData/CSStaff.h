@@ -11,6 +11,9 @@ class CSStaff : public VisibleElement
 {
 public:
 
+    CSStaff()
+        : BaseElement(BaseElement::ElementType::CSStaff) {}
+
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;
 
 public:

@@ -223,6 +223,13 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
     // TODO: fix dangerous line of code
     song->systems[song->systems.size() - 1]->endingMeasureIndex = song->instruments[0]->staves[0]->csStaff->measures.size() - 1;
 
+    for (int i = song->systems[song->systems.size() - 1]->beginningMeasureIndex; i <= song->systems[song->systems.size() - 1]->endingMeasureIndex; i++)
+    {
+        SystemMeasure newSystemMeasure;
+        newSystemMeasure.measureIndex = i;
+        song->systems[song->systems.size() - 1]->systemMeasures.push_back(newSystemMeasure);
+    }
+
     // TODO: will create problems if it is socre-timewise
     /*XMLElement* root = doc.FirstChildElement("score-partwise");
     if (root)
@@ -2001,6 +2008,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             bool startNewPage = false;
 
             std::vector<std::shared_ptr<CSMeasure>> currentMeasures;
+            song->systemMeasures.push_back(std::make_shared<SystemMeasure>());
 
             // adding staves
             if (firstMeasure)
@@ -2043,6 +2051,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             {
                 std::shared_ptr<CSMeasure> newMeasure = std::make_shared<CSMeasure>();
                 newMeasure->width = measureWidth;
+                newMeasure->parent = currentInst->staves[i]->csStaff;
                 /*newMeasure->measureNumber = MeasureNumber(measureNumber);
                 newMeasure->implicit = implicitMeasure;
                 newMeasure->index = measureIndex;
@@ -2069,6 +2078,8 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                 currentMeasures.push_back(newMeasure);
             }
 
+            song->systemMeasures.back()->measureIndex = measureIndex;
+
             /*if (multiMeasureRest)
             {
                 if (measureIndex - measureThatStartedMultiMeasureRest < numberOfMeasuresInMultiMeasureRest)
@@ -2087,6 +2098,11 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     startNewSystem = true, startNewPage = true;
 
                 for (const auto& m : currentMeasures) { m->isFirstMeasureOfSystem = startNewSystem; m->isFirstMeasureOfSystem = startNewPage; }
+                if (song->systemMeasures.size() > 1)
+                {
+                    song->systemMeasures[song->systemMeasures.size() - 2]->systemBreak = startNewSystem;
+                    song->systemMeasures[song->systemMeasures.size() - 2]->pageBreak = startNewPage;
+                }
 
                 if ((firstMeasure || startNewSystem) && isFirstPart)
                 {

@@ -805,6 +805,71 @@ void Song::OnUpdate()
     LOGI("Done updating song data!");
 }
 
+void Song::CalculateSystems()
+{
+    systems.clear();
+    const float maxSystemWidth = displayConstants.pageWidth - (displayConstants.systemLayout.systemLeftMargin + displayConstants.systemLayout.systemRightMargin) - (displayConstants.leftMargin + displayConstants.rightMargin);
+
+    float currentSystemWidth = 0.0f;
+    std::shared_ptr<System> currentSystem = std::make_shared<System>();
+    currentSystem->beginningMeasureIndex = 0;
+    currentSystem->endingMeasureIndex = 0;
+    for (const auto& instrument : instruments)
+    {
+        for (const auto& staff : instrument->staves)
+        {
+            if (staff->csStaff)
+            {
+                int measureIndex = 0;
+                for (const auto& measure : staff->csStaff->measures)
+                {
+                    bool systemBreak = false;
+                    if (measureIndex > 1)
+                    {
+                        systemBreak = systemMeasures[measureIndex - 1]->systemBreak;
+                    }
+
+                    if (currentSystemWidth + measure->width >= maxSystemWidth || systemBreak)
+                    {
+                        // push back system
+                        currentSystem->endingMeasureIndex = measureIndex - 1;
+
+                        for (int i = currentSystem->beginningMeasureIndex; i <= currentSystem->endingMeasureIndex; i++)
+                        {
+                            SystemMeasure systemMeasure;
+                            systemMeasure.measureIndex = i;
+                            currentSystem->systemMeasures.push_back(systemMeasure);
+                        }
+
+                        systems.push_back(currentSystem);
+                        
+                        // new system
+                        currentSystem = std::make_shared<System>();
+                        currentSystem->beginningMeasureIndex = measureIndex;
+                        currentSystemWidth = 0.0f;
+                    }
+
+                    currentSystemWidth += measure->width;
+                    measureIndex++;
+                }
+
+
+                // push back last system
+                currentSystem->endingMeasureIndex = measureIndex - 1;
+
+                for (int i = currentSystem->beginningMeasureIndex; i <= currentSystem->endingMeasureIndex; i++)
+                {
+                    SystemMeasure systemMeasure;
+                    systemMeasure.measureIndex = i;
+                    currentSystem->systemMeasures.push_back(systemMeasure);
+                }
+
+                systems.push_back(currentSystem);
+            }
+        }
+    }
+}
+
 void Song::CalculateSystemPositionsAndPageBreaks()
 {
     if (systems.empty() || instruments.empty())
@@ -899,7 +964,7 @@ void Song::CalculateSystemPositionsAndPageBreaks()
                 if (newPage.systems.size() - 1 != 0)
                 {
                     float extra = dist / (float) newPage.systems.size() - 1;
-                    LOGW_TAG("Song", "extra: %f", extra);
+                    LOGD_TAG("Song", "extra: %f", extra);
                     for (int i = 0; i < newPage.systems.size(); i++)
                     {
                         newPage.systems[i]->position.y += extra * (float)i;
@@ -907,7 +972,7 @@ void Song::CalculateSystemPositionsAndPageBreaks()
                 }
 
                 // start a new page
-                LOGE_TAG("Song", "Starting new page");
+                LOGD_TAG("Song", "Starting new page");
                 startNewPage = true;
                 previousSystemPosition = { 0.0f, displayConstants.topMargin + systems[systemIndex]->layout.topSystemDistance };
                 CreatePageBreak(system->beginningMeasureIndex);
@@ -925,7 +990,7 @@ void Song::CalculateSystemPositionsAndPageBreaks()
             system->position.y += -GetSystemBoundingBox(systemIndex).AddPadding(systemPadding).GetTop();
         }
 
-        LOGE_TAG("Song", "Pushing back system!!!!!!!!!!!!!!!!");
+        LOGD_TAG("Song", "Pushing back system!!!!!!!!!!!!!!!!");
         newPage.systems.push_back(system);
         previousSystemPosition = system->position;
         previousSystemIndex = systemIndex;
@@ -1198,6 +1263,13 @@ bool Song::DoesMeasureStartNewSystem(int measureIndex) const
     }
 
     return false;
+
+    /*ASSERT(measureIndex >= 0 && measureIndex < systemMeasures.size());
+
+    if (measureIndex == 0)
+        return true;
+
+    return systemMeasures[measureIndex - 1]->systemBreak;*/
 }
 
 bool Song::DoesMeasureStartNewPage(int measureIndex) const
@@ -2024,12 +2096,5 @@ void Song::Transpose(const TranspositionRequest& transposeRequest)
 
 int Song::GetMeasureCount() const
 {
-    uint16_t count = 0;
-
-    for (const auto& system : systems)
-    {
-        count += system->systemMeasures.size();
-    }
-
-    return count;
+    return systemMeasures.size();
 }

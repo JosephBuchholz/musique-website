@@ -10,7 +10,7 @@ class BaseElement {
 
 public:
     enum class ElementType {
-        None = 0, CSLyric, CSChord, CSMeasure
+        None = 0, CSLyric, CSChord, CSMeasure, CSStaff, Credit
     };
 
 public:
@@ -18,6 +18,8 @@ public:
     BaseElement(ElementType type)
         : elementType(type) {}
     virtual ~BaseElement() {}
+    
+    virtual void Delete() { ASSERT(false); }
 
 public:
     std::string id = "";

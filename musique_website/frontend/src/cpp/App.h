@@ -66,6 +66,7 @@ public:
     bool OnMouseScrollEvent(const MouseScrollEvent& event);
     bool OnButtonEvent(const ButtonEvent& event);
     bool OnPointerEvent(const PointerEvent& event);
+    bool OnKeyboardEvent(const KeyboardEvent& event);
 
     int OnCalculateNumPages();
 

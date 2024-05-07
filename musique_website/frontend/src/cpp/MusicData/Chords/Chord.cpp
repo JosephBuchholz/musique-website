@@ -382,3 +382,83 @@ SMuFLID Chord::GetChordSymbolAccidentalSMuFLID(int alter)
         default: return SMuFLID::ErrorGlyph;
     }
 }
+
+DiatonicNote Chord::ParseBasicPitch(char c)
+{
+    if (c == 'A')
+        return DiatonicNote::A;
+    else if (c == 'B')
+        return  DiatonicNote::B;
+    else if (c == 'C')
+        return DiatonicNote::C;
+    else if (c == 'D')
+        return DiatonicNote::D;
+    else if (c == 'E')
+        return DiatonicNote::E;
+    else if (c == 'F')
+        return DiatonicNote::F;
+    else if (c == 'G')
+        return DiatonicNote::G;
+
+    return DiatonicNote::C;
+}
+
+float Chord::ParseAlter(const std::string& chordSymbol, int index)
+{
+    if (index < chordSymbol.size())
+    {
+        char c = chordSymbol[index];
+
+        if (c == '#')
+            return 1.0f;
+        else if (c == 'b')
+            return -1.0f;
+    }
+
+    return 0.0f;
+}
+
+Chord Chord::CreateChordFromString(const std::string& chordString)
+{
+    Chord newChord;
+
+    if (chordString.empty())
+        return newChord;
+
+    newChord.rootPitch.step = ParseBasicPitch(chordString[0]);
+    newChord.rootPitch.alter = ParseAlter(chordString, 1);
+
+    size_t foundSlash = chordString.find_first_of('/');
+    if (foundSlash != std::string::npos)
+    {
+        if (chordString.size() > foundSlash + 1)
+        {
+            newChord.bassPitch.step = ParseBasicPitch(chordString[foundSlash + 1]);
+            newChord.bassPitch.alter = ParseAlter(chordString, foundSlash + 2);
+            newChord.hasBassNote = true;
+        }
+    }
+
+    size_t foundMinor = chordString.find('m');
+    if (foundMinor != std::string::npos)
+        newChord.harmonyType = Chord::HarmonyType::Minor;
+
+    size_t foundSus4 = chordString.find("sus4");
+    if (foundSus4 != std::string::npos)
+        newChord.harmonyType = Chord::HarmonyType::SuspendedFourth;
+
+    return newChord;
+}
+
+std::string Chord::GetChordNameAsStandardString() const
+{
+    std::string chordString;
+
+    for (uint16_t c : chordNameString)
+    {
+        // TODO: handle special characters
+        chordString += c;
+    }
+
+    return chordString;
+}

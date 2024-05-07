@@ -38,6 +38,14 @@ public:
 
     void OnTranspose(const TranspositionRequest& transposeRequest, const MusicalKey& currentKey);
 
+    static Chord CreateChordFromString(const std::string& chordString);
+
+    std::string GetChordNameAsStandardString() const;
+
+private:
+    static DiatonicNote ParseBasicPitch(char c);
+    static float ParseAlter(const std::string& chordSymbol, int index);
+
 private:
 
     void AddCharsToString(std::vector<uint16_t>& dest, const std::vector<uint16_t>& charsToAdd);

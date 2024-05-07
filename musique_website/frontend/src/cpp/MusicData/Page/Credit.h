@@ -13,7 +13,9 @@ class CreditWords : public TextualElement
     friend class HarmonyXMLExporter;
 
 public:
+    BoundingBox GetBoundingBox(Paint parentPaint) const;
 
+public:
     std::string text;
 
     float positionX;
@@ -28,6 +30,9 @@ class Credit : public BaseElement {
 
 public:
 
+    Credit()
+        : BaseElement(BaseElement::ElementType::Credit) {}
+
     /**
      * Renders this class.
      *
@@ -37,6 +42,8 @@ public:
      * @param offset An offset.
      */
     void Render(RenderData& renderData, Vec2<float> pagePosition, Vec2<float> pageDimensions, Vec2<float> offset = { 0.0f, 0.0f }) const;
+
+    BoundingBox GetBoundingBox() const;
 
 public:
     void CalculatePositionAsPaged()

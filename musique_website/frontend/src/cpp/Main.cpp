@@ -101,6 +101,28 @@ bool OnPointerEvent(int pointerEventType, float positionX, float positionY)
     return app.OnPointerEvent(event);
 }
 
+bool OnKeyboardEvent(int eventType, int keyCodePtr)
+{
+    char* keyCodeString = reinterpret_cast<char*>(keyCodePtr);
+    std::string keyCode = keyCodeString;
+    free(keyCodeString);
+
+    KeyboardEvent event;
+    event.type = InputEvent::InputEventType::Keyboard;
+    event.eventType = (KeyboardEvent::KeyboardEventType)eventType;
+
+    if (keyCode == "Delete")
+        event.keyCode = KeyboardEvent::KeyCode::Delete;
+    else if (keyCode == "Control")
+        event.keyCode = KeyboardEvent::KeyCode::Control;
+    else if (keyCode == "Shift")
+        event.keyCode = KeyboardEvent::KeyCode::Shift;
+
+    App& app = App::GetInstance();
+
+    return app.OnKeyboardEvent(event);
+}
+
 bool OnTextFieldEvent(int id, int inputStringPtr)
 {
     App& app = App::GetInstance();
@@ -123,6 +145,13 @@ void OnPropertiesUpdated(int stringPtr)
     free(c);
 
     app.editor->OnPropertiesUpdated(propertiesString);
+}
+
+void OnNewElement(int id)
+{
+    App& app = App::GetInstance();
+
+    app.editor->OnNewElement(id);
 }
 
 void OnCanvasResize(float width, float height)
@@ -175,8 +204,10 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("addAudioCallbacksToCpp", &AddAudioCallbacksToCpp);
     emscripten::function("onButtonEvent", &OnButtonEvent);
     emscripten::function("onPointerEvent", &OnPointerEvent);
+    emscripten::function("onKeyboardEvent", &OnKeyboardEvent);
     emscripten::function("onTextFieldEvent", &OnTextFieldEvent);
     emscripten::function("onPropertiesUpdated", &OnPropertiesUpdated);
+    emscripten::function("onNewElement", &OnNewElement);
     emscripten::function("onCanvasResize", &OnCanvasResize);
     emscripten::function("loadSong", &LoadSong);
 }

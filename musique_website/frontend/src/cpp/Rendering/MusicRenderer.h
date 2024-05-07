@@ -68,4 +68,5 @@ public:
     bool updateRenderData = true; // weather the sheet music needs to be updated(rendered) again
 
     float zoom = 1.0f;
+    Vec2<float> offset = { 0.0f, 0.0f };
 };

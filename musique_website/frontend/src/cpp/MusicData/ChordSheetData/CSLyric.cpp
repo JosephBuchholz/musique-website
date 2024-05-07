@@ -8,6 +8,41 @@ void CSLyric::Init(Vec2<float> pos)
     position = pos;
 }
 
+void CSLyric::Delete()
+{
+    onDeleteCallback();
+
+    if (parentSyllableGroup)
+    {
+        int i = 0;
+        for (const auto& lyric : parentSyllableGroup->lyrics)
+        {
+            if (lyric.get() == this)
+            {
+                parentSyllableGroup->lyrics.erase(parentSyllableGroup->lyrics.begin() + i);
+                break;
+            }
+
+            i++;
+        }
+    }
+
+    if (parentLyricalPhrase)
+    {
+        int i = 0;
+        for (const auto& lyric : parentLyricalPhrase->lyrics)
+        {
+            if (lyric.get() == this)
+            {
+                parentLyricalPhrase->lyrics.erase(parentLyricalPhrase->lyrics.begin() + i);
+                break;
+            }
+
+            i++;
+        }
+    }
+}
+
 void CSLyric::Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const
 {
     lyricText.Render(renderData, parentPosition + position, Paint());

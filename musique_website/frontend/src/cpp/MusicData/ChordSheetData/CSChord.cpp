@@ -15,3 +15,8 @@ Vec2<float> CSChord::GetDimensions() const
 {
     return chordSymbol.GetBoundingBoxRelativeToParent().size;
 }
+
+void CSChord::Delete()
+{
+    onDeleteCallback();
+}

@@ -163,7 +163,6 @@ export class CanvasRenderer extends Renderer {
     }
 
     clear() {
-        console.log("clearing canvas!!!");
         this.context.clearRect(
             0,
             0,

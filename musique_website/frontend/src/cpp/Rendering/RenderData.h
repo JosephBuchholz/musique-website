@@ -119,6 +119,7 @@ public:
     MusicDisplayConstants displayConstants = MusicDisplayConstants();
 
     float zoom = 1.0f;
+    Vec2<float> offset = { 0.0f, 0.0f };
 };
 
 #endif // MUSIQUE_RENDERDATA_H

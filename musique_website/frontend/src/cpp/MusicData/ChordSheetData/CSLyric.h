@@ -1,6 +1,8 @@
 #ifndef MUSIQUE_CSLYRIC_H
 #define MUSIQUE_CSLYRIC_H
 
+#include <functional>
+
 #include "../BaseElements/TextualElement.h"
 #include "../../Settings.h"
 #include "../BaseElements/TextElement.h"
@@ -15,10 +17,13 @@ public:
         : BaseElement(BaseElement::ElementType::CSLyric) {}
 
     void Init(Vec2<float> pos);
+    void Delete() override;
 
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;
 
     void UpdateBoundingBox();
+
+    void SetOnDeleteCallback(std::function<void()> callback) { onDeleteCallback = callback; }
 
 public:
 
@@ -31,6 +36,8 @@ public:
     std::shared_ptr<LyricalPhrase> parentLyricalPhrase;
 
     bool isPickupToNextMeasure = false;
+
+    std::function<void()> onDeleteCallback = []() {};
 };
 
 #endif //MUSIQUE_CSLYRIC_H

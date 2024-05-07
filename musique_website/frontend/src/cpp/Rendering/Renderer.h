@@ -25,6 +25,7 @@ public:
 
 	void Clear();
 	void SetScale(float scale) { this->scale = scale; }
+	void SetOffset(Vec2<float> offset) { this->offset = offset; }
 
 	void DrawLine(Vec2<float> start, Vec2<float> end, const Paint& paint = Paint());
 	void DrawRect(Vec2<float> position, Vec2<float> size, const Paint& paint = Paint());
@@ -73,5 +74,6 @@ public:
 private:
 
 	float scale;
+	Vec2<float> offset;
 	bool isRenderingPDF = false;
 };

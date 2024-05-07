@@ -13,6 +13,7 @@ void UpdateRender(const RenderData& renderData)
 
     renderer.Clear();
     renderer.SetScale(renderData.zoom);
+    renderer.SetOffset(renderData.offset);
 
     for (const Line& line : renderData.m_lines)
     {

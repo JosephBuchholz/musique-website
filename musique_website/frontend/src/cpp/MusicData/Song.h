@@ -264,6 +264,11 @@ public:
      */
     void CalculateSystemPositionsAndPageBreaks();
 
+    /**
+     * Calculates or recalculates systems
+    */
+   void CalculateSystems();
+
 private:
     struct TimeSpacePoint
     {
@@ -294,6 +299,7 @@ public:
 
     std::vector<std::shared_ptr<Instrument>> instruments;
     std::vector<std::shared_ptr<System>> systems;
+    std::vector<std::shared_ptr<SystemMeasure>> systemMeasures;
 
     std::vector<Credit> credits;
 

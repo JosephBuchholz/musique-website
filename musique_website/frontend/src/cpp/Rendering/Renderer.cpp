@@ -43,11 +43,14 @@ void Renderer::Clear()
 
 void Renderer::DrawLine(Vec2<float> start, Vec2<float> end, const Paint& paint)
 {
+    start += offset;
+    end += offset;
     DrawLineCallback(start.x * scale, start.y * scale, end.x * scale, end.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 
 void Renderer::DrawRect(Vec2<float> position, Vec2<float> size, const Paint& paint)
 {
+    position += offset;
     DrawLine({ position.x, position.y }, { position.x + size.x, position.y }, paint);
     DrawLine({ position.x + size.x, position.y }, { position.x + size.x, position.y + size.y }, paint);
     DrawLine({ position.x + size.x, position.y + size.y }, { position.x, position.y + size.y }, paint);
@@ -56,6 +59,7 @@ void Renderer::DrawRect(Vec2<float> position, Vec2<float> size, const Paint& pai
 
 void Renderer::DrawText(const std::string& text, Vec2<float> position, const Paint& paint)
 {
+    position += offset;
     DrawTextCallback(text.c_str(), position.x * scale, position.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 
@@ -79,7 +83,7 @@ uint16_t* NewSubString(uint16_t* string, int size, int startIndex, int endIndex)
 
 void Renderer::DrawSpannableText(const SpannableText& spannableText)
 {
-    Vec2<float> currentPosition = spannableText.position * scale;
+    Vec2<float> currentPosition = (spannableText.position + offset) * scale;
 
     for (const TextSpan& span : spannableText.spans)
     {
@@ -102,11 +106,16 @@ void Renderer::DrawSpannableText(const SpannableText& spannableText)
 
 void Renderer::DrawGlyph(SMuFLID glyph, Vec2<float> position, const Paint& paint)
 {
+    position += offset;
     DrawGlyphCallback((uint16_t)glyph, position.x * scale, position.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 
 void Renderer::DrawCubicCurve(Vec2<float> point1, Vec2<float> point2, Vec2<float> point3, Vec2<float> point4, const Paint& paint)
 {
+    point1 += offset;
+    point2 += offset;
+    point3 += offset;
+    point4 += offset;
     DrawCubicCurveCallback(point1.x * scale, point1.y * scale, point2.x * scale, point2.y * scale, point3.x * scale, point3.y * scale, point4.x * scale, point4.y * scale, EncodePaintObject(paint, scale).c_str());
 }
 

@@ -14,10 +14,13 @@ public:
         : BaseElement(BaseElement::ElementType::CSMeasure) {}
 
     void Init();
+    void Delete() override;
 
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;
 
     BoundingBox GetTotalBoundingBox(const MusicDisplayConstants& displayConstants) const;
+
+    int GetMeasureIndex() const;
 
 private:
 
@@ -33,6 +36,8 @@ public:
 
     std::vector<std::shared_ptr<CSChord>> chords;
     std::vector<std::shared_ptr<CSLyric>> lyrics;
+
+    std::shared_ptr<BaseElement> parent;
 };
 
 #endif //MUSIQUE_CSMEASURE_H

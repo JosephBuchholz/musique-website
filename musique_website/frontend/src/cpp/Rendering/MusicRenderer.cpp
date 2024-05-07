@@ -468,6 +468,7 @@ void MusicRenderer::RenderWithRenderData()
     if (updateRenderData)
     {
         m_RenderData.zoom = zoom;
+        m_RenderData.offset = offset;
 
         UpdateRender(m_RenderData);
         updateRenderData = false;
