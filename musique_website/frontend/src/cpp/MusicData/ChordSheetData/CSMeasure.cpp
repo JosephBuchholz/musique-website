@@ -48,6 +48,11 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
         if (!lyric->isPickupToNextMeasure)
             lyric->Render(renderData, settings, currentPosition);
     }
+
+    for (const Direction& direction : directions)
+    {
+        direction.Render(renderData, currentPosition);
+    }
 }
 
 void CSMeasure::Init(const Settings& settings)
@@ -59,6 +64,9 @@ void CSMeasure::Init(const Settings& settings)
     float lyricSpace = settings.displayCosntants.lyricSpaceWidth;
     float minMeasureWidth = settings.displayCosntants.minimumMeasureWidth;
     bool displayReminderPickupLyrics = settings.displayCosntants.displayReminderPickupLyrics;
+
+    boundingBox.size.x = width;
+    boundingBox.size.y = lyricPosY + (settings.displayCosntants.lyricFontSize.size / 2.0f); // only an estimation
 
     std::sort(chords.begin(), chords.end(), [](std::shared_ptr<CSChord> a, std::shared_ptr<CSChord> b)
         {
@@ -278,6 +286,17 @@ void CSMeasure::Init(const Settings& settings)
     {
         width = defaultWidth;
     }*/
+
+    for (auto& direction : directions)
+    {
+        for (auto& rehearsal : direction.rehearsals)
+        {
+            rehearsal.position = { -pickupWidth, -20.0f };
+            rehearsal.fontSize.size = 16.0f;
+
+            boundingBox = BoundingBox::CombineBoundingBoxes(boundingBox, rehearsal.GetBoundingBoxRelativeToParent());
+        }
+    }
 }
 
 void CSMeasure::Delete()
@@ -344,10 +363,10 @@ std::shared_ptr<CSChord> CSMeasure::GetChordFromBeatPosition(float beatPosition)
 
 BoundingBox CSMeasure::GetTotalBoundingBox(const MusicDisplayConstants& displayConstants) const
 {
-    BoundingBox totalBoundingBox;
+    BoundingBox totalBoundingBox = boundingBox;
 
-    totalBoundingBox.size.x = width;
-    totalBoundingBox.size.y = 100.0f;
+    //totalBoundingBox.size.x = width;
+    //totalBoundingBox.size.y = 75.0f;
 
     return totalBoundingBox;
 }

@@ -2556,19 +2556,28 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                             AddError("Missing Element", "Forward element has no duration");
                         }
                     }
-                    /*else if (strcmp(value, "direction") == 0) // direction
+                    else if (strcmp(value, "direction") == 0) // direction
                     {
                         // duration direction
-                        bool isNewDurationDirection;
+                        /*bool isNewDurationDirection;
                         std::shared_ptr<DurationDirection> durationDirection = ParseDurationDirection(element, isNewDurationDirection, currentTimeInMeasure, measureIndex);
                         if (isNewDurationDirection && durationDirection)
                         {
                             //durationDirection->beatPositionStart = currentTimeInMeasure;
                             //durationDirection->startMeasureIndex = measureIndex;
                             currentInst->staves[0]->durationDirections.push_back(durationDirection);
+                        }*/
+
+                        // direction
+                        bool isNewDirection;
+                        Direction direction = ParseDirection(element, isNewDirection, currentTimeInMeasure);
+                        if (isNewDirection)
+                        {
+                            direction.beatPosition = currentTimeInMeasure;
+                            currentMeasures[0]->directions.push_back(direction);
                         }
 
-                        if (!isNewDurationDirection)
+                        /*if (!isNewDurationDirection)
                         {
                             // direction
                             bool isNewDirection;
@@ -2578,10 +2587,10 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                                 direction.beatPosition = currentTimeInMeasure;
                                 currentMeasures[0]->directions.push_back(direction);
                             }
-                        }
+                        }*/
 
                         // sound
-                        XMLElement* soundElement = element->FirstChildElement("sound");
+                        /*XMLElement* soundElement = element->FirstChildElement("sound");
                         if (soundElement)
                         {
                             float dynamics = XMLHelper::GetFloatAttribute(soundElement, "dynamics", -1.0f);
@@ -2610,9 +2619,9 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
 
                                 for (const auto& m : currentMeasures) { m->soundEvents.push_back(event); }
                             }
-                        }
+                        }*/
                     }
-                    else if (strcmp(value, "barline") == 0) // barline
+                    /*else if (strcmp(value, "barline") == 0) // barline
                     {
                         Barline barline = ParseBarlineElement(element);
 

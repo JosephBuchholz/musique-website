@@ -15,6 +15,8 @@ class VisibleElement : public PrintableElement {
 
 public:
     VisibleElement() {}
+    VisibleElement(Vec2<float> pos)
+        : position(pos) {}
 
     /**
      * Updates the given paint to match the attributes of this class.

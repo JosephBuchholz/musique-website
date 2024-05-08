@@ -6,6 +6,7 @@
 #include "CSChord.h"
 #include "CSLyric.h"
 #include "LyricPickup.h"
+#include "../Directions/Direction.h"
 
 class CSMeasure : public VisibleElement
 {
@@ -44,6 +45,8 @@ public:
     std::shared_ptr<BaseElement> parent;
 
     std::shared_ptr<LyricPickup> lyricPickup;
+    
+    std::vector<Direction> directions; // the directions contained in this measure
 };
 
 #endif //MUSIQUE_CSMEASURE_H

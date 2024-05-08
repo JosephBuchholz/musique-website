@@ -880,6 +880,18 @@ void Song::CalculateSystemPositionsAndPageBreaks()
     if (systems.empty() || instruments.empty())
         return;
 
+    for (const auto& instrument : instruments)
+    {
+        instrument->systemPositionData.clear();
+        instrument->systemBoundingBoxes.clear();
+
+        for (const auto& staff : instrument->staves)
+        {
+            staff->systemPositionData.clear();
+            staff->systemBoundingBoxes.clear();
+        }
+    }
+
     auto start = high_resolution_clock::now();
     for (const auto& instrument : instruments)
     {

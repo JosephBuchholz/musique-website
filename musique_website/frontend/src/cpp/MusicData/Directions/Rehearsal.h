@@ -13,7 +13,7 @@
 class Rehearsal : public Words {
 
 public:
-    Rehearsal() { }
+    Rehearsal() { position = { 0.0f, -10.0f }; }
 
     Rehearsal(Words words)
         : Words(words) { }
