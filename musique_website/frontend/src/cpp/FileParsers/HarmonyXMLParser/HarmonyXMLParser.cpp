@@ -609,6 +609,9 @@ void HarmonyXMLParser::ParseLyric(XMLElement* element, const std::shared_ptr<CSM
             lyricText.text = textElement->GetText();
             lyric->lyricText = lyricText;
         }
+
+        lyric->isPickupToNextMeasure = XMLHelper::GetBoolAttribute(element, "is-pickup", lyric->isPickupToNextMeasure);
+        lyric->startsPickup = XMLHelper::GetBoolAttribute(element, "starts-pickup", lyric->startsPickup);
     }
 
     currentMeasure->lyrics.push_back(lyric);
@@ -1464,15 +1467,15 @@ MusicDisplayConstants HarmonyXMLParser::ParseDefaultsElement(XMLElement* default
     return displayConstants;
 }
 
-Credit HarmonyXMLParser::ParseCreditElement(XMLElement* creditElement)
+std::shared_ptr<Credit> HarmonyXMLParser::ParseCreditElement(XMLElement* creditElement)
 {
-    Credit credit = Credit();
+    std::shared_ptr<Credit> credit = std::make_shared<Credit>();
 
     if (creditElement)
     {
         BaseElementParser::ParseBaseElement(creditElement, credit);
 
-        credit.pageNumber = XMLHelper::GetUnsignedIntAttribute(creditElement, "page", credit.pageNumber);
+        credit->pageNumber = XMLHelper::GetUnsignedIntAttribute(creditElement, "page", credit->pageNumber);
 
         XMLElement* creditWordsElement = creditElement->FirstChildElement("credit-words");
         if (creditWordsElement)
@@ -1481,9 +1484,9 @@ Credit HarmonyXMLParser::ParseCreditElement(XMLElement* creditElement)
             BaseElementParser::ParseTextualElement(creditWordsElement, words);
             words.text = XMLHelper::GetStringValue(creditWordsElement, words.text);
             words.positionX = XMLHelper::GetFloatAttribute(creditWordsElement, "default-x", words.positionY);
-            words.positionY = XMLHelper::GetFloatAttribute(creditWordsElement, "default-y", words.positionX);
+            words.positionY = DEFAULT_PAGE_HEIGHT - XMLHelper::GetFloatAttribute(creditWordsElement, "default-y", words.positionX);
 
-            credit.words = words;
+            credit->words = words;
         }
     }
 

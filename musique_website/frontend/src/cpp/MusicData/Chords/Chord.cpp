@@ -8,6 +8,7 @@ void Chord::Render(RenderData& renderData, const Settings& settings, Vec2<float>
     // paint
     Paint paint = Paint();
     TextualElement::ModifyPaint(paint);
+    paint.textSize = settings.displayCosntants.chordFontSize.size;
 
     // render
     if (chordDiagram && settings.showChordDiagram == Settings::ShowChordDiagram::Auto)

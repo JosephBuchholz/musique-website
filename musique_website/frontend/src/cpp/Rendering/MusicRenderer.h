@@ -35,7 +35,7 @@ private:
     void RenderLineOfMeasures(RenderData& renderData, const Settings& settings, unsigned int startMeasure, unsigned int endMeasure, const std::shared_ptr<System>& system, const std::shared_ptr<Staff>& staff, float systemPositionX, float staffPositionY, float lineSpacing, bool isTopMeasureLine, const std::vector<std::shared_ptr<EndingGroup>>& endingGroups);
     void RenderDebugLineOfMeasures(RenderData& renderData, const Settings& settings, unsigned int startMeasure, unsigned int endMeasure, const std::shared_ptr<System>& system, const std::shared_ptr<Staff>& staff, float systemPositionX, float staffPositionY, float lineSpacing, bool isTopMeasureLine);
 
-    void RenderCredits(RenderData& renderData, const std::shared_ptr<Song>& song, const MusicDisplayConstants& displayConstants, const std::vector<Credit>& credits, float pageX, float pageY);
+    void RenderCredits(RenderData& renderData, const std::shared_ptr<Song>& song, const MusicDisplayConstants& displayConstants, const std::vector<std::shared_ptr<Credit>>& credits, float pageX, float pageY);
 
 public:
 

@@ -301,7 +301,7 @@ public:
     std::vector<std::shared_ptr<System>> systems;
     std::vector<std::shared_ptr<SystemMeasure>> systemMeasures;
 
-    std::vector<Credit> credits;
+    std::vector<std::shared_ptr<Credit>> credits;
 
     std::vector<Page> pages;
 

@@ -33,6 +33,7 @@ XMLElement* ExportLyric(XMLDocument& doc, const std::shared_ptr<CSLyric>& lyric)
     lyricElement->SetAttribute("default-y", lyric->position.y);
 
     lyricElement->SetAttribute("is-pickup", HarmonyXMLExportHelper::FromBoolToYesNo(lyric->isPickupToNextMeasure));
+    lyricElement->SetAttribute("starts-pickup", HarmonyXMLExportHelper::FromBoolToYesNo(lyric->startsPickup));
 
     // syllabic element
     if (lyric->parentSyllableGroup)
@@ -179,14 +180,14 @@ XMLElement* ExportChord(XMLDocument& doc, const std::shared_ptr<CSChord>& chord)
     return chordElement;
 }
 
-XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<System>& currentSystem)
+XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
 {
     XMLElement* measureElement = doc.NewElement("measure");
 
     //measureElement->SetAttribute("number", measure->number);
     measureElement->SetAttribute("width", measure->width);
 
-    if (measure->isFirstMeasureOfSystem)
+    if (measure->isFirstMeasureOfSystem || startsNewSystem)
     {
         XMLElement* printElement = doc.NewElement("print");
 
@@ -284,12 +285,12 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
     {
         XMLElement* creditElement = doc.NewElement("credit");
 
-        creditElement->SetAttribute("page", credit.pageNumber);
+        creditElement->SetAttribute("page", credit->pageNumber);
 
         XMLElement* creditTypeElement = doc.NewElement("credit-type");
 
         std::string creditTypeString = "";
-        switch (credit.creditType)
+        switch (credit->creditType)
         {
             case Credit::CreditType::PageNumber: creditTypeString = "page number"; break;
             case Credit::CreditType::Title: creditTypeString = "title"; break;
@@ -310,10 +311,10 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
 
         XMLElement* creditWordsElement = doc.NewElement("credit-words");
 
-        creditWordsElement->SetText(credit.words.text.c_str());
-        creditWordsElement->SetAttribute("default-x", credit.words.positionX);
-        creditWordsElement->SetAttribute("default-y", credit.words.positionY);
-        HarmonyXMLExportHelper::SetTextualAttributes(creditWordsElement, credit.words);
+        creditWordsElement->SetText(credit->words.text.c_str());
+        creditWordsElement->SetAttribute("default-x", credit->words.positionX);
+        creditWordsElement->SetAttribute("default-y", DEFAULT_PAGE_HEIGHT - credit->words.positionY);
+        HarmonyXMLExportHelper::SetTextualAttributes(creditWordsElement, credit->words);
 
         creditElement->InsertEndChild(creditWordsElement);
 
@@ -357,7 +358,11 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
                         systemIndex++;
                     }
 
-                    XMLElement* m = ExportMeasure(doc, measure, i, song->systems[systemIndex]);
+                    bool startsNewSystem = false;
+                    if (i > 0)
+                        startsNewSystem = song->systemMeasures[i - 1]->systemBreak;
+
+                    XMLElement* m = ExportMeasure(doc, measure, i, song->systems[systemIndex], startsNewSystem);
                     part->InsertEndChild(m);
                     i++;
                 }

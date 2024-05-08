@@ -8,6 +8,7 @@
 #include "../BaseElements/TextElement.h"
 #include "SyllableGroup.h"
 #include "LyricalPhrase.h"
+#include "LyricPickup.h"
 
 class CSLyric : public TextualElement
 {
@@ -16,10 +17,10 @@ public:
     CSLyric()
         : BaseElement(BaseElement::ElementType::CSLyric) {}
 
-    void Init(Vec2<float> pos);
+    void Init(const Settings& settings, Vec2<float> pos);
     void Delete() override;
 
-    void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;
+    void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition, bool isPickup = false) const;
 
     void UpdateBoundingBox();
 
@@ -36,6 +37,9 @@ public:
     std::shared_ptr<LyricalPhrase> parentLyricalPhrase;
 
     bool isPickupToNextMeasure = false;
+    bool startsPickup = false;
+    Vec2<float> pickupPosition = { 0.0f, 0.0f };
+    std::shared_ptr<LyricPickup> parentLyricPickup;
 
     std::function<void()> onDeleteCallback = []() {};
 };

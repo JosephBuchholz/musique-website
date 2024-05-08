@@ -520,15 +520,15 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
         systemIndex++;
     }*/
 
-    Credit credit;
-    credit.words = CreditWords();
-    credit.creditType = Credit::CreditType::Title;
-    credit.words.text = "Hymn Of Heaven";
-    credit.words.positionX = song->displayConstants.pageWidth / 2.0f;
-    credit.words.positionY = song->displayConstants.pageHeight - 80.0f;
-    credit.words.align = CreditWords::TextAlign::Center;
-    credit.words.fontSize.size = 20.0f;
-    credit.words.justify = Justify::Center;
+    std::shared_ptr<Credit> credit = std::make_shared<Credit>();
+    credit->words = CreditWords();
+    credit->creditType = Credit::CreditType::Title;
+    credit->words.text = "Hymn Of Heaven";
+    credit->words.positionX = song->displayConstants.pageWidth / 2.0f;
+    credit->words.positionY = song->displayConstants.pageHeight - 80.0f;
+    credit->words.align = CreditWords::TextAlign::Center;
+    credit->words.fontSize.size = 20.0f;
+    credit->words.justify = Justify::Center;
     song->credits.push_back(credit);
 
     song->displayConstants.systemLayout.systemLeftMargin = 200.0f;

@@ -496,7 +496,7 @@ void MusicRenderer::RenderLineOfMeasures(RenderData& renderData, const Settings&
             {
                 std::shared_ptr<CSMeasure> csMeasure = staff->csStaff->measures[m];
 
-                nextMeasurePositionX = measurePositionX + csMeasure->width;
+                nextMeasurePositionX = measurePositionX + csMeasure->GetTotalWidth();
 
                 csMeasure->Render(renderData, settings, { measurePositionX, staffPositionY });
             }
@@ -628,11 +628,11 @@ void MusicRenderer::RenderDebugLineOfMeasures(RenderData& renderData, const Sett
     } // measures loop
 }
 
-void MusicRenderer::RenderCredits(RenderData& renderData, const std::shared_ptr<Song>& song, const MusicDisplayConstants& displayConstants, const std::vector<Credit>& credits, float pageX, float pageY)
+void MusicRenderer::RenderCredits(RenderData& renderData, const std::shared_ptr<Song>& song, const MusicDisplayConstants& displayConstants, const std::vector<std::shared_ptr<Credit>>& credits, float pageX, float pageY)
 {
-    for (const Credit& credit : credits)
+    for (const std::shared_ptr<Credit>& credit : credits)
     {
-        credit.Render(renderData, { pageX, pageY }, { song->displayConstants.pageWidth, song->displayConstants.pageHeight });
+        credit->Render(renderData, { pageX, pageY }, { song->displayConstants.pageWidth, song->displayConstants.pageHeight });
     }
 }
 

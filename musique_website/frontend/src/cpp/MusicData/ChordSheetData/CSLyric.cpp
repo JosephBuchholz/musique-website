@@ -1,8 +1,8 @@
 #include "CSLyric.h"
 
-void CSLyric::Init(Vec2<float> pos)
+void CSLyric::Init(const Settings& settings, Vec2<float> pos)
 {
-    lyricText.fontSize.size = 8.0f;
+    lyricText.fontSize = settings.displayCosntants.lyricFontSize;
     lyricText.align = TextAlign::Left;
 
     position = pos;
@@ -43,9 +43,15 @@ void CSLyric::Delete()
     }
 }
 
-void CSLyric::Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const
+void CSLyric::Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition, bool renderPickup) const
 {
-    lyricText.Render(renderData, parentPosition + position, Paint());
+    Vec2<float> pos = position;
+    if (renderPickup)
+    {
+        pos = pickupPosition;
+    }
+    
+    lyricText.Render(renderData, parentPosition + pos, Paint());
 /*
 #if DEBUG
     if (isPickupToNextMeasure)

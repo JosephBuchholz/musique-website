@@ -1,5 +1,7 @@
 #include "Editor.h"
 
+#include <sstream>
+
 #include "Properties.h"
 #include "../Callbacks.h"
 
@@ -27,6 +29,13 @@ void AddFloatToJson(nlohmann::ordered_json& jsonObject, const std::string& headi
     jsonObject[heading][id]["value"] = value;
 }
 
+void AddIntToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, int value)
+{
+    jsonObject[heading][id]["name"] = name;
+    jsonObject[heading][id]["type"] = "int";
+    jsonObject[heading][id]["value"] = value;
+}
+
 void AddColorToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, uint32_t value)
 {
     jsonObject[heading][id]["name"] = name;
@@ -37,16 +46,19 @@ void AddColorToJson(nlohmann::ordered_json& jsonObject, const std::string& headi
 
 std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 {
-    /*for (const Credit& credit : song->credits)
+    for (const auto& credit : song->credits)
     {
-        BoundingBox bb = credit.GetBoundingBox();
-        bb.position += musicRenderer->pagePositions[credit.pageNumber - 1];
+        BoundingBox bb = credit->GetBoundingBox();
+        bb.position += musicRenderer->pagePositions[credit->pageNumber - 1];
+
+        LOGV("bb: %s", bb.GetPrintableString().c_str());
 
         if (bb.DoesOverlapWithPoint(point))
         {
+            LOGV("slected credit!!");
             return credit;
         }
-    }*/
+    }
 
     int systemIndex = 0;
     for (const auto& system : song->systems)
@@ -71,7 +83,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                         {
                             BoundingBox bb = lyric->lyricText.GetBoundingBox(Paint());
                             bb.position += lyric->position;
-                            bb.position.x += measurePositionX;
+                            bb.position.x += measurePositionX + measure->pickupWidth;
                             bb.position += musicRenderer->systemPositions[systemIndex];
                             //musicRenderer->m_RenderData.AddDebugDot(bb.position);
                             //bb.Render(musicRenderer->m_RenderData, 0xFF2222FF);
@@ -86,7 +98,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                         {
                             BoundingBox bb = chord->chordSymbol.GetBoundingBoxRelativeToParent();
                             bb.position += chord->position;
-                            bb.position.x += measurePositionX;
+                            bb.position.x += measurePositionX + measure->pickupWidth;
                             bb.position += musicRenderer->systemPositions[systemIndex];
 
                             if (bb.DoesOverlapWithPoint(point))
@@ -96,7 +108,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                         }
 
                         BoundingBox bb = measure->GetTotalBoundingBox(MusicDisplayConstants());
-                        bb.position.x += measurePositionX;
+                        bb.position.x += measurePositionX + measure->pickupWidth;
                         bb.position += musicRenderer->systemPositions[systemIndex];
 
                         if (bb.DoesOverlapWithPoint(point))
@@ -104,7 +116,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                             return measure;
                         }
 
-                        measurePositionX += measure->width;
+                        measurePositionX += measure->GetTotalWidth();
                     }
                 }
 
@@ -130,95 +142,14 @@ bool Editor::OnPointerEvent(const PointerEvent& event)
 
             std::shared_ptr<BaseElement> selectedElement = FindSelectedElement(point);
 
-            // deselect elements
-            for (int i = selectedElements.size() - 1; i >= 0; i--)
-            {
-                std::shared_ptr<BaseElement> element = selectedElements[i];
-                if (element->elementType == BaseElement::ElementType::CSLyric)
-                {
-                    std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(element);
-                    lyric->lyricText.selectedColor = 0x000000FF;
-                }
-                else if (element->elementType == BaseElement::ElementType::CSChord)
-                {
-                    std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(element);
-                    chord->chordSymbol.selectedColor = 0x000000FF;
-                }
-                element->selectedColor = 0x000000FF;
+            SetSelection({ selectedElement });
 
-                selectedElements.erase(selectedElements.begin() + i);
-            }
-
-            // select elements
-            if (selectedElement)
-            {
-                selectedElements.push_back(selectedElement);
-
-                selectedElement->selectedColor = 0x3333EEFF;
-
-                if (selectedElement->elementType == BaseElement::ElementType::CSLyric)
-                {
-                    std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(selectedElement);
-                    lyric->lyricText.selectedColor = 0x3333EEFF;
-
-                    nlohmann::ordered_json jsonObject;
-
-                    AddTextToJson(jsonObject, "Main", "text", "Text", lyric->lyricText.text);
-                    AddFloatToJson(jsonObject, "Main", "beatPosition", "Beat Position", lyric->beatPosition);
-                    AddFloatToJson(jsonObject, "Main", "duration", "Duration", lyric->duration);
-
-                    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)lyric->lyricText.fontWeight - 1));
-                    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)lyric->lyricText.fontStyle - 1));
-                    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", lyric->lyricText.fontSize.size);
-                    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", lyric->lyricText.color.color);
-
-                    AddFloatToJson(jsonObject, "Position", "posX", "Position X", lyric->position.x);
-                    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", lyric->position.y);
-
-                    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-                }
-                else if (selectedElement->elementType == BaseElement::ElementType::CSChord)
-                {
-                    std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(selectedElement);
-                    chord->chordSymbol.selectedColor = 0x3333EEFF;
-                    
-                    nlohmann::ordered_json jsonObject;
-
-                    AddTextToJson(jsonObject, "Main", "chordName", "Chord Name", chord->chordSymbol.GetChordNameAsStandardString());
-                    AddFloatToJson(jsonObject, "Main", "beatPosition", "Beat Position", chord->beatPosition);
-                    AddFloatToJson(jsonObject, "Main", "duration", "Duration", chord->duration);
-
-                    AddFloatToJson(jsonObject, "Position", "posX", "Position X", chord->position.x);
-                    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", chord->position.y);
-
-                    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-                }
-                else if (selectedElement->elementType == BaseElement::ElementType::CSMeasure)
-                {
-                    std::shared_ptr<CSMeasure> measure = std::dynamic_pointer_cast<CSMeasure>(selectedElement);
-
-                    int measureIndex = measure->GetMeasureIndex();
-                            
-                    nlohmann::ordered_json jsonObject;
-
-                    AddFloatToJson(jsonObject, "Main", "width", "Width", measure->width);
-                    AddBoolToJson(jsonObject, "Main", "pageBreak", "Page Break", song->systemMeasures[measureIndex]->pageBreak);
-                    AddBoolToJson(jsonObject, "Main", "systemBreak", "System Break", song->systemMeasures[measureIndex]->systemBreak);
-
-                    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-                }
-                
-            }
-            else
-            {
-                Callbacks::GetInstance().UpdateProperties("{}");
-            }
-
-            //musicRenderer->m_RenderData.AddDebugDot(event.position / musicRenderer->zoom);
+            Update();
+            /*//musicRenderer->m_RenderData.AddDebugDot(event.position / musicRenderer->zoom);
             musicRenderer->updateRenderData = true;
             musicRenderer->layoutCalculated = false;
             //musicRenderer->RenderWithRenderData();
-            musicRenderer->Render(song, song->settings);
+            musicRenderer->Render(song, song->settings);*/
 
 
             pointerIsDown = true;
@@ -303,9 +234,57 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         {
             std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(e);
 
-            lyric->lyricText.text = jsonObject["Main"]["text"]["value"];
             lyric->beatPosition = jsonObject["Main"]["beatPosition"]["value"];
             lyric->duration = jsonObject["Main"]["duration"]["value"];
+            lyric->startsPickup = jsonObject["Main"]["startsPickup"]["value"];
+
+            std::string text = jsonObject["Main"]["text"]["value"];
+
+            if (text.back() == ' ')
+            {
+                text.pop_back();
+                lyric->lyricText.text = text;
+
+                std::shared_ptr<CSMeasure> measure;
+
+                for (auto& instrument : song->instruments)
+                {
+                    for (auto& staff : instrument->staves)
+                    {
+                        if (staff->csStaff)
+                        {
+                            for (auto& m : staff->csStaff->measures)
+                            {
+                                for (auto& l : m->lyrics)
+                                {
+                                    if (l == lyric)
+                                    {
+                                        measure = m;
+                                        break;
+                                    }
+                                }
+
+                                if (measure) break;
+                            }
+                        }
+
+                        if (measure) break;
+                    }
+
+                    if (measure) break;
+                }
+
+                ASSERT(measure);
+
+                std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
+                newLyric->lyricText.text = "";
+                newLyric->beatPosition = lyric->beatPosition;
+                measure->lyrics.push_back(newLyric);
+
+                SetSelection({ newLyric });
+            }
+            else
+                lyric->lyricText.text = text;
 
             bool fontWeight = jsonObject["Text Properties"]["isBold"]["value"];
             bool fontStyle = jsonObject["Text Properties"]["isItalic"]["value"];
@@ -323,7 +302,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
             std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(e);
 
             chord->chordSymbol = Chord::CreateChordFromString(jsonObject["Main"]["chordName"]["value"]);
-            chord->chordSymbol.CalculateChordName(Settings());
+            chord->chordSymbol.CalculateChordName(song->settings);
             chord->beatPosition = jsonObject["Main"]["beatPosition"]["value"];
             chord->duration = jsonObject["Main"]["duration"]["value"];
 
@@ -339,15 +318,47 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
             song->systemMeasures[measureIndex]->pageBreak = jsonObject["Main"]["pageBreak"]["value"];
             song->systemMeasures[measureIndex]->systemBreak = jsonObject["Main"]["systemBreak"]["value"];
         }
+        else if (e->elementType == BaseElement::ElementType::Credit)
+        {
+            std::shared_ptr<Credit> credit = std::dynamic_pointer_cast<Credit>(e);
+
+            credit->words.text = jsonObject["Main"]["text"]["value"];
+            credit->pageNumber = jsonObject["Main"]["pageNumber"]["value"];
+
+            bool fontWeight = jsonObject["Text Properties"]["isBold"]["value"];
+            bool fontStyle = jsonObject["Text Properties"]["isItalic"]["value"];
+
+            credit->words.fontWeight = (FontWeight)(1 + fontWeight);
+            credit->words.fontStyle = (FontStyle)(1 + fontStyle);
+            credit->words.fontSize.size = jsonObject["Text Properties"]["textSize"]["value"];
+            credit->words.color.color = jsonObject["Text Properties"]["color"]["value"];
+
+            credit->words.positionX = jsonObject["Position"]["posX"]["value"];
+            credit->words.positionY = jsonObject["Position"]["posY"]["value"];
+        }
     }
 
-    song->OnUpdate();
-    song->CalculateSystems();
-    song->CalculateSystemPositionsAndPageBreaks();
+    if (selectedElements.empty())
+    {
+        song->settings.displayCosntants.lyricFontSize.size = jsonObject["Lyrics"]["fontSize"]["value"];
+        song->settings.displayCosntants.lyricPositionY = jsonObject["Lyrics"]["lyricPositionY"]["value"];
+        song->settings.displayCosntants.lyricSpaceWidth = jsonObject["Lyrics"]["lyricSpaceWidth"]["value"];
 
-    musicRenderer->updateRenderData = true;
-    musicRenderer->layoutCalculated = false;
-    musicRenderer->Render(song, song->settings);
+        song->settings.displayCosntants.chordMarginFromBarline = jsonObject["Other"]["chordMarginFromBarline"]["value"];
+        song->settings.displayCosntants.beatWidth = jsonObject["Other"]["beatWidth"]["value"];
+        song->settings.displayCosntants.chordPositionY = jsonObject["Other"]["chordPositionY"]["value"];
+        song->settings.displayCosntants.minimumMeasureWidth = jsonObject["Other"]["minimumMeasureWidth"]["value"];
+        song->settings.displayCosntants.displayReminderPickupLyrics = jsonObject["Other"]["displayReminderPickupLyrics"]["value"];
+        song->settings.displayCosntants.measureBarlineHeight = jsonObject["Other"]["measureBarlineHeight"]["value"];
+        song->settings.displayCosntants.chordFontSize.size = jsonObject["Other"]["chordFontSize"]["value"];
+
+        song->settings.displayCosntants.systemLayout.systemDistance = jsonObject["Systems"]["systemDistance"]["value"];
+
+        song->settings.displayCosntants.pageWidth = jsonObject["Pages"]["pageWidth"]["value"];
+        song->settings.displayCosntants.pageHeight = jsonObject["Pages"]["pageHeight"]["value"];
+    }
+
+    Update();
 }
 
 void Editor::OnNewElement(int id)
@@ -370,7 +381,7 @@ void Editor::OnNewElement(int id)
             {
                 std::shared_ptr<CSChord> newChord = std::make_shared<CSChord>();
                 newChord->chordSymbol = Chord::CreateChordFromString("C");
-                newChord->chordSymbol.CalculateChordName(Settings());
+                newChord->chordSymbol.CalculateChordName(song->settings);
 
                 measure->chords.push_back(newChord);
             }
@@ -411,6 +422,38 @@ void Editor::OnNewElement(int id)
                 }
             }
         }
+        else if (e->elementType == BaseElement::ElementType::CSChord)
+        {
+            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(e);
+
+            if (id == 0) // add lyric
+            {
+                std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
+                newLyric->lyricText.text = "none";
+                newLyric->beatPosition = chord->beatPosition;
+
+                for (auto& instrument : song->instruments)
+                {
+                    for (auto& staff : instrument->staves)
+                    {
+                        if (staff->csStaff)
+                        {
+                            for (auto& measure : staff->csStaff->measures)
+                            {
+                                for (auto& c : measure->chords)
+                                {
+                                    if (c == chord)
+                                    {
+                                        measure->lyrics.push_back(newLyric);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
     }
     else
     {
@@ -433,13 +476,7 @@ void Editor::OnNewElement(int id)
         }
     }
 
-    song->OnUpdate();
-    song->CalculateSystems();
-    song->CalculateSystemPositionsAndPageBreaks();
-
-    musicRenderer->updateRenderData = true;
-    musicRenderer->layoutCalculated = false;
-    musicRenderer->Render(song, song->settings);
+    Update();
 }
 
 void Editor::OnDeleteSelected()
@@ -511,6 +548,177 @@ void Editor::OnDeleteSelected()
 
     selectedElements.clear();
 
+    Update();
+}
+
+void Editor::UpdateLyricProperties(std::shared_ptr<CSLyric> lyric)
+{
+    nlohmann::ordered_json jsonObject;
+
+    AddTextToJson(jsonObject, "Main", "text", "Text", lyric->lyricText.text);
+    AddFloatToJson(jsonObject, "Main", "beatPosition", "Beat Position", lyric->beatPosition);
+    AddFloatToJson(jsonObject, "Main", "duration", "Duration", lyric->duration);
+    AddBoolToJson(jsonObject, "Main", "startsPickup", "Pickup To Next Measure", lyric->startsPickup);
+
+    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)lyric->lyricText.fontWeight - 1));
+    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)lyric->lyricText.fontStyle - 1));
+    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", lyric->lyricText.fontSize.size);
+    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", lyric->lyricText.color.color);
+
+    AddFloatToJson(jsonObject, "Position", "posX", "Position X", lyric->position.x);
+    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", lyric->position.y);
+
+    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+}
+
+void Editor::UpdateChordProperties(std::shared_ptr<CSChord> chord)
+{
+    nlohmann::ordered_json jsonObject;
+
+    AddTextToJson(jsonObject, "Main", "chordName", "Chord Name", chord->chordSymbol.GetChordNameAsStandardString());
+    AddFloatToJson(jsonObject, "Main", "beatPosition", "Beat Position", chord->beatPosition);
+    AddFloatToJson(jsonObject, "Main", "duration", "Duration", chord->duration);
+
+    AddFloatToJson(jsonObject, "Position", "posX", "Position X", chord->position.x);
+    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", chord->position.y);
+
+    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+}
+
+void Editor::UpdateMeasureProperties(std::shared_ptr<CSMeasure> measure)
+{
+    int measureIndex = measure->GetMeasureIndex();
+            
+    nlohmann::ordered_json jsonObject;
+
+    AddFloatToJson(jsonObject, "Main", "width", "Width", measure->width);
+    AddBoolToJson(jsonObject, "Main", "pageBreak", "Page Break", song->systemMeasures[measureIndex]->pageBreak);
+    AddBoolToJson(jsonObject, "Main", "systemBreak", "System Break", song->systemMeasures[measureIndex]->systemBreak);
+
+    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+}
+
+void Editor::UpdateCreditProperties(std::shared_ptr<Credit> credit)
+{
+    nlohmann::ordered_json jsonObject;
+
+    AddTextToJson(jsonObject, "Main", "text", "Text", credit->words.text);
+    AddIntToJson(jsonObject, "Main", "pageNumber", "Page", credit->pageNumber);
+
+    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)credit->words.fontWeight - 1));
+    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)credit->words.fontStyle - 1));
+    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", credit->words.fontSize.size);
+    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", credit->words.color.color);
+
+    AddFloatToJson(jsonObject, "Position", "posX", "Position X", credit->words.positionX);
+    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", credit->words.positionY);
+
+    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+}
+
+void Editor::UpdateDisplayConstantsProperties()
+{
+    nlohmann::ordered_json jsonObject;
+
+    AddFloatToJson(jsonObject, "Lyrics", "fontSize", "Font Size", song->settings.displayCosntants.lyricFontSize.size);
+    AddFloatToJson(jsonObject, "Lyrics", "lyricPositionY", "Lyric Y Position", song->settings.displayCosntants.lyricPositionY);
+    AddFloatToJson(jsonObject, "Lyrics", "lyricSpaceWidth", "Lyric Spacing", song->settings.displayCosntants.lyricSpaceWidth);
+
+    AddFloatToJson(jsonObject, "Other", "chordMarginFromBarline", "Chord Margin From Barline", song->settings.displayCosntants.chordMarginFromBarline);
+    AddFloatToJson(jsonObject, "Other", "beatWidth", "Beat Width", song->settings.displayCosntants.beatWidth);
+    AddFloatToJson(jsonObject, "Other", "chordPositionY", "Chord Y Position", song->settings.displayCosntants.chordPositionY);
+    AddFloatToJson(jsonObject, "Other", "minimumMeasureWidth", "Minimum Measure Width", song->settings.displayCosntants.minimumMeasureWidth);
+    AddBoolToJson(jsonObject, "Other", "displayReminderPickupLyrics", "Display Reminder Pickup Lyrics", song->settings.displayCosntants.displayReminderPickupLyrics);
+    AddFloatToJson(jsonObject, "Other", "measureBarlineHeight", "Measure Height", song->settings.displayCosntants.measureBarlineHeight);
+    AddFloatToJson(jsonObject, "Other", "chordFontSize", "Chord Font Size", song->settings.displayCosntants.chordFontSize.size);
+
+    AddFloatToJson(jsonObject, "Systems", "systemDistance", "System Distance", song->settings.displayCosntants.systemLayout.systemDistance);
+    AddFloatToJson(jsonObject, "Pages", "pageWidth", "Page Width", song->settings.displayCosntants.pageWidth);
+    AddFloatToJson(jsonObject, "Pages", "pageHeight", "Page Height", song->settings.displayCosntants.pageHeight);
+
+    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+}
+
+void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
+{
+    // deselect elements
+    for (int i = selectedElements.size() - 1; i >= 0; i--)
+    {
+        std::shared_ptr<BaseElement> element = selectedElements[i];
+        if (element->elementType == BaseElement::ElementType::CSLyric)
+        {
+            std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(element);
+            lyric->lyricText.selectedColor = 0x000000FF;
+
+            if (lyric->lyricText.text == "")
+            {
+                lyric->Delete();
+            }
+        }
+        else if (element->elementType == BaseElement::ElementType::CSChord)
+        {
+            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(element);
+            chord->chordSymbol.selectedColor = 0x000000FF;
+        }
+        element->selectedColor = 0x000000FF;
+
+        selectedElements.erase(selectedElements.begin() + i);
+    }
+
+    bool noSelection = false;
+    if (!newSelected.empty())
+    {
+        if (!newSelected[0])
+            noSelection = true;
+    }
+    else
+        noSelection = true;
+
+    // select elements
+    if (!noSelection)
+    {
+        selectedElements = newSelected;
+        
+        std::shared_ptr<BaseElement> selectedElement = selectedElements[0]; // TODO: revise when implementing multi-select
+
+        selectedElement->selectedColor = 0x3333EEFF;
+
+        if (selectedElement->elementType == BaseElement::ElementType::CSLyric)
+        {
+            std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(selectedElement);
+            lyric->lyricText.selectedColor = 0x3333EEFF;
+
+            UpdateLyricProperties(lyric);                    
+        }
+        else if (selectedElement->elementType == BaseElement::ElementType::CSChord)
+        {
+            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(selectedElement);
+            chord->chordSymbol.selectedColor = 0x3333EEFF;
+            
+            UpdateChordProperties(chord);
+        }
+        else if (selectedElement->elementType == BaseElement::ElementType::CSMeasure)
+        {
+            std::shared_ptr<CSMeasure> measure = std::dynamic_pointer_cast<CSMeasure>(selectedElement);
+
+            UpdateMeasureProperties(measure);
+        }
+        else if (selectedElement->elementType == BaseElement::ElementType::Credit)
+        {
+            std::shared_ptr<Credit> credit = std::dynamic_pointer_cast<Credit>(selectedElement);
+
+            UpdateCreditProperties(credit);
+        }
+    }
+    else
+    {
+        UpdateDisplayConstantsProperties();
+        //Callbacks::GetInstance().UpdateProperties("{}");
+    }
+}
+
+void Editor::Update()
+{
     song->OnUpdate();
     song->CalculateSystems();
     song->CalculateSystemPositionsAndPageBreaks();

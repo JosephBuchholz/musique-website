@@ -118,6 +118,10 @@ struct FontFamily {
 
 struct FontSize {
 
+    FontSize() {}
+    FontSize(float s)
+        : size(s) {}
+
     void SetCSSSize(const std::string& s)
     {
         if (s == "xx-small")

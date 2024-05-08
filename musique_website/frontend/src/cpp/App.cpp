@@ -260,7 +260,7 @@ void App::OnUpdate(double dt)
             }*/
 
 
-            musicRenderer->Render(song, settings);
+            musicRenderer->Render(song, song->settings);
 
             if (allowFrameDataRendering)
             {
@@ -317,7 +317,7 @@ bool App::OnUpdatePrintLayout()
     {
         RenderData pageRenderData = RenderData();
         musicRenderer->updateRenderData = true;
-        musicRenderer->RenderMusicToPage(song, pageIndex, pageRenderData, settings, { 0.0f, 0.0f });
+        musicRenderer->RenderMusicToPage(song, pageIndex, pageRenderData, song->settings, { 0.0f, 0.0f });
         printRenderData.pages.push_back(pageRenderData);
         pageIndex++;
     }
@@ -438,7 +438,7 @@ bool App::OnButtonEvent(const ButtonEvent& event)
                 {
                     RenderData pageRenderData = RenderData();
                     musicRenderer->updateRenderData = true;
-                    musicRenderer->RenderMusicToPage(song, pageIndex, pageRenderData, settings, { 0.0f, 0.0f });
+                    musicRenderer->RenderMusicToPage(song, pageIndex, pageRenderData, song->settings, { 0.0f, 0.0f });
                     printRenderData.pages.push_back(pageRenderData);
                     pageIndex++;
                 }

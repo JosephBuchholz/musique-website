@@ -1,5 +1,4 @@
-#ifndef MUSIQUE_LYRICALPHRASE_H
-#define MUSIQUE_LYRICALPHRASE_H
+#pragma once
 
 #include <vector>
 
@@ -13,5 +12,3 @@ public:
 
     std::vector<std::shared_ptr<CSLyric>> lyrics;
 };
-
-#endif //MUSIQUE_LYRICALPHRASE_H

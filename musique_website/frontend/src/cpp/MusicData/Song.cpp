@@ -46,7 +46,7 @@ void Song::OnUpdate()
         {
             for (const auto& measure: instrument->staves[0]->csStaff->measures)
             {
-                measure->Init();
+                measure->Init(settings);
             }
 
             return;
@@ -214,9 +214,9 @@ void Song::OnUpdate()
         m_MeasureBeginWidths.clear();
         LOGI("Paged");
 
-        for (Credit& credit : credits)
+        for (auto& credit : credits)
         {
-            credit.CalculatePositionAsPaged();
+            credit->CalculatePositionAsPaged();
         }
 
         for (const auto& endingGroup : endingGroups)
@@ -814,6 +814,10 @@ void Song::CalculateSystems()
     std::shared_ptr<System> currentSystem = std::make_shared<System>();
     currentSystem->beginningMeasureIndex = 0;
     currentSystem->endingMeasureIndex = 0;
+    System::SystemLayout defaultLayout;
+    defaultLayout = settings.displayCosntants.systemLayout;
+
+    currentSystem->layout = defaultLayout;
     for (const auto& instrument : instruments)
     {
         for (const auto& staff : instrument->staves)
@@ -829,7 +833,7 @@ void Song::CalculateSystems()
                         systemBreak = systemMeasures[measureIndex - 1]->systemBreak;
                     }
 
-                    if (currentSystemWidth + measure->width >= maxSystemWidth || systemBreak)
+                    if (currentSystemWidth + measure->GetTotalWidth() >= maxSystemWidth || systemBreak)
                     {
                         // push back system
                         currentSystem->endingMeasureIndex = measureIndex - 1;
@@ -845,11 +849,12 @@ void Song::CalculateSystems()
                         
                         // new system
                         currentSystem = std::make_shared<System>();
+                        currentSystem->layout = defaultLayout;
                         currentSystem->beginningMeasureIndex = measureIndex;
                         currentSystemWidth = 0.0f;
                     }
 
-                    currentSystemWidth += measure->width;
+                    currentSystemWidth += measure->GetTotalWidth();
                     measureIndex++;
                 }
 

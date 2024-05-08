@@ -7,7 +7,7 @@ void Credit::Render(RenderData& renderData, Vec2<float> pagePosition, Vec2<float
     if (pageNumber == 1)
     {
         float positionX = words.positionX + pagePosition.x;
-        float positionY = (pageDimensions.y - words.positionY) + pagePosition.y; // get coordinate from top instead of bottom of page
+        float positionY = words.positionY + pagePosition.y; // get coordinate from top instead of bottom of page
 
         Paint paint = Paint();
         if (words.fontStyle == FontStyle::Italic)

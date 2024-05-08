@@ -53,7 +53,7 @@ private:
     static void ParseEncodingElement(XMLElement* encodingElement, const std::shared_ptr<Song>& song);
     static void ParseIdentificationElement(XMLElement* idElement, const std::shared_ptr<Song>& song);
     static MusicDisplayConstants ParseDefaultsElement(XMLElement* defaultsElement);
-    static Credit ParseCreditElement(XMLElement* creditElement);
+    static std::shared_ptr<Credit> ParseCreditElement(XMLElement* creditElement);
     static void ParseFrameElement(XMLElement* frameElement, Chord& chord);
     static void ParseHarmonyElement(XMLElement* harmonyElement, float& currentTimeInMeasure, std::vector<std::shared_ptr<Measure>> currentMeasures);
     static Barline ParseBarlineElement(XMLElement* barlineElement);

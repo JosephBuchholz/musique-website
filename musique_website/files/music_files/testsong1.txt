@@ -4,7 +4,7 @@
         <work-title></work-title>
     </work>
     <credit page="1">
-        <credit-type>title</credit-type>
+        <credit-type>composer</credit-type>
         <credit-words default-x="616.935" default-y="1516.77" justify="center" font-size="20">Hymn Of Heaven</credit-words>
     </credit>
     <part-list>
@@ -13,27 +13,31 @@
         </score-part>
     </part-list>
     <part id="">
-        <measure width="190.49132">
+        <measure width="65.678467">
+            <attributes>
+                <divisions>16</divisions>
+            </attributes>
+            <lyric default-x="0" default-y="50" is-pickup="no" starts-pickup="no">
+                <text>How</text>
+            </lyric>
+            <lyric default-x="57.804447" default-y="50" is-pickup="no" starts-pickup="no">
+                <text>I</text>
+            </lyric>
+        </measure>
+        <measure width="299.01364">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <attributes>
-                <divisions>16</divisions>
-            </attributes>
-            <lyric default-x="-49.640182" default-y="55" is-pickup="yes">
-                <text>How,</text>
-                <phrase>start</phrase>
-            </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>long</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -44,19 +48,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="-7.8740158" default-y="55" is-pickup="yes">
-                <text>ZEBRA</text>
-            </lyric>
-            <lyric default-x="46.580219" default-y="55" is-pickup="no">
+            <lyric default-x="63.266357" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="64.735275" default-y="55" is-pickup="no">
+            <lyric default-x="121.39136" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>breathe</text>
             </lyric>
-            <chord-symbol default-x="64.735275" default-y="25">
+            <chord-symbol default-x="121.39136" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -67,38 +68,27 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="125.72951" default-y="55" is-pickup="no">
+            <lyric default-x="201.95456" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="152.30974" default-y="55" is-pickup="no">
+            <lyric default-x="241.22092" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>air</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="174.61732" default-y="55" is-pickup="no">
+            <lyric default-x="275.99002" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>of</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-104.32544" default-y="55" is-pickup="yes">
-                <text>Where</text>
-                <phrase>start</phrase>
+        <measure width="147.74803">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
+                <text>Heaven</text>
             </lyric>
-            <lyric default-x="-50.462616" default-y="55" is-pickup="yes">
-                <text>pain</text>
-            </lyric>
-            <lyric default-x="-13.430642" default-y="55" is-pickup="yes">
-                <text>is</text>
-            </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <text>Heaven!!</text>
-                <phrase>end</phrase>
-            </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -106,21 +96,33 @@
                 </root>
                 <kind>none</kind>
             </chord-symbol>
+            <forward>
+                <duration>48</duration>
+            </forward>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
+                <text>Where</text>
+            </lyric>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
+                <text>pain</text>
+            </lyric>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
+                <text>is</text>
+            </lyric>
         </measure>
-        <measure width="189.16905">
+        <measure width="271.99783">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <text>gone,</text>
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
+                <text>gone</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -131,16 +133,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="53.601303" default-y="55" is-pickup="no">
+            <lyric default-x="67.023598" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>and</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="83.501846" default-y="55" is-pickup="no">
+            <lyric default-x="125.1486" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>mercy</text>
             </lyric>
-            <chord-symbol default-x="83.501846" default-y="25">
+            <chord-symbol default-x="125.1486" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -151,29 +153,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="136.07092" default-y="55" is-pickup="no">
+            <lyric default-x="195.28665" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>fills</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="167.27495" default-y="55" is-pickup="no">
+            <lyric default-x="240.73148" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-58.424149" default-y="55" is-pickup="yes">
-                <text>To</text>
-                <phrase>start</phrase>
-            </lyric>
-            <lyric default-x="-36.580219" default-y="55" is-pickup="yes">
-                <text>look</text>
-            </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="147.74803">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>streets</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>G</root-step>
@@ -181,21 +175,30 @@
                 </root>
                 <kind>none</kind>
             </chord-symbol>
+            <forward>
+                <duration>48</duration>
+            </forward>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
+                <text>To</text>
+            </lyric>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
+                <text>look</text>
+            </lyric>
         </measure>
-        <measure width="196.59526">
+        <measure width="295.16174">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>upon</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -206,16 +209,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="52.598381" default-y="55" is-pickup="no">
+            <lyric default-x="70.173203" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="79.178619" default-y="55" is-pickup="no">
+            <lyric default-x="128.2982" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>one</text>
             </lyric>
-            <chord-symbol default-x="79.178619" default-y="25">
+            <chord-symbol default-x="128.2982" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -226,37 +229,27 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="108.62741" default-y="55" is-pickup="no">
+            <lyric default-x="171.32181" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="145.66916" default-y="55" is-pickup="no">
+            <lyric default-x="222.82704" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>bled</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="182.70114" default-y="55" is-pickup="no">
+            <lyric default-x="274.32056" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
             </lyric>
         </measure>
-        <measure width="190.58392">
-            <lyric default-x="-116.67211" default-y="55" is-pickup="yes">
-                <text>And</text>
-                <phrase>start</phrase>
-            </lyric>
-            <lyric default-x="-79.630356" default-y="55" is-pickup="yes">
-                <text>walk</text>
-            </lyric>
-            <lyric default-x="-38.155022" default-y="55" is-pickup="yes">
-                <text>with</text>
-            </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="192.58392">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>save</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -267,11 +260,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="55.748032" default-y="55" is-pickup="no">
+            <lyric default-x="63.015778" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>me</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="55.748032" default-y="25">
+            <chord-symbol default-x="63.015778" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>G</root-step>
@@ -282,7 +274,7 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <chord-symbol default-x="101.49606" default-y="25">
+            <chord-symbol default-x="103.49606" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -290,21 +282,33 @@
                 </root>
                 <kind>minor</kind>
             </chord-symbol>
+            <forward>
+                <duration>16</duration>
+            </forward>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
+                <text>And</text>
+            </lyric>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
+                <text>walk</text>
+            </lyric>
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
+                <text>with</text>
+            </lyric>
         </measure>
-        <measure width="149.17978">
+        <measure width="211.63051">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Him</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -315,16 +319,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="48.89761" default-y="55" is-pickup="no">
+            <lyric default-x="64.472397" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>for</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="73.431747" default-y="55" is-pickup="no">
+            <lyric default-x="122.5974" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>all</text>
             </lyric>
-            <chord-symbol default-x="73.431747" default-y="25">
+            <chord-symbol default-x="122.5974" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -335,18 +339,15 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="94.16452" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="155.7917" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>eterni</text>
             </lyric>
         </measure>
-        <measure width="201.51556">
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+        <measure width="203.51556">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>ty</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>C</root-step>
@@ -357,7 +358,7 @@
             <forward>
                 <duration>48</duration>
             </forward>
-            <chord-symbol default-x="115.74803" default-y="25">
+            <chord-symbol default-x="117.74803" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -366,21 +367,20 @@
                 <kind>suspended-fourth</kind>
             </chord-symbol>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-112.68051" default-y="55" is-pickup="yes">
+        <measure width="147.74803">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
                 <text>There</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-65.477844" default-y="55" is-pickup="yes">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>will</text>
             </lyric>
-            <lyric default-x="-32.04723" default-y="55" is-pickup="yes">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>be</text>
             </lyric>
-            <lyric default-x="-11.023623" default-y="55" is-pickup="yes">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>a</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -389,20 +389,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="194.75424">
+        <measure width="275.79019">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>day</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -413,16 +413,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="39.900547" default-y="55" is-pickup="no">
+            <lyric default-x="55.250759" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>when</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="85.819244" default-y="55" is-pickup="no">
+            <lyric default-x="117.40833" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>all</text>
             </lyric>
-            <chord-symbol default-x="85.819244" default-y="25">
+            <chord-symbol default-x="117.40833" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -433,29 +433,27 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="106.55202" default-y="55" is-pickup="no">
+            <lyric default-x="150.60263" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="139.98264" default-y="55" is-pickup="no">
+            <lyric default-x="198.71936" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>bow</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="177.30545" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="251.19179" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>be</text>
             </lyric>
         </measure>
-        <measure width="237.68588">
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+        <measure width="308.55139">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>fore</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>C</root-step>
@@ -466,28 +464,28 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="42.769077" default-y="55" is-pickup="no">
+            <lyric default-x="59.007954" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Him.</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="84.624893" default-y="55" is-pickup="no">
+            <lyric default-x="115.97509" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>There</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="131.82756" default-y="55" is-pickup="no">
+            <lyric default-x="180.30334" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>44</duration>
             </forward>
-            <lyric default-x="165.25818" default-y="55" is-pickup="no">
+            <lyric default-x="262.80334" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>be</text>
             </lyric>
-            <chord-symbol default-x="165.25818" default-y="25">
+            <chord-symbol default-x="262.80334" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -498,26 +496,15 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="186.28178" default-y="55" is-pickup="no">
+            <lyric default-x="295.40176" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>a</text>
-                <phrase>end</phrase>
             </lyric>
         </measure>
-        <measure width="312.93826">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <text>DAY</text>
-                <phrase>start</phrase>
+        <measure width="442.4137">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
+                <text>day</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -528,16 +515,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="39.900547" default-y="55" is-pickup="no">
+            <lyric default-x="55.250759" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>when</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="85.819244" default-y="55" is-pickup="no">
+            <lyric default-x="117.40833" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>death</text>
             </lyric>
-            <chord-symbol default-x="85.819244" default-y="25">
+            <chord-symbol default-x="117.40833" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -548,39 +535,39 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="130.15335" default-y="55" is-pickup="no">
+            <lyric default-x="177.97937" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="163.58397" default-y="55" is-pickup="no">
+            <lyric default-x="226.0961" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>be</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="184.60757" default-y="55" is-pickup="no">
+            <lyric default-x="258.69452" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>no</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="207.20599" default-y="55" is-pickup="no">
+            <lyric default-x="292.86774" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>more.</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="254.59891" default-y="55" is-pickup="no">
+            <lyric default-x="356.47943" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Standing</text>
             </lyric>
         </measure>
-        <measure width="116.29053">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="163.49606">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>face</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>G</root-step>
@@ -591,14 +578,13 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="43.862835" default-y="55" is-pickup="no">
+            <lyric default-x="60.320473" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
-                <phrase>end</phrase>
             </lyric>
             <forward>
                 <duration>47</duration>
             </forward>
-            <chord-symbol default-x="43.862835" default-y="25">
+            <chord-symbol default-x="117.74803" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -607,21 +593,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="204.5341">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="293.05063">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>face</text>
-                <phrase>start</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -632,16 +608,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="43.862835" default-y="55" is-pickup="no">
+            <lyric default-x="60.320473" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>with</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="82.017853" default-y="55" is-pickup="no">
+            <lyric default-x="118.44547" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>He</text>
             </lyric>
-            <chord-symbol default-x="82.017853" default-y="25">
+            <chord-symbol default-x="118.44547" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -652,42 +628,39 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="107.48482" default-y="55" is-pickup="no">
+            <lyric default-x="156.37592" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="144.52658" default-y="55" is-pickup="no">
+            <lyric default-x="207.88115" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>died</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="179.98375" default-y="55" is-pickup="no">
+            <lyric default-x="257.79987" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>and</text>
             </lyric>
         </measure>
-        <measure width="190.58392">
-            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
+        <measure width="329.93176">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(1)</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="47.866177" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(to</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="83.124718" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Verse</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="146.37933" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>2)</text>
-                <phrase>end</phrase>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="174.25334" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>rose</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="174.25334" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -698,11 +671,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="55.748032" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="224.18375" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>a</text>
             </lyric>
-            <chord-symbol default-x="55.748032" default-y="25">
+            <chord-symbol default-x="224.18375" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>E</root-step>
@@ -713,12 +685,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="114.8359" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="254.18375" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>gain</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="114.8359" default-y="25">
+            <chord-symbol default-x="254.18375" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -727,20 +697,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="163.67116">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="201.30432">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy,</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -751,10 +712,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -765,22 +726,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="128.34641" default-y="55" is-pickup="no">
+            <lyric default-x="145.9212" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="141.77705" default-y="55" is-pickup="no">
+            <lyric default-x="170.03796" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="203.92377">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="179.24409">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lord</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -791,7 +751,7 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <chord-symbol default-x="55.748032" default-y="25">
+            <chord-symbol default-x="57.748032" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -802,7 +762,7 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <chord-symbol default-x="128.17574" default-y="25">
+            <chord-symbol default-x="103.49606" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -811,23 +771,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="174.83591">
-            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
+        <measure width="176.83591">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(2)</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="47.866177" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(to</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="83.124718" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Verse</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="146.37933" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>3)</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="146.37933" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -838,7 +795,7 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <chord-symbol default-x="99.087868" default-y="25">
+            <chord-symbol default-x="101.08787" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -847,20 +804,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="163.67116">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="201.30432">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy,</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -871,10 +819,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -885,22 +833,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="128.34641" default-y="55" is-pickup="no">
+            <lyric default-x="145.9212" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="141.77705" default-y="55" is-pickup="no">
+            <lyric default-x="170.03796" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="201.51556">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="203.51556">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lord</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>C</root-step>
@@ -911,7 +858,7 @@
             <forward>
                 <duration>48</duration>
             </forward>
-            <chord-symbol default-x="115.74803" default-y="25">
+            <chord-symbol default-x="117.74803" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -920,15 +867,14 @@
                 <kind>suspended-fourth</kind>
             </chord-symbol>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-82.479378" default-y="55" is-pickup="yes">
+        <measure width="147.74803">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
                 <text>And</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-45.437622" default-y="55" is-pickup="yes">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>every</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -937,20 +883,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="205.65126">
+        <measure width="309.27521">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>prayer</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -961,16 +907,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="63.862804" default-y="55" is-pickup="no">
+            <lyric default-x="84.320457" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="89.329773" default-y="55" is-pickup="no">
+            <lyric default-x="142.44547" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>prayed</text>
             </lyric>
-            <chord-symbol default-x="89.329773" default-y="25">
+            <chord-symbol default-x="142.44547" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -981,34 +927,30 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="146.34218" default-y="55" is-pickup="no">
+            <lyric default-x="217.91553" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>in</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="162.92242" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="245.1819" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>desper</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-98.346359" default-y="55" is-pickup="yes">
+        <measure width="287.24402">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>The</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-66.680763" default-y="55" is-pickup="yes">
+            <lyric default-x="57.683754" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>songs</text>
             </lyric>
-            <lyric default-x="-21.023607" default-y="55" is-pickup="yes">
+            <lyric default-x="120.47237" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>of</text>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="151.49599" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>ation,</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="151.49599" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1017,20 +959,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="246.48929">
+        <measure width="359.25247">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>faith</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -1041,16 +983,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="47.67395" default-y="55" is-pickup="no">
+            <lyric default-x="64.578827" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="73.140915" default-y="55" is-pickup="no">
+            <lyric default-x="122.70383" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>sang</text>
             </lyric>
-            <chord-symbol default-x="73.140915" default-y="25">
+            <chord-symbol default-x="122.70383" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1061,35 +1003,33 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="110.82465" default-y="55" is-pickup="no">
+            <lyric default-x="175.2944" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>through</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="175.63977" default-y="55" is-pickup="no">
+            <lyric default-x="260.12772" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>doubt</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="221.93893" default-y="55" is-pickup="no">
+            <lyric default-x="324.00171" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>and</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-44.263992" default-y="55" is-pickup="yes">
+        <measure width="215.605">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>In</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-26.580235" default-y="55" is-pickup="yes">
+            <lyric default-x="40.590595" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="79.856964" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>fear</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="79.856964" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1098,20 +1038,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="195.60072">
+        <measure width="294.89102">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>end</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1122,22 +1062,22 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="39.900547" default-y="55" is-pickup="no">
+            <lyric default-x="55.250759" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="65.367516" default-y="55" is-pickup="no">
+            <lyric default-x="93.181198" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>will</text>
             </lyric>
             <forward>
                 <duration>29</duration>
             </forward>
-            <lyric default-x="98.798126" default-y="55" is-pickup="no">
+            <lyric default-x="147.5562" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>see</text>
             </lyric>
-            <chord-symbol default-x="98.798126" default-y="25">
+            <chord-symbol default-x="147.5562" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1148,38 +1088,36 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="124.90707" default-y="55" is-pickup="no">
+            <lyric default-x="186.57199" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>that</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="157.21463" default-y="55" is-pickup="no">
+            <lyric default-x="233.34109" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>it</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="169.07047" default-y="55" is-pickup="no">
+            <lyric default-x="255.88306" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>was</text>
             </lyric>
         </measure>
-        <measure width="190.58392">
-            <lyric default-x="-91.928223" default-y="55" is-pickup="yes">
+        <measure width="225.13144">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>When</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-43.150726" default-y="55" is-pickup="yes">
+            <lyric default-x="77.903091" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>He</text>
             </lyric>
-            <lyric default-x="-17.68376" default-y="55" is-pickup="yes">
-                <syllabic>start</syllabic>
+            <lyric default-x="115.83353" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>re</text>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="144.42412" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>worth</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="144.42412" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1190,11 +1128,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="59.258518" default-y="55" is-pickup="no">
+            <lyric default-x="210.58948" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>it</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="59.258518" default-y="25">
+            <chord-symbol default-x="210.58948" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1205,7 +1142,7 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <chord-symbol default-x="101.49606" default-y="25">
+            <chord-symbol default-x="103.49606" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -1214,21 +1151,20 @@
                 <kind>minor</kind>
             </chord-symbol>
         </measure>
-        <measure width="146.0508">
+        <measure width="235.64223">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>turns</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1239,16 +1175,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="51.665554" default-y="55" is-pickup="no">
+            <lyric default-x="69.683723" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="69.820602" default-y="55" is-pickup="no">
+            <lyric default-x="127.80872" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>wipe</text>
             </lyric>
-            <chord-symbol default-x="69.820602" default-y="25">
+            <chord-symbol default-x="127.80872" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1259,15 +1195,15 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="110.84418" default-y="55" is-pickup="no">
+            <lyric default-x="184.4071" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>away</text>
             </lyric>
         </measure>
-        <measure width="123.64152">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="203.51556">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>our</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1278,14 +1214,13 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="37.873985" default-y="55" is-pickup="no">
+            <lyric default-x="53.448803" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>tears</text>
-                <phrase>end</phrase>
             </lyric>
             <forward>
                 <duration>47</duration>
             </forward>
-            <chord-symbol default-x="37.873985" default-y="25">
+            <chord-symbol default-x="117.74803" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1294,18 +1229,17 @@
                 <kind>suspended-fourth</kind>
             </chord-symbol>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-90.372932" default-y="55" is-pickup="yes">
+        <measure width="147.74803">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
                 <text>And</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-53.331177" default-y="55" is-pickup="yes">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>on</text>
             </lyric>
-            <lyric default-x="-32.307568" default-y="55" is-pickup="yes">
+            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>that</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1314,20 +1248,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="181.13504">
+        <measure width="252.73399">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>day</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1338,16 +1272,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="39.900547" default-y="55" is-pickup="no">
+            <lyric default-x="55.250759" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="65.367516" default-y="55" is-pickup="no">
+            <lyric default-x="113.37576" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>join</text>
             </lyric>
-            <chord-symbol default-x="65.367516" default-y="25">
+            <chord-symbol default-x="113.37576" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1358,35 +1292,30 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="100.65398" default-y="55" is-pickup="no">
+            <lyric default-x="162.45969" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="127.23421" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="201.72604" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>resur</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-101.30572" default-y="55" is-pickup="yes">
+        <measure width="291.11023">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>And</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-64.263962" default-y="55" is-pickup="yes">
+            <lyric default-x="63.505234" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>stand</text>
             </lyric>
-            <lyric default-x="-21.023607" default-y="55" is-pickup="yes">
-                <syllabic>start</syllabic>
+            <lyric default-x="122.76376" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>be</text>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="155.36218" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>rection</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="155.36218" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1395,21 +1324,20 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="166.14937">
+        <measure width="251.76682">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
                         <left-margin>0.000000</left-margin>
                         <right-margin>0.000000</right-margin>
                     </system-margins>
-                    <system-distance>127.000000</system-distance>
+                    <system-distance>0.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>side</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -1420,16 +1348,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="42.788616" default-y="55" is-pickup="no">
+            <lyric default-x="59.031384" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="69.368851" default-y="55" is-pickup="no">
+            <lyric default-x="117.15639" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>heroes</text>
             </lyric>
-            <chord-symbol default-x="69.368851" default-y="25">
+            <chord-symbol default-x="117.15639" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1440,32 +1368,30 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="123.23166" default-y="55" is-pickup="no">
+            <lyric default-x="189.47684" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>of</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="144.25526" default-y="55" is-pickup="no">
+            <lyric default-x="220.50046" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-104.64557" default-y="55" is-pickup="yes">
+        <measure width="295.11801">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>And</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-67.603813" default-y="55" is-pickup="yes">
+            <lyric default-x="63.505234" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>with</text>
             </lyric>
-            <lyric default-x="-29.44879" default-y="55" is-pickup="yes">
+            <lyric default-x="116.34637" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>one</text>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="159.36998" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>faith</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="159.36998" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1474,20 +1400,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="179.37299">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="283.63049">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>voice</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1498,16 +1415,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="55.457157" default-y="55" is-pickup="no">
+            <lyric default-x="73.918701" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>a</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="66.480782" default-y="55" is-pickup="no">
+            <lyric default-x="132.0437" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>thousand</text>
             </lyric>
-            <chord-symbol default-x="66.480782" default-y="25">
+            <chord-symbol default-x="132.0437" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1518,27 +1435,24 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="141.2959" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="228.87701" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>gener</text>
             </lyric>
         </measure>
-        <measure width="190.58392">
-            <lyric default-x="-62.237404" default-y="55" is-pickup="yes">
+        <measure width="267.51321">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(1)</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-37.703266" default-y="55" is-pickup="yes">
+            <lyric default-x="47.866177" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Sing</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes">
+            <lyric default-x="100.48018" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(repeat)</text>
-                <phrase>single</phrase>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="182.9635" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>a</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="182.9635" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1549,12 +1463,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="55.748032" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="212.9635" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>tions,</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="55.748032" default-y="25">
+            <chord-symbol default-x="212.9635" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1565,7 +1477,7 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <chord-symbol default-x="101.49606" default-y="25">
+            <chord-symbol default-x="103.49606" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -1574,20 +1486,11 @@
                 <kind>minor</kind>
             </chord-symbol>
         </measure>
-        <measure width="222.09016">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="325.32397">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>worthy</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1598,22 +1501,22 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="69.258499" default-y="55" is-pickup="no">
+            <lyric default-x="90.165344" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="82.68914" default-y="55" is-pickup="no">
+            <lyric default-x="114.28211" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>29</duration>
             </forward>
-            <lyric default-x="109.26938" default-y="55" is-pickup="no">
+            <lyric default-x="168.6571" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lamb</text>
             </lyric>
-            <chord-symbol default-x="109.26938" default-y="25">
+            <chord-symbol default-x="168.6571" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1624,29 +1527,27 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="158.51816" default-y="55" is-pickup="no">
+            <lyric default-x="234.81078" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="195.55991" default-y="55" is-pickup="no">
+            <lyric default-x="286.31601" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>was</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-62.237404" default-y="55" is-pickup="yes">
+        <measure width="236.22821">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(2)</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-37.703266" default-y="55" is-pickup="yes">
+            <lyric default-x="47.866177" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Sing</text>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="100.48018" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>slain</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="100.48018" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1655,20 +1556,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="222.09016">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="325.32397">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>worthy</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1679,22 +1571,22 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="69.258499" default-y="55" is-pickup="no">
+            <lyric default-x="90.165344" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="82.68914" default-y="55" is-pickup="no">
+            <lyric default-x="114.28211" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>29</duration>
             </forward>
-            <lyric default-x="109.26938" default-y="55" is-pickup="no">
+            <lyric default-x="168.6571" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lamb</text>
             </lyric>
-            <chord-symbol default-x="109.26938" default-y="25">
+            <chord-symbol default-x="168.6571" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1705,27 +1597,24 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="158.51816" default-y="55" is-pickup="no">
+            <lyric default-x="234.81078" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="195.55991" default-y="55" is-pickup="no">
+            <lyric default-x="286.31601" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>was</text>
             </lyric>
         </measure>
-        <measure width="174.83591">
-            <lyric default-x="-30.571836" default-y="55" is-pickup="yes">
-                <syllabic>start</syllabic>
+        <measure width="176.83591">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>For</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="56.371258" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>slain</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="56.371258" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -1736,7 +1625,7 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <chord-symbol default-x="99.087868" default-y="25">
+            <chord-symbol default-x="101.08787" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1745,21 +1634,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="164.50787">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+        <measure width="200.80318">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>ever</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1770,10 +1649,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>He</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1784,24 +1663,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="111.215" default-y="55" is-pickup="no">
+            <lyric default-x="125.67847" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>shall</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="149.73094" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="180.21259" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>re</text>
             </lyric>
         </measure>
-        <measure width="201.51556">
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+        <measure width="203.51556">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>ign</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1812,7 +1688,7 @@
             <forward>
                 <duration>48</duration>
             </forward>
-            <chord-symbol default-x="115.74803" default-y="25">
+            <chord-symbol default-x="117.74803" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1821,25 +1697,23 @@
                 <kind>suspended-fourth</kind>
             </chord-symbol>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-93.913925" default-y="55" is-pickup="yes">
+        <measure width="270.02881">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>So</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="-71.767273" default-y="55" is-pickup="yes">
+            <lyric default-x="45.946068" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>let</text>
             </lyric>
-            <lyric default-x="-51.034496" default-y="55" is-pickup="yes">
+            <lyric default-x="79.140373" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>it</text>
             </lyric>
-            <lyric default-x="-39.178658" default-y="55" is-pickup="yes">
+            <lyric default-x="101.68233" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>be</text>
             </lyric>
-            <lyric default-x="-18.155052" default-y="55" is-pickup="yes">
-                <syllabic>start</syllabic>
+            <lyric default-x="134.28076" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="134.28076" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1848,21 +1722,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="200.05913">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+        <measure width="301.7207">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>day</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1873,16 +1737,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="39.900547" default-y="55" is-pickup="no">
+            <lyric default-x="55.250759" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="65.367516" default-y="55" is-pickup="no">
+            <lyric default-x="113.37576" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>shout</text>
             </lyric>
-            <chord-symbol default-x="65.367516" default-y="25">
+            <chord-symbol default-x="113.37576" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -1893,27 +1757,27 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="109.44987" default-y="55" is-pickup="no">
+            <lyric default-x="174.58957" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="136.03011" default-y="55" is-pickup="no">
+            <lyric default-x="213.85593" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>hymn</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="184.18513" default-y="55" is-pickup="no">
+            <lyric default-x="278.69708" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>of</text>
             </lyric>
         </measure>
-        <measure width="241.19858">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="314.10605">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Heaven.</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1924,22 +1788,22 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="77.373344" default-y="55" is-pickup="no">
+            <lyric default-x="99.588234" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>With</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="117.58638" default-y="55" is-pickup="no">
+            <lyric default-x="155.21394" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>angles</text>
             </lyric>
             <forward>
                 <duration>45</duration>
             </forward>
-            <lyric default-x="168.77087" default-y="55" is-pickup="no">
+            <lyric default-x="239.58894" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>and</text>
             </lyric>
-            <chord-symbol default-x="168.77087" default-y="25">
+            <chord-symbol default-x="239.58894" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -1950,26 +1814,15 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="198.67142" default-y="55" is-pickup="no">
+            <lyric default-x="282.83969" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
-                <phrase>end</phrase>
             </lyric>
         </measure>
-        <measure width="183.73782">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="282.93588">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Saints</text>
-                <phrase>start</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -1980,16 +1833,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="58.987225" default-y="55" is-pickup="no">
+            <lyric default-x="78.784691" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>we</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="84.454193" default-y="55" is-pickup="no">
+            <lyric default-x="136.9097" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>raise</text>
             </lyric>
-            <chord-symbol default-x="84.454193" default-y="25">
+            <chord-symbol default-x="136.9097" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -2000,21 +1853,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="124.35471" default-y="55" is-pickup="no">
+            <lyric default-x="192.1604" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>a</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="135.37833" default-y="55" is-pickup="no">
+            <lyric default-x="212.75882" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>mighty</text>
             </lyric>
         </measure>
-        <measure width="167.50432">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="214.02664">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>roar.</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>48</duration>
                 <root>
                     <root-step>G</root-step>
@@ -2025,16 +1878,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="47.392899" default-y="55" is-pickup="no">
+            <lyric default-x="63.61166" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Glory</text>
             </lyric>
             <forward>
                 <duration>47</duration>
             </forward>
-            <lyric default-x="95.076614" default-y="55" is-pickup="no">
+            <lyric default-x="151.73666" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
             </lyric>
-            <chord-symbol default-x="95.076614" default-y="25">
+            <chord-symbol default-x="151.73666" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -2045,26 +1898,15 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="113.23167" default-y="55" is-pickup="no">
+            <lyric default-x="180.57784" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>our</text>
-                <phrase>end</phrase>
             </lyric>
         </measure>
-        <measure width="193.63063">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="281.93225">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>God</text>
-                <phrase>start</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -2075,16 +1917,16 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="45.466953" default-y="55" is-pickup="no">
+            <lyric default-x="61.930431" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>who</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="82.508713" default-y="55" is-pickup="no">
+            <lyric default-x="120.05544" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>gave</text>
             </lyric>
-            <chord-symbol default-x="82.508713" default-y="25">
+            <chord-symbol default-x="120.05544" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -2095,33 +1937,30 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="120.83444" default-y="55" is-pickup="no">
+            <lyric default-x="173.73138" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>us</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="140.28325" default-y="55" is-pickup="no">
+            <lyric default-x="204.755" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>life</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="167.50546" default-y="55" is-pickup="no">
-                <syllabic>start</syllabic>
+            <lyric default-x="245.10669" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>bey</text>
             </lyric>
         </measure>
-        <measure width="190.58392">
-            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
+        <measure width="207.47899">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(1)</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
-                <syllabic>end</syllabic>
+            <lyric default-x="47.866177" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>ond</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="47.866177" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>C</root-step>
@@ -2132,10 +1971,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="55.748032" default-y="55" is-pickup="no">
+            <lyric default-x="92.464584" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
-            <chord-symbol default-x="55.748032" default-y="25">
+            <chord-symbol default-x="92.464584" default-y="22">
                 <duration>16</duration>
                 <root>
                     <root-step>E</root-step>
@@ -2146,11 +1985,10 @@
             <forward>
                 <duration>16</duration>
             </forward>
-            <lyric default-x="114.8359" default-y="55" is-pickup="no">
+            <lyric default-x="131.73096" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>grave</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="114.8359" default-y="25">
+            <chord-symbol default-x="131.73096" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -2159,20 +1997,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="163.67116">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="201.30432">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy,</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -2183,10 +2012,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -2197,26 +2026,24 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="128.34641" default-y="55" is-pickup="no">
+            <lyric default-x="145.9212" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="141.77705" default-y="55" is-pickup="no">
+            <lyric default-x="170.03796" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="-24.534138" default-y="55" is-pickup="yes">
+        <measure width="183.61421">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>(2)</text>
-                <phrase>start</phrase>
             </lyric>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+            <lyric default-x="47.866177" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lord</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="47.866177" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -2225,20 +2052,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="163.67116">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="201.30432">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy,</text>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -2249,10 +2067,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -2263,22 +2081,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="128.34641" default-y="55" is-pickup="no">
+            <lyric default-x="145.9212" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="141.77705" default-y="55" is-pickup="no">
+            <lyric default-x="170.03796" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="201.51556">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="176.83591">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lord</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -2289,7 +2106,7 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <chord-symbol default-x="99.087868" default-y="25">
+            <chord-symbol default-x="101.08787" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -2298,21 +2115,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="163.67116">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="201.30432">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy,</text>
-                <phrase>start</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -2323,10 +2130,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -2337,22 +2144,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="128.34641" default-y="55" is-pickup="no">
+            <lyric default-x="145.9212" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="141.77705" default-y="55" is-pickup="no">
+            <lyric default-x="170.03796" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="201.51556">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="176.83591">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lord</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>A</root-step>
@@ -2363,7 +2169,7 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <chord-symbol default-x="99.087868" default-y="25">
+            <chord-symbol default-x="101.08787" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
@@ -2372,21 +2178,11 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="163.67116">
-            <print new-system="yes">
-                <system-layout>
-                    <system-margins>
-                        <left-margin>0.000000</left-margin>
-                        <right-margin>0.000000</right-margin>
-                    </system-margins>
-                    <system-distance>127.000000</system-distance>
-                </system-layout>
-            </print>
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="201.30432">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy,</text>
-                <phrase>start</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>F</root-step>
@@ -2397,10 +2193,10 @@
             <forward>
                 <duration>32</duration>
             </forward>
-            <lyric default-x="85.748032" default-y="55" is-pickup="no">
+            <lyric default-x="87.748032" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Holy</text>
             </lyric>
-            <chord-symbol default-x="85.748032" default-y="25">
+            <chord-symbol default-x="87.748032" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>G</root-step>
@@ -2411,22 +2207,21 @@
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="128.34641" default-y="55" is-pickup="no">
+            <lyric default-x="145.9212" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>is</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="141.77705" default-y="55" is-pickup="no">
+            <lyric default-x="170.03796" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
         </measure>
-        <measure width="145.74803">
-            <lyric default-x="10" default-y="55" is-pickup="no">
+        <measure width="147.74803">
+            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>Lord</text>
-                <phrase>end</phrase>
             </lyric>
-            <chord-symbol default-x="10" default-y="25">
+            <chord-symbol default-x="12" default-y="22">
                 <duration>64</duration>
                 <root>
                     <root-step>C</root-step>
@@ -2435,7 +2230,6 @@
                 <kind>none</kind>
             </chord-symbol>
         </measure>
-        <measure width="0"/>
     </part>
 </score-partwise>
 

@@ -871,15 +871,15 @@ MusicDisplayConstants MusicXMLParser::ParseDefaultsElement(XMLElement* defaultsE
     return displayConstants;
 }
 
-Credit MusicXMLParser::ParseCreditElement(XMLElement* creditElement)
+std::shared_ptr<Credit> MusicXMLParser::ParseCreditElement(XMLElement* creditElement)
 {
-    Credit credit = Credit();
+    std::shared_ptr<Credit> credit = std::make_shared<Credit>();
 
     if (creditElement)
     {
         BaseElementParser::ParseBaseElement(creditElement, credit);
 
-        credit.pageNumber = XMLHelper::GetUnsignedIntAttribute(creditElement, "page", credit.pageNumber);
+        credit->pageNumber = XMLHelper::GetUnsignedIntAttribute(creditElement, "page", credit->pageNumber);
 
         XMLElement* creditWordsElement = creditElement->FirstChildElement("credit-words");
         if (creditWordsElement)
@@ -887,10 +887,10 @@ Credit MusicXMLParser::ParseCreditElement(XMLElement* creditElement)
             CreditWords words = CreditWords();
             BaseElementParser::ParseTextualElement(creditWordsElement, words);
             words.text = XMLHelper::GetStringValue(creditWordsElement, words.text);
-            words.defaultX = XMLHelper::GetFloatAttribute(creditWordsElement, "default-x", words.defaultX);
-            words.defaultY = XMLHelper::GetFloatAttribute(creditWordsElement, "default-y", words.defaultY);
+            words.positionX = XMLHelper::GetFloatAttribute(creditWordsElement, "default-x", words.positionY);
+            words.positionY = XMLHelper::GetFloatAttribute(creditWordsElement, "default-y", words.positionX);
 
-            credit.words = words;
+            credit->words = words;
         }
     }
 

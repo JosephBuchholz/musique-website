@@ -7,13 +7,14 @@
 void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const
 {
     Vec2<float> currentPosition = parentPosition + position;
+    currentPosition.x += pickupWidth;
 
-    renderData.AddLine(Line(currentPosition, { currentPosition.x, currentPosition.y + 40.0f }, Paint()));
-    renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, { currentPosition.x + width, currentPosition.y + 40.0f }, Paint()));
+    renderData.AddLine(Line(currentPosition, { currentPosition.x, currentPosition.y + settings.displayCosntants.measureBarlineHeight }, Paint()));
+    renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, { currentPosition.x + width, currentPosition.y + settings.displayCosntants.measureBarlineHeight }, Paint()));
 
     for (const auto& chord : chords)
     {
-        chord->Render(renderData, settings, parentPosition + position);
+        chord->Render(renderData, settings, currentPosition);
     }
 
     if (isFirstMeasureOfSystem && !lyrics.empty())
@@ -34,6 +35,14 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
         }
     }
 
+    if (lyricPickup)
+    {
+        for (const auto& lyric : lyricPickup->lyrics)
+        {
+            lyric->Render(renderData, settings, currentPosition, true);
+        }
+    }
+
     for (const auto& lyric : lyrics)
     {
         if (!lyric->isPickupToNextMeasure)
@@ -41,14 +50,15 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
     }
 }
 
-void CSMeasure::Init()
+void CSMeasure::Init(const Settings& settings)
 {
-    const float barlineMargin = 12.0f;
-    const float beatWidth = 30.0f;
-    const float chordPosY = 25.0f;
-    const float lyricPosY = 60.0f;
-    const float lyricSpace = 8.0f;
-    const float minMeasureWidth = 30.0f;
+    float barlineMargin = settings.displayCosntants.chordMarginFromBarline;
+    float beatWidth = settings.displayCosntants.beatWidth;
+    float chordPosY = settings.displayCosntants.chordPositionY;
+    float lyricPosY = settings.displayCosntants.lyricPositionY;
+    float lyricSpace = settings.displayCosntants.lyricSpaceWidth;
+    float minMeasureWidth = settings.displayCosntants.minimumMeasureWidth;
+    bool displayReminderPickupLyrics = settings.displayCosntants.displayReminderPickupLyrics;
 
     std::sort(chords.begin(), chords.end(), [](std::shared_ptr<CSChord> a, std::shared_ptr<CSChord> b)
         {
@@ -61,15 +71,70 @@ void CSMeasure::Init()
         });
     
     std::shared_ptr<CSLyric> previousLyric = nullptr;
+    bool pickupStarted = false;
+    std::shared_ptr<LyricPickup> currentLyricPickup = nullptr;
     for (const auto& lyric : lyrics)
     {
         if (previousLyric != nullptr)
         {
             previousLyric->duration = lyric->beatPosition - previousLyric->beatPosition;
         }
+
+        
+        if (lyric->startsPickup || pickupStarted)
+        {
+            pickupStarted = true;
+            lyric->isPickupToNextMeasure = true;
+
+            if (currentLyricPickup == nullptr)
+            {
+                currentLyricPickup = std::make_shared<LyricPickup>();
+            }
+
+            currentLyricPickup->lyrics.push_back(lyric);
+            lyric->parentLyricPickup = currentLyricPickup;
+        }
+        else
+        {
+            lyric->parentLyricPickup = nullptr;
+            lyric->isPickupToNextMeasure = false;
+        }
         
         previousLyric = lyric;
     }
+
+    // set this measure's pickup (by using the previous measure)
+    if (parent)
+    {
+        if (parent->elementType == BaseElement::ElementType::CSStaff)
+        {
+            std::shared_ptr<CSStaff> staff = std::dynamic_pointer_cast<CSStaff>(parent);
+
+            int i = 0;
+            for (const auto& m : staff->measures)
+            {
+                if (m.get() == this)
+                {
+                    break;
+                }
+
+                i++;
+            }
+
+            if (i > 0)
+            {
+                if (!staff->measures[i - 1]->lyrics.empty())
+                {
+                    lyricPickup = staff->measures[i - 1]->lyrics.back()->parentLyricPickup;
+                }
+            }
+        }       
+    }
+
+    if (lyricPickup)
+        pickupWidth = -lyricPickup->lyrics[0]->pickupPosition.x;
+    else
+        pickupWidth = 0.0f;
 
     if (previousLyric != nullptr)
         previousLyric->duration = 4.0f - previousLyric->beatPosition;
@@ -143,8 +208,11 @@ void CSMeasure::Init()
             }
         });
 
-        if (lyric->isPickupToNextMeasure)
+        if (lyric->isPickupToNextMeasure && lyric->parentLyricPickup && !displayReminderPickupLyrics)
+        {
+            lyric->Init(settings, { 0.0f, 0.0f });
             continue;
+        }
 
         Vec2<float> dimensions = lyric->lyricText.GetDimensions(Paint());
 
@@ -165,9 +233,27 @@ void CSMeasure::Init()
             lyricPosition.x = chordPositionX;
         }
 
-        lyric->Init(lyricPosition);
+        lyric->Init(settings, lyricPosition);
 
         prevPos = { lyricPosition.x + std::max(dimensions.x + lyricSpace, (lyric->duration * beatWidth)), lyricPosY };
+    }
+
+
+    prevPos = { 0.0f, lyricPosY };
+    if (!lyrics.empty())
+    {
+        if (lyrics.back()->parentLyricPickup)
+        {
+            for (int i = lyrics.back()->parentLyricPickup->lyrics.size() - 1; i >= 0; i--)
+            {
+                std::shared_ptr<CSLyric> lyric = lyrics.back()->parentLyricPickup->lyrics[i];
+                Vec2<float> dimensions = lyric->lyricText.GetDimensions(Paint());
+
+                lyric->pickupPosition = { prevPos.x - (dimensions.x + lyricSpace), prevPos.y };
+
+                prevPos = lyric->pickupPosition;
+            }
+        }
     }
 
     float chordPosX = 0.0f;
@@ -176,8 +262,16 @@ void CSMeasure::Init()
     if (!chords.empty())
         chordPosX = chords.back()->GetDimensions().x + chords.back()->position.x + chords.back()->duration * 30.0f;
 
-    if (!lyrics.empty())
-        lyricPosX = lyrics.back()->lyricText.GetDimensions(Paint()).x + lyrics.back()->position.x;
+    for (int i = lyrics.size() - 1; i >= 0; i--)
+    {
+        if (!lyrics[i]->parentLyricPickup)
+        {
+            lyricPosX = lyrics[i]->lyricText.GetDimensions(Paint()).x + lyrics[i]->position.x;
+            break;
+        }
+    }
+    //if (!lyrics.empty())
+    //    lyricPosX = lyrics.back()->lyricText.GetDimensions(Paint()).x + lyrics.back()->position.x;
 
     width = std::max(std::max(chordPosX, lyricPosX), minMeasureWidth);
     /*if (defaultWidth != 0.0f)

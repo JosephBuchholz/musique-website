@@ -335,8 +335,6 @@ export default function EditorPage() {
 
                 var posY = (pdfPageHeight - height) / 2;
 
-                pdfDocument.addImage(img, "PNG", 0, posY, width, height);
-
                 //pdfDocument.text("Hello world!", 10, 10);
                 pdfDocument.save("song.pdf");
 
@@ -352,8 +350,6 @@ export default function EditorPage() {
                 var height = (1 / (pageWidth / pageHeight)) * pdfPageWidth;
 
                 var posY = (pdfPageHeight - height) / 2;
-
-                pdfDocument.addImage(img, "PNG", 0, posY, width, height);
 
                 if (!isFirstPage) {
                     pdfDocument.addPage("p", "mm", "a4");
@@ -554,14 +550,14 @@ export default function EditorPage() {
                 <Sidebar
                     properties={editableProperties}
                     onPropertiesChange={(newProperties) => {
+                        setEditableProperties(newProperties);
+
                         if (moduleIsCreated) {
                             var ptr = module.stringToNewUTF8(
                                 JSON.stringify(newProperties)
                             );
                             module.onPropertiesUpdated(ptr);
                         }
-
-                        setEditableProperties(newProperties);
                     }}
                 />
             </div>
@@ -787,6 +783,26 @@ function Sidebar({ properties, onPropertiesChange }) {
                                         JSON.stringify(properties)
                                     ); // deep copy
                                     newProperties[k1][k2].value = parseFloat(
+                                        event.target.value
+                                    );
+                                    onPropertiesChange(newProperties);
+                                }}
+                            ></NumberField>
+                        </li>
+                    );
+                } else if (property.type == "int") {
+                    items.push(
+                        <li>
+                            <NumberField
+                                label={property.name}
+                                value={property.value}
+                                k1={heading}
+                                k2={propertyKey}
+                                onChange={async (event, k1, k2) => {
+                                    var newProperties = JSON.parse(
+                                        JSON.stringify(properties)
+                                    ); // deep copy
+                                    newProperties[k1][k2].value = parseInt(
                                         event.target.value
                                     );
                                     onPropertiesChange(newProperties);
