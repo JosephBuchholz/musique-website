@@ -51,11 +51,8 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
         BoundingBox bb = credit->GetBoundingBox();
         bb.position += musicRenderer->pagePositions[credit->pageNumber - 1];
 
-        LOGV("bb: %s", bb.GetPrintableString().c_str());
-
         if (bb.DoesOverlapWithPoint(point))
         {
-            LOGV("slected credit!!");
             return credit;
         }
     }
@@ -104,6 +101,18 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                             if (bb.DoesOverlapWithPoint(point))
                             {
                                 return chord;
+                            }
+                        }
+
+                        for (const auto& direction : measure->textDirections)
+                        {
+                            BoundingBox bb = direction->GetBoundingBoxRelativeToParent();
+                            bb.position.x += measurePositionX + measure->pickupWidth;
+                            bb.position += musicRenderer->systemPositions[systemIndex];
+
+                            if (bb.DoesOverlapWithPoint(point))
+                            {
+                                return direction;
                             }
                         }
 
@@ -336,6 +345,23 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
             credit->words.positionX = jsonObject["Position"]["posX"]["value"];
             credit->words.positionY = jsonObject["Position"]["posY"]["value"];
         }
+        else if (e->elementType == BaseElement::ElementType::TextDirection)
+        {
+            std::shared_ptr<TextDirection> direction = std::dynamic_pointer_cast<TextDirection>(e);
+
+            direction->text.text = jsonObject["Main"]["text"]["value"];
+
+            bool fontWeight = jsonObject["Text Properties"]["isBold"]["value"];
+            bool fontStyle = jsonObject["Text Properties"]["isItalic"]["value"];
+
+            direction->text.fontWeight = (FontWeight)(1 + fontWeight);
+            direction->text.fontStyle = (FontStyle)(1 + fontStyle);
+            direction->text.fontSize.size = jsonObject["Text Properties"]["textSize"]["value"];
+            direction->text.color.color = jsonObject["Text Properties"]["color"]["value"];
+
+            direction->position.x = jsonObject["Position"]["posX"]["value"];
+            direction->position.y = jsonObject["Position"]["posY"]["value"];
+        }
     }
 
     if (selectedElements.empty())
@@ -353,6 +379,8 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         song->settings.displayCosntants.chordFontSize.size = jsonObject["Other"]["chordFontSize"]["value"];
 
         song->settings.displayCosntants.systemLayout.systemDistance = jsonObject["Systems"]["systemDistance"]["value"];
+        song->settings.displayCosntants.systemLayout.topSystemDistance = jsonObject["Systems"]["topSystemDistance"]["value"];
+        song->settings.displayCosntants.systemLayout.firstPageTopSystemDistance = jsonObject["Systems"]["firstPageTopSystemDistance"]["value"];
 
         song->settings.displayCosntants.pageWidth = jsonObject["Pages"]["pageWidth"]["value"];
         song->settings.displayCosntants.pageHeight = jsonObject["Pages"]["pageHeight"]["value"];
@@ -420,6 +448,14 @@ void Editor::OnNewElement(int id)
                         song->systemMeasures.push_back(newSystemMeasure);
                     }
                 }
+            }
+            else if (id == 5) // rehearsal marking
+            {
+                std::shared_ptr<Rehearsal> newRehearsal = std::make_shared<Rehearsal>();
+                newRehearsal->text.text = "A";
+                newRehearsal->beatPosition = 0.0f;
+
+                measure->textDirections.push_back(newRehearsal);
             }
         }
         else if (e->elementType == BaseElement::ElementType::CSChord)
@@ -616,6 +652,23 @@ void Editor::UpdateCreditProperties(std::shared_ptr<Credit> credit)
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
+void Editor::UpdateTextDirectionProperties(std::shared_ptr<TextDirection> direction)
+{
+    nlohmann::ordered_json jsonObject;
+
+    AddTextToJson(jsonObject, "Main", "text", "Text", direction->text.text);
+
+    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)direction->text.fontWeight - 1));
+    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)direction->text.fontStyle - 1));
+    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", direction->text.fontSize.size);
+    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", direction->text.color.color);
+
+    AddFloatToJson(jsonObject, "Position", "posX", "Position X", direction->position.x);
+    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", direction->position.y);
+
+    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+}
+
 void Editor::UpdateDisplayConstantsProperties()
 {
     nlohmann::ordered_json jsonObject;
@@ -633,6 +686,8 @@ void Editor::UpdateDisplayConstantsProperties()
     AddFloatToJson(jsonObject, "Other", "chordFontSize", "Chord Font Size", song->settings.displayCosntants.chordFontSize.size);
 
     AddFloatToJson(jsonObject, "Systems", "systemDistance", "System Distance", song->settings.displayCosntants.systemLayout.systemDistance);
+    AddFloatToJson(jsonObject, "Systems", "firstPageTopSystemDistance", "First Page: System Distance From Top", song->settings.displayCosntants.systemLayout.firstPageTopSystemDistance);
+    AddFloatToJson(jsonObject, "Systems", "topSystemDistance", "System Distance From Top", song->settings.displayCosntants.systemLayout.topSystemDistance);
     AddFloatToJson(jsonObject, "Pages", "pageWidth", "Page Width", song->settings.displayCosntants.pageWidth);
     AddFloatToJson(jsonObject, "Pages", "pageHeight", "Page Height", song->settings.displayCosntants.pageHeight);
 
@@ -708,6 +763,16 @@ void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
             std::shared_ptr<Credit> credit = std::dynamic_pointer_cast<Credit>(selectedElement);
 
             UpdateCreditProperties(credit);
+        }
+        else if (selectedElement->elementType == BaseElement::ElementType::TextDirection)
+        {
+            std::shared_ptr<TextDirection> direction = std::dynamic_pointer_cast<TextDirection>(selectedElement);
+
+            UpdateTextDirectionProperties(direction);
+        }
+        else
+        {
+            LOGE("Did not recognize element type");
         }
     }
     else

@@ -7,8 +7,6 @@
 
 void UpdateRender(const RenderData& renderData)
 {
-    LOGI("Updating Render!!! %f", renderData.zoom);
-
     Renderer& renderer = Renderer::GetInstance();
 
     renderer.Clear();
@@ -59,8 +57,6 @@ void UpdateRender(const RenderData& renderData)
 
         renderer.DrawCubicCurve(curve.point1, curve.point2, curve.point3, curve.point4, paint);
     }
-
-    LOGD("Callbacks: Update Render function called");
 }
 
 void UpdateFrameData(const FrameData& frameData)
@@ -181,6 +177,5 @@ void Callbacks::DownloadText(const std::string& name, const std::string& data)
 
 void Callbacks::UpdateProperties(const std::string& propertiesString)
 {
-    LOGD("Updateing properties (from c++): %s", propertiesString.c_str());
     UpdatePropertiesCallback(propertiesString.c_str());
 }

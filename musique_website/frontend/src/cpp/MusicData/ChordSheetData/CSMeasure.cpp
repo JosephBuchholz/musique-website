@@ -49,9 +49,9 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
             lyric->Render(renderData, settings, currentPosition);
     }
 
-    for (const Direction& direction : directions)
+    for (const auto& direction : textDirections)
     {
-        direction.Render(renderData, currentPosition);
+        direction->Render(renderData, currentPosition);
     }
 }
 
@@ -65,6 +65,7 @@ void CSMeasure::Init(const Settings& settings)
     float minMeasureWidth = settings.displayCosntants.minimumMeasureWidth;
     bool displayReminderPickupLyrics = settings.displayCosntants.displayReminderPickupLyrics;
 
+    boundingBox = BoundingBox();
     boundingBox.size.x = width;
     boundingBox.size.y = lyricPosY + (settings.displayCosntants.lyricFontSize.size / 2.0f); // only an estimation
 
@@ -287,15 +288,26 @@ void CSMeasure::Init(const Settings& settings)
         width = defaultWidth;
     }*/
 
-    for (auto& direction : directions)
+    for (const auto& direction : textDirections)
     {
-        for (auto& rehearsal : direction.rehearsals)
-        {
-            rehearsal.position = { -pickupWidth, -20.0f };
-            rehearsal.fontSize.size = 16.0f;
+        direction->SetOnDeleteCallback([&](){
+            int i = 0;
+            for (const auto& d : textDirections)
+            {
+                if (d == direction)
+                {
+                    textDirections.erase(textDirections.begin() + i);
+                    break;
+                }
 
-            boundingBox = BoundingBox::CombineBoundingBoxes(boundingBox, rehearsal.GetBoundingBoxRelativeToParent());
-        }
+                i++;
+            }
+        });
+
+        direction->position = { -pickupWidth, -20.0f };
+        direction->text.fontSize.size = 16.0f;
+
+        boundingBox = BoundingBox::CombineBoundingBoxes(boundingBox, direction->GetBoundingBoxRelativeToParent());
     }
 }
 

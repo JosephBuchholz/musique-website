@@ -57,6 +57,7 @@ add_executable(
         MusicData/Directions/DynamicWedge.cpp
         MusicData/Directions/MetronomeMark.cpp
         MusicData/Directions/Rehearsal.cpp
+        MusicData/Directions/TextDirection.cpp
         MusicData/Directions/Marker.cpp
 
         MusicData/Chords/Chord.cpp

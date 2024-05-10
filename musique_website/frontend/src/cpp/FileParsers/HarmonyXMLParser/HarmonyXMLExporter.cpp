@@ -180,6 +180,32 @@ XMLElement* ExportChord(XMLDocument& doc, const std::shared_ptr<CSChord>& chord)
     return chordElement;
 }
 
+XMLElement* ExportTextDirection(XMLDocument& doc, const std::shared_ptr<TextDirection>& direction)
+{
+    XMLElement* directionElement = doc.NewElement("direction");
+
+    XMLElement* directionType = doc.NewElement("direction-type");
+    
+    if (direction->directionType == TextDirection::DirectionType::Rehearsal)
+    {
+        std::shared_ptr<Rehearsal> rehearsal = std::dynamic_pointer_cast<Rehearsal>(direction);
+
+        XMLElement* rehearsalElement = doc.NewElement("rehearsal");
+
+        HarmonyXMLExportHelper::SetTextualAttributes(rehearsalElement, rehearsal->text);
+        //rehearsalElement->SetAttribute("font-size", rehearsal->text.fontSize.size);
+        //rehearsalElement->SetAttribute("font-weight", rehearsal->text.fontSize.size);
+
+        rehearsalElement->SetText(rehearsal->text.text.c_str());
+
+        directionType->InsertEndChild(rehearsalElement);
+    }
+
+    directionElement->InsertEndChild(directionType);
+
+    return directionElement;
+}
+
 XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
 {
     XMLElement* measureElement = doc.NewElement("measure");
@@ -237,6 +263,14 @@ XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& me
         TimedElement newElement;
         newElement.element = ExportChord(doc, chord);
         newElement.timeInMeasure = chord->beatPosition * divisions;
+        elements.push_back(newElement);
+    }
+
+    for (auto direction : measure->textDirections)
+    {
+        TimedElement newElement;
+        newElement.element = ExportTextDirection(doc, direction);
+        newElement.timeInMeasure = direction->beatPosition * divisions;
         elements.push_back(newElement);
     }
     
@@ -361,6 +395,9 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
                     bool startsNewSystem = false;
                     if (i > 0)
                         startsNewSystem = song->systemMeasures[i - 1]->systemBreak;
+
+                    if (startsNewSystem)
+                        systemIndex++;
 
                     XMLElement* m = ExportMeasure(doc, measure, i, song->systems[systemIndex], startsNewSystem);
                     part->InsertEndChild(m);

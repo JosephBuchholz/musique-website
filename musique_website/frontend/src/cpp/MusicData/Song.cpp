@@ -629,10 +629,10 @@ void Song::OnUpdate()
                             word.CalculatePositionAsPaged(displayConstants, defaultX, defaultY);
                         }
 
-                        for (auto& rehearsals : direction.rehearsals)
+                        /*for (auto& rehearsals : direction.rehearsals)
                         {
                             rehearsals.CalculatePositionAsPaged(displayConstants, defaultX, defaultY);
-                        }
+                        }*/
 
                         if (direction.metronomeMark != nullptr)
                         {
@@ -814,8 +814,7 @@ void Song::CalculateSystems()
     std::shared_ptr<System> currentSystem = std::make_shared<System>();
     currentSystem->beginningMeasureIndex = 0;
     currentSystem->endingMeasureIndex = 0;
-    System::SystemLayout defaultLayout;
-    defaultLayout = settings.displayCosntants.systemLayout;
+    System::SystemLayout defaultLayout = settings.displayCosntants.systemLayout;
 
     currentSystem->layout = defaultLayout;
     for (const auto& instrument : instruments)
@@ -962,7 +961,7 @@ void Song::CalculateSystemPositionsAndPageBreaks()
     CreatePageBreak(0);
     Page newPage;
 
-    Vec2<float> previousSystemPosition = { 0.0f, displayConstants.topMargin + systems[0]->layout.topSystemDistance };
+    Vec2<float> previousSystemPosition = { 0.0f, displayConstants.topMargin + systems[0]->layout.firstPageTopSystemDistance };
     float bottomLimit = displayConstants.pageHeight * (17.0f / 18.0f);
     int previousSystemIndex = -1;
     systemIndex = 0;
@@ -1820,12 +1819,12 @@ void Song::ResolveCollisions()
                         words.Move(words.boundingBox.position - oldBoundingBox.position);
                     }
 
-                    for (auto& rehearsal : direction.rehearsals)
+                    /*for (auto& rehearsal : direction.rehearsals)
                     {
                         BoundingBox oldBoundingBox = rehearsal.boundingBox;
                         ResolveCollisionsWith(rehearsal.boundingBox, pageIndex);
                         rehearsal.Move(rehearsal.boundingBox.position - oldBoundingBox.position);
-                    }
+                    }*/
 
                     for (auto& dynamic : direction.dynamics)
                     {
@@ -1931,23 +1930,16 @@ void Song::ResolveCollisionsWith(BoundingBox& box, int pageIndex)
                             words.Move(words.boundingBox.position - oldBoundingBox.position);
                         }
 
-                        for (auto& rehearsal : direction.rehearsals)
+                        /*for (auto& rehearsal : direction.rehearsals)
                         {
-                            /*LOGV("rehearsal text: %s, box: %s | rehearsal.box: %s", rehearsal.text.string.c_str(), box.GetPrintableString().c_str(), rehearsal.boundingBox.GetPrintableString().c_str());
-                            if (BoundingBox::DoBoundingBoxesOverlap(box, rehearsal.boundingBox))
-                            {
-                                LOGW("rehearsal text: %s", rehearsal.text.string.c_str());
-                            }*/
                             BoundingBox oldBoundingBox = rehearsal.boundingBox;
                             BoundingBox::ResolveOverlap(box, rehearsal.boundingBox);
                             rehearsal.Move(rehearsal.boundingBox.position - oldBoundingBox.position);
-                        }
+                        }*/
 
                         if (direction.metronomeMark != nullptr)
                         {
                             ResolveCollisionWith(direction.metronomeMark, box);
-                            //LOGW("metronomeMark!: %s", direction.metronomeMark->tempo.c_str());
-                            //BoundingBox::ResolveOverlap(box, direction.metronomeMark->boundingBox);
                         }
 
                         for (auto& dynamic : direction.dynamics)

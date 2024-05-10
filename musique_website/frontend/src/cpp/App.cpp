@@ -195,6 +195,8 @@ void App::OnUpdate(double dt)
                     pageIndex++;
                 }
 
+                song->CalculateSystems();
+
                 if (doCollisions)
                 {
                     {

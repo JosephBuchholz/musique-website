@@ -67,7 +67,7 @@ public:
     float beatPosition = 0.0f; // the position of the direction in the measure in beats(quarter notes)
     float beatPositionInSong = 0.0f; // the position of the direction in the song(not counting repeats) in beats(quarter notes)
 
-    std::vector<Rehearsal> rehearsals;
+    //std::vector<Rehearsal> rehearsals;
     std::vector<Words> words;
     std::shared_ptr<MetronomeMark> metronomeMark = nullptr;
     std::vector<Dynamic> dynamics;

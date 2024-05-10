@@ -27,10 +27,10 @@ Rehearsal MusicXMLParser::ParseRehearsal(XMLElement* element)
 {
     Rehearsal rehearsal = Rehearsal();
 
-    if (element)
+    /*if (element)
     {
         rehearsal = ParseWords(element);
-    }
+    }*/
 
     return rehearsal;
 }
@@ -565,11 +565,11 @@ Direction MusicXMLParser::ParseDirection(XMLElement* directionElement, bool& isN
                     XMLElement* directionTypeElement = element;
 
                     // rehearsal
-                    XMLElement* rehearsalElement = directionTypeElement->FirstChildElement("rehearsal");
+                    /*XMLElement* rehearsalElement = directionTypeElement->FirstChildElement("rehearsal");
                     if (rehearsalElement)
                     {
                         direction.rehearsals.push_back(ParseRehearsal(rehearsalElement));
-                    }
+                    }*/
 
                     // words
                     XMLElement* wordsElement = directionTypeElement->FirstChildElement("words");

@@ -40,7 +40,7 @@ private:
     // ---- Parse Functions ----
     static void ParsePart(const std::shared_ptr<Song>& song, XMLElement* part, bool isFirstPart, MusicDisplayConstants displayConstants);
 
-    static Rehearsal ParseRehearsal(XMLElement* element);
+    static std::shared_ptr<Rehearsal> ParseRehearsal(XMLElement* element);
     static Words ParseWords(XMLElement* element);
     static std::shared_ptr<MetronomeMark> ParseMetronomeMark(XMLElement* element);
     static Dynamic ParseDynamicElement(XMLElement* element);
@@ -48,6 +48,7 @@ private:
     static std::shared_ptr<BracketDirection> ParseDashesDirectionElement(XMLElement* element, float currentTimeInMeasure, int measureIndex);
     static std::shared_ptr<BracketDirection> ParseBracketDirectionElement(XMLElement* element, float currentTimeInMeasure, int measureIndex);
     static Direction ParseDirection(XMLElement* directionElement, bool& isNewDirection, float currentTimeInMeasure);
+    static std::shared_ptr<TextDirection> ParseTextDirection(XMLElement* element, float currentTimeInMeasure);
     static std::shared_ptr<DurationDirection> ParseDurationDirection(XMLElement* directionElement, bool& isNewDirection, float currentTimeInMeasure, int measureIndex);
     static void ParseWorkElement(XMLElement* workElement, std::string& workTitle, int& workNumber);
     static void ParseEncodingElement(XMLElement* encodingElement, const std::shared_ptr<Song>& song);

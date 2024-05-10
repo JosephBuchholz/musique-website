@@ -2,23 +2,26 @@
  * This file contains the definition of the `Rehearsal` class.
  */
 
-#ifndef MUSIQUE_REHERSAL_H
-#define MUSIQUE_REHERSAL_H
+#pragma once
 
-#include "Words.h"
+#include "TextDirection.h"
 
 /**
  * This class represents a rehearsal mark.
  */
-class Rehearsal : public Words {
-
+class Rehearsal : public TextDirection
+{
 public:
-    Rehearsal() { position = { 0.0f, -10.0f }; }
-
-    Rehearsal(Words words)
-        : Words(words) { }
+    Rehearsal()
+        : BaseElement(BaseElement::ElementType::TextDirection) { directionType = TextDirection::DirectionType::Rehearsal; }
 
     void Render(RenderData& renderData, Vec2<float> measurePosition) const override;
-};
 
-#endif // MUSIQUE_REHERSAL_H
+    BoundingBox GetBoundingBoxRelativeToParent() const override;
+
+public:
+
+    enum class EnclosureShape {
+        None = 0, Rectangle, Square, Oval, Circle, Bracket, InvertedBracket, Triangle, Diamond, Pentagon, Hexagon, Heptagon, Octagon, Nonagon, Decagon
+    } enclosureShape = EnclosureShape::None;
+};

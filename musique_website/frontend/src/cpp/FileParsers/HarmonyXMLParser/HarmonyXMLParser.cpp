@@ -619,13 +619,70 @@ void HarmonyXMLParser::ParseLyric(XMLElement* element, const std::shared_ptr<CSM
 
 // ---- Parse Functions ----
 
-Rehearsal HarmonyXMLParser::ParseRehearsal(XMLElement* element)
+std::shared_ptr<Rehearsal> HarmonyXMLParser::ParseRehearsal(XMLElement* element)
 {
-    Rehearsal rehearsal = Rehearsal();
+    std::shared_ptr<Rehearsal> rehearsal = std::make_shared<Rehearsal>();
 
     if (element)
     {
-        rehearsal = ParseWords(element);
+        const char* s = element->GetText();
+        if (s != nullptr)
+            rehearsal->text.text = s;
+        else
+            LOGE("ERROR: string in WORDS is null <_____________________________________________________________________");
+
+        //words.defX = XMLHelper::GetFloatAttribute(element, "default-x", words.defX);
+        //words.defY = XMLHelper::GetFloatAttribute(element, "default-y", words.defY);
+
+        /*if (words.defX == 0.0f)
+            words.noDefX = true;
+        else
+            words.noDefX = false;
+
+        if (words.defY == 0.0f)
+            words.noDefY = true;
+        else
+            words.noDefY = false;
+
+        words.relX = XMLHelper::GetFloatAttribute(element, "relative-x", words.relX);
+        words.relY = XMLHelper::GetFloatAttribute(element, "relative-y", words.relY);*/
+
+        std::string enclosureString = XMLHelper::GetStringAttribute(element, "enclosure", "");
+
+        Words::EnclosureShape enclosure = Words::EnclosureShape::None;
+
+        if (enclosureString == "rectangle")
+            enclosure = Words::EnclosureShape::Rectangle;
+        else if (enclosureString == "square")
+            enclosure = Words::EnclosureShape::Square;
+        else if (enclosureString == "oval")
+            enclosure = Words::EnclosureShape::Oval;
+        else if (enclosureString == "circle")
+            enclosure = Words::EnclosureShape::Circle;
+        else if (enclosureString == "bracket")
+            enclosure = Words::EnclosureShape::Bracket;
+        else if (enclosureString == "inverted-bracket")
+            enclosure = Words::EnclosureShape::InvertedBracket;
+        else if (enclosureString == "triangle")
+            enclosure = Words::EnclosureShape::Triangle;
+        else if (enclosureString == "diamond")
+            enclosure = Words::EnclosureShape::Diamond;
+        else if (enclosureString == "pentagon")
+            enclosure = Words::EnclosureShape::Pentagon;
+        else if (enclosureString == "hexagon")
+            enclosure = Words::EnclosureShape::Hexagon;
+        else if (enclosureString == "heptagon")
+            enclosure = Words::EnclosureShape::Heptagon;
+        else if (enclosureString == "octagon")
+            enclosure = Words::EnclosureShape::Octagon;
+        else if (enclosureString == "nonagon")
+            enclosure = Words::EnclosureShape::Nonagon;
+        else if (enclosureString == "decagon")
+            enclosure = Words::EnclosureShape::Decagon;
+        else if (enclosureString == "none")
+            enclosure = Words::EnclosureShape::None;
+
+        BaseElementParser::ParseTextualElement(element, rehearsal->text);
     }
 
     return rehearsal;
@@ -1141,6 +1198,76 @@ std::shared_ptr<DurationDirection> HarmonyXMLParser::ParseDurationDirection(XMLE
     return durationDirection;
 }
 
+std::shared_ptr<TextDirection> HarmonyXMLParser::ParseTextDirection(XMLElement* element, float currentTimeInMeasure)
+{
+    std::shared_ptr<TextDirection> direction;
+
+    if (element)
+    {
+        // loop through all elements
+        XMLNode* previousElement = element->FirstChildElement(); // first element
+        while (true)
+        {
+            if (previousElement) {
+                XMLElement* element = previousElement->ToElement();
+                const char* value = element->Value();
+
+                if (strcmp(value, "direction-type") == 0) // direction-type
+                {
+                    XMLElement* directionTypeElement = element;
+
+                    // rehearsal
+                    XMLElement* rehearsalElement = directionTypeElement->FirstChildElement("rehearsal");
+                    if (rehearsalElement)
+                    {
+                        direction = ParseRehearsal(rehearsalElement);
+                    }
+                }
+                else if (strcmp(value, "offset") == 0) // offset
+                {
+                    // TODO: implement
+                }
+                else if (strcmp(value, "footnote") == 0) // footnote
+                {
+                    // TODO: implement
+                }
+                else if (strcmp(value, "level") == 0) // level
+                {
+                    // TODO: implement
+                }
+                else if (strcmp(value, "voice") == 0) // voice
+                {
+                    // TODO: implement
+                }
+                else if (strcmp(value, "staff") == 0) // staff
+                {
+                    // TODO: implement
+                }
+                else if (strcmp(value, "sound") == 0) // sound
+                {
+                    // TODO: implement
+                }
+                else if (strcmp(value, "listening") == 0) // listening
+                {
+                    // TODO: implement
+                }
+                else
+                {
+                    AddError("Didn't recognize element", "Didn't recognize element in Direction");
+                }
+            }
+            else
+            {
+                break;
+            }
+
+            previousElement = previousElement->NextSiblingElement();
+        }
+    }
+
+    return direction;
+}
+
 Direction HarmonyXMLParser::ParseDirection(XMLElement* directionElement, bool& isNewDirection, float currentTimeInMeasure)
 {
     isNewDirection = true;
@@ -1161,11 +1288,11 @@ Direction HarmonyXMLParser::ParseDirection(XMLElement* directionElement, bool& i
                     XMLElement* directionTypeElement = element;
 
                     // rehearsal
-                    XMLElement* rehearsalElement = directionTypeElement->FirstChildElement("rehearsal");
+                    /*XMLElement* rehearsalElement = directionTypeElement->FirstChildElement("rehearsal");
                     if (rehearsalElement)
                     {
                         direction.rehearsals.push_back(ParseRehearsal(rehearsalElement));
-                    }
+                    }*/
 
                     // words
                     XMLElement* wordsElement = directionTypeElement->FirstChildElement("words");
@@ -2569,13 +2696,17 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                         }*/
 
                         // direction
-                        bool isNewDirection;
+                        /*bool isNewDirection;
                         Direction direction = ParseDirection(element, isNewDirection, currentTimeInMeasure);
                         if (isNewDirection)
                         {
                             direction.beatPosition = currentTimeInMeasure;
                             currentMeasures[0]->directions.push_back(direction);
-                        }
+                        }*/
+
+                        std::shared_ptr<TextDirection> textDirection = ParseTextDirection(element, currentTimeInMeasure);
+                        textDirection->beatPosition = currentTimeInMeasure;
+                        currentMeasures[0]->textDirections.push_back(textDirection);
 
                         /*if (!isNewDurationDirection)
                         {

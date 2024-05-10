@@ -712,6 +712,16 @@ function ComponentsSidebar() {
                         >
                             Append Measure
                         </TextButton>
+
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(5);
+                                }
+                            }}
+                        >
+                            Add Rehearsal/Section Marking
+                        </TextButton>
                     </ul>
                 </div>
             </div>

@@ -14,7 +14,8 @@ class System
 public:
     struct SystemLayout {
         float systemDistance = 127.0f;
-        float topSystemDistance = 127.0f;
+        float topSystemDistance = 10.0f;
+        float firstPageTopSystemDistance = 135.0f;
 
         float systemLeftMargin = 0.0f;
         float systemRightMargin = 0.0f;

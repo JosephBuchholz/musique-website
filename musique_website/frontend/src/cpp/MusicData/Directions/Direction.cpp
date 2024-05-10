@@ -2,14 +2,14 @@
 
 void Direction::Render(RenderData& renderData, Vec2<float> measurePosition) const
 {
-    if (!rehearsals.empty())
+    /*if (!rehearsals.empty())
     {
         for (const auto& rehearsal : rehearsals)
         {
             rehearsal.Render(renderData, measurePosition);
         }
-    }
-    else if (!words.empty())
+    }*/
+    if (!words.empty())
     {
         for (const auto& word : words)
         {
@@ -41,10 +41,10 @@ void Direction::RenderDebug(RenderData& renderData, Vec2<float> measurePosition)
         word.RenderDebug(renderData, measurePosition);
     }
 
-    for (const auto& rehearsal : rehearsals)
+    /*for (const auto& rehearsal : rehearsals)
     {
         rehearsal.RenderDebug(renderData, measurePosition);
-    }
+    }*/
 
     if (marker != nullptr)
     {
@@ -59,10 +59,10 @@ void Direction::RenderDebug(RenderData& renderData) const
         //word.RenderDebug(renderData);
     }
 
-    for (auto& rehearsal : rehearsals)
+    /*for (auto& rehearsal : rehearsals)
     {
         //rehearsal.RenderDebug(renderData);
-    }
+    }*/
 
     for (auto& dynamic : dynamics)
     {
@@ -89,10 +89,10 @@ Vec2<float> Direction::GetPositionRelativeToMeasure() const
         position = wordsObject.position;
     }
 
-    for (auto& rehearsal : rehearsals)
+    /*for (auto& rehearsal : rehearsals)
     {
         position = rehearsal.position;
-    }
+    }*/
 
     for (auto& dynamic : dynamics)
     {
@@ -131,10 +131,10 @@ Vec2<float> Direction::GetDimensions() const
         dimensions = wordsObject.GetDimensions();
     }
 
-    for (auto& rehearsal : rehearsals)
+    /*for (auto& rehearsal : rehearsals)
     {
         dimensions = rehearsal.GetDimensions();
-    }
+    }*/
 
     for (auto& dynamic : dynamics)
     {
@@ -189,10 +189,10 @@ void Direction::UpdateBoundingBox(const Vec2<float>& measurePosition)
         wordsObject.UpdateBoundingBox(measurePosition);
     }
 
-    for (auto& rehearsal : rehearsals)
+    /*for (auto& rehearsal : rehearsals)
     {
         rehearsal.UpdateBoundingBox(measurePosition);
-    }
+    }*/
 
     for (auto& dynamic : dynamics)
     {
