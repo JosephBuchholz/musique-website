@@ -15,22 +15,12 @@ void UpdateRender(const RenderData& renderData)
 
     for (const Line& line : renderData.m_lines)
     {
-        Paint paint = line.paint;
-        paint.color = 0x000000FF;
-
-        renderer.DrawLine(line.start, line.end, paint);
+        renderer.DrawLine(line.start, line.end, line.paint);
     }
 
     for (const Text& text : renderData.m_texts)
     {
-        Paint paint = text.paint;
-        //paint.color = 0x000000FF;
-
-        renderer.DrawText(text.text, text.position, paint);
-
-        //BoundingBox boundingBox = renderer.MeasureText(text.text, text.paint);
-
-        //renderer.DrawRect((text.position * scale) + boundingBox.position, boundingBox.size);
+        renderer.DrawText(text.text, text.position, text.paint);
     }
 
     for (const SpannableText& text : renderData.m_spannableTexts)
@@ -44,10 +34,6 @@ void UpdateRender(const RenderData& renderData)
         textPaint.color = 0x000000FF;
 
         renderer.DrawGlyph(glyph.codePoint, glyph.position, textPaint);
-
-        //BoundingBox boundingBox = renderer.MeasureGlyph(glyph.codePoint, textPaint);
-
-        //renderer.DrawRect((glyph.position * scale) + boundingBox.position, boundingBox.size);
     }
 
     for (const CubicCurve& curve : renderData.m_cubicCurves)
@@ -73,6 +59,7 @@ void UpdatePrintRenderData(const PrintRenderData& printRenderData)
 {
     Renderer& renderer = Renderer::GetInstance();
 
+    renderer.SetOffset({ 0.0f, 0.0f });
     renderer.StartPDFRender();
 
     for (const RenderData& renderData : printRenderData.pages)

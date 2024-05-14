@@ -13,7 +13,7 @@
         </score-part>
     </part-list>
     <part id="">
-        <measure width="65.678467">
+        <measure width="65.678467" isPickup="yes">
             <attributes>
                 <divisions>16</divisions>
             </attributes>
@@ -1541,9 +1541,6 @@
             <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
                 <text>Sing</text>
             </lyric>
-            <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="no">
-                <text>(repeat)</text>
-            </lyric>
         </measure>
         <measure width="325.32397">
             <print new-system="yes">
@@ -1605,7 +1602,7 @@
                 <text>was</text>
             </lyric>
         </measure>
-        <measure width="147.74803">
+        <measure width="206.48331">
             <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>slain</text>
             </lyric>
@@ -1620,6 +1617,9 @@
             <forward>
                 <duration>64</duration>
             </forward>
+            <lyric default-x="132" default-y="50" is-pickup="no" starts-pickup="no">
+                <text>(repeat)</text>
+            </lyric>
             <lyric default-x="0" default-y="0" is-pickup="yes" starts-pickup="yes">
                 <text>(2)</text>
             </lyric>

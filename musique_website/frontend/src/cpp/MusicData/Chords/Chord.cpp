@@ -8,7 +8,7 @@ void Chord::Render(RenderData& renderData, const Settings& settings, Vec2<float>
     // paint
     Paint paint = Paint();
     TextualElement::ModifyPaint(paint);
-    paint.textSize = settings.displayCosntants.chordFontSize.size;
+    paint.textSize = settings.displayConstants.chordFontSize.size;
 
     // render
     if (chordDiagram && settings.showChordDiagram == Settings::ShowChordDiagram::Auto)
@@ -62,7 +62,10 @@ BoundingBox Chord::GetBoundingBoxRelativeToParent() const
 
     bb.position.x = textBoundingBox.position.x + position.x;
     bb.position.y = textBoundingBox.position.y + position.y;
-    //bb.position.x -= textBoundingBox.size.x / 2.0f;
+    
+    if (justify == Justify::Left)
+        bb.position.x += textBoundingBox.size.x / 2.0f;
+
     //bb.position.y += textBoundingBox.size.y / 2.0f;
     bb.size.x = textBoundingBox.size.x;
     bb.size.y = textBoundingBox.size.y;

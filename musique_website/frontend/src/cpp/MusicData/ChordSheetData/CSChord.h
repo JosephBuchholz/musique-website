@@ -20,6 +20,7 @@ public:
 
     void Render(RenderData& renderData, const Settings& settings, Vec2<float> measurePosition) const;
 
+    BoundingBox GetBoundingBox() const;
     Vec2<float> GetDimensions() const;
 
     void SetOnDeleteCallback(std::function<void()> callback) { onDeleteCallback = callback; }

@@ -4,13 +4,16 @@
 
 #include "CSStaff.h"
 
-void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const
+void CSMeasure::Render(RenderData& renderData, const Settings& settings, const std::shared_ptr<SystemMeasure>& systemMeasure, Vec2<float> parentPosition) const
 {
     Vec2<float> currentPosition = parentPosition + position;
     currentPosition.x += pickupWidth;
 
-    renderData.AddLine(Line(currentPosition, { currentPosition.x, currentPosition.y + settings.displayCosntants.measureBarlineHeight }, Paint()));
-    renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, { currentPosition.x + width, currentPosition.y + settings.displayCosntants.measureBarlineHeight }, Paint()));
+    if (!systemMeasure->isPickupMeasure)
+    {
+        renderData.AddLine(Line(currentPosition, { currentPosition.x, currentPosition.y + settings.displayConstants.measureBarlineHeight }, Paint()));
+        renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, { currentPosition.x + width, currentPosition.y + settings.displayConstants.measureBarlineHeight }, Paint()));
+    }
 
     for (const auto& chord : chords)
     {
@@ -53,21 +56,32 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, Vec2<fl
     {
         direction->Render(renderData, currentPosition);
     }
+
+    if (selectedColor.color != 0x000000FF)
+    {
+        Paint boxPaint;
+        boxPaint.color = selectedColor.color;
+        boxPaint.strokeWidth = 2.0f;
+        renderData.AddLine(Line(currentPosition, { currentPosition.x, currentPosition.y + settings.displayConstants.measureBarlineHeight }, boxPaint));
+        renderData.AddLine(Line({ currentPosition.x, currentPosition.y + settings.displayConstants.measureBarlineHeight }, { currentPosition.x + width, currentPosition.y + settings.displayConstants.measureBarlineHeight }, boxPaint));
+        renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y + settings.displayConstants.measureBarlineHeight }, { currentPosition.x + width, currentPosition.y }, boxPaint));
+        renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, currentPosition, boxPaint));
+    }
 }
 
 void CSMeasure::Init(const Settings& settings)
 {
-    float barlineMargin = settings.displayCosntants.chordMarginFromBarline;
-    float beatWidth = settings.displayCosntants.beatWidth;
-    float chordPosY = settings.displayCosntants.chordPositionY;
-    float lyricPosY = settings.displayCosntants.lyricPositionY;
-    float lyricSpace = settings.displayCosntants.lyricSpaceWidth;
-    float minMeasureWidth = settings.displayCosntants.minimumMeasureWidth;
-    bool displayReminderPickupLyrics = settings.displayCosntants.displayReminderPickupLyrics;
+    float barlineMargin = settings.displayConstants.chordMarginFromBarline;
+    float beatWidth = settings.displayConstants.beatWidth;
+    float chordPosY = settings.displayConstants.chordPositionY;
+    float lyricPosY = settings.displayConstants.lyricPositionY;
+    float lyricSpace = settings.displayConstants.lyricSpaceWidth;
+    float minMeasureWidth = settings.displayConstants.minimumMeasureWidth;
+    bool displayReminderPickupLyrics = settings.displayConstants.displayReminderPickupLyrics;
 
     boundingBox = BoundingBox();
     boundingBox.size.x = width;
-    boundingBox.size.y = lyricPosY + (settings.displayCosntants.lyricFontSize.size / 2.0f); // only an estimation
+    boundingBox.size.y = lyricPosY + (settings.displayConstants.lyricFontSize.size / 2.0f); // only an estimation
 
     std::sort(chords.begin(), chords.end(), [](std::shared_ptr<CSChord> a, std::shared_ptr<CSChord> b)
         {
@@ -376,9 +390,6 @@ std::shared_ptr<CSChord> CSMeasure::GetChordFromBeatPosition(float beatPosition)
 BoundingBox CSMeasure::GetTotalBoundingBox(const MusicDisplayConstants& displayConstants) const
 {
     BoundingBox totalBoundingBox = boundingBox;
-
-    //totalBoundingBox.size.x = width;
-    //totalBoundingBox.size.y = 75.0f;
 
     return totalBoundingBox;
 }

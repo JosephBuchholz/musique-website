@@ -2,7 +2,7 @@
 
 void CSLyric::Init(const Settings& settings, Vec2<float> pos)
 {
-    lyricText.fontSize = settings.displayCosntants.lyricFontSize;
+    lyricText.fontSize = settings.displayConstants.lyricFontSize;
     lyricText.align = TextAlign::Left;
 
     position = pos;
@@ -51,7 +51,7 @@ void CSLyric::Render(RenderData& renderData, const Settings& settings, Vec2<floa
         pos = pickupPosition;
     }
     
-    lyricText.Render(renderData, parentPosition + pos, Paint());
+    lyricText.Render(renderData, parentPosition + pos, Paint(selectedColor.color));
 /*
 #if DEBUG
     if (isPickupToNextMeasure)

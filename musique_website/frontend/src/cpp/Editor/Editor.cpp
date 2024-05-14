@@ -91,10 +91,27 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                             }
                         }
 
+                        if (measure->lyricPickup)
+                        {
+                            for (auto lyric : measure->lyricPickup->lyrics)
+                            {
+                                BoundingBox bb = lyric->lyricText.GetBoundingBox(Paint());
+                                bb.position += lyric->pickupPosition;
+                                bb.position.x += measurePositionX + measure->pickupWidth;
+                                bb.position += musicRenderer->systemPositions[systemIndex];
+                                //musicRenderer->m_RenderData.AddDebugDot(bb.position);
+                                //bb.Render(musicRenderer->m_RenderData, 0xFF2222FF);
+
+                                if (bb.DoesOverlapWithPoint(point))
+                                {
+                                    return lyric;
+                                }   
+                            }
+                        }
+
                         for (auto chord : measure->chords)
                         {
-                            BoundingBox bb = chord->chordSymbol.GetBoundingBoxRelativeToParent();
-                            bb.position += chord->position;
+                            BoundingBox bb = chord->GetBoundingBox();
                             bb.position.x += measurePositionX + measure->pickupWidth;
                             bb.position += musicRenderer->systemPositions[systemIndex];
 
@@ -326,6 +343,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
             measure->width = jsonObject["Main"]["width"]["value"];
             song->systemMeasures[measureIndex]->pageBreak = jsonObject["Main"]["pageBreak"]["value"];
             song->systemMeasures[measureIndex]->systemBreak = jsonObject["Main"]["systemBreak"]["value"];
+            song->systemMeasures[measureIndex]->isPickupMeasure = jsonObject["Main"]["isPickupMeasure"]["value"];
         }
         else if (e->elementType == BaseElement::ElementType::Credit)
         {
@@ -366,24 +384,26 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
 
     if (selectedElements.empty())
     {
-        song->settings.displayCosntants.lyricFontSize.size = jsonObject["Lyrics"]["fontSize"]["value"];
-        song->settings.displayCosntants.lyricPositionY = jsonObject["Lyrics"]["lyricPositionY"]["value"];
-        song->settings.displayCosntants.lyricSpaceWidth = jsonObject["Lyrics"]["lyricSpaceWidth"]["value"];
+        song->settings.displayConstants.lyricFontSize.size = jsonObject["Lyrics"]["fontSize"]["value"];
+        song->settings.displayConstants.lyricPositionY = jsonObject["Lyrics"]["lyricPositionY"]["value"];
+        song->settings.displayConstants.lyricSpaceWidth = jsonObject["Lyrics"]["lyricSpaceWidth"]["value"];
 
-        song->settings.displayCosntants.chordMarginFromBarline = jsonObject["Other"]["chordMarginFromBarline"]["value"];
-        song->settings.displayCosntants.beatWidth = jsonObject["Other"]["beatWidth"]["value"];
-        song->settings.displayCosntants.chordPositionY = jsonObject["Other"]["chordPositionY"]["value"];
-        song->settings.displayCosntants.minimumMeasureWidth = jsonObject["Other"]["minimumMeasureWidth"]["value"];
-        song->settings.displayCosntants.displayReminderPickupLyrics = jsonObject["Other"]["displayReminderPickupLyrics"]["value"];
-        song->settings.displayCosntants.measureBarlineHeight = jsonObject["Other"]["measureBarlineHeight"]["value"];
-        song->settings.displayCosntants.chordFontSize.size = jsonObject["Other"]["chordFontSize"]["value"];
+        song->settings.displayConstants.chordMarginFromBarline = jsonObject["Other"]["chordMarginFromBarline"]["value"];
+        song->settings.displayConstants.beatWidth = jsonObject["Other"]["beatWidth"]["value"];
+        song->settings.displayConstants.chordPositionY = jsonObject["Other"]["chordPositionY"]["value"];
+        song->settings.displayConstants.minimumMeasureWidth = jsonObject["Other"]["minimumMeasureWidth"]["value"];
+        song->settings.displayConstants.displayReminderPickupLyrics = jsonObject["Other"]["displayReminderPickupLyrics"]["value"];
+        song->settings.displayConstants.measureBarlineHeight = jsonObject["Other"]["measureBarlineHeight"]["value"];
+        song->settings.displayConstants.chordFontSize.size = jsonObject["Other"]["chordFontSize"]["value"];
 
-        song->settings.displayCosntants.systemLayout.systemDistance = jsonObject["Systems"]["systemDistance"]["value"];
-        song->settings.displayCosntants.systemLayout.topSystemDistance = jsonObject["Systems"]["topSystemDistance"]["value"];
-        song->settings.displayCosntants.systemLayout.firstPageTopSystemDistance = jsonObject["Systems"]["firstPageTopSystemDistance"]["value"];
+        song->settings.displayConstants.systemLayout.systemDistance = jsonObject["Systems"]["systemDistance"]["value"];
+        song->settings.displayConstants.systemLayout.topSystemDistance = jsonObject["Systems"]["topSystemDistance"]["value"];
+        song->settings.displayConstants.systemLayout.firstPageTopSystemDistance = jsonObject["Systems"]["firstPageTopSystemDistance"]["value"];
 
-        song->settings.displayCosntants.pageWidth = jsonObject["Pages"]["pageWidth"]["value"];
-        song->settings.displayCosntants.pageHeight = jsonObject["Pages"]["pageHeight"]["value"];
+        song->settings.displayConstants.topMargin = jsonObject["Pages"]["topMargin"]["value"];
+        song->settings.displayConstants.bottomMargin = jsonObject["Pages"]["bottomMargin"]["value"];
+        song->settings.displayConstants.leftMargin = jsonObject["Pages"]["leftMargin"]["value"];
+        song->settings.displayConstants.rightMargin = jsonObject["Pages"]["rightMargin"]["value"];
     }
 
     Update();
@@ -630,6 +650,7 @@ void Editor::UpdateMeasureProperties(std::shared_ptr<CSMeasure> measure)
     AddFloatToJson(jsonObject, "Main", "width", "Width", measure->width);
     AddBoolToJson(jsonObject, "Main", "pageBreak", "Page Break", song->systemMeasures[measureIndex]->pageBreak);
     AddBoolToJson(jsonObject, "Main", "systemBreak", "System Break", song->systemMeasures[measureIndex]->systemBreak);
+    AddBoolToJson(jsonObject, "Main", "isPickupMeasure", "Is Pickup Measure", song->systemMeasures[measureIndex]->isPickupMeasure);
 
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
@@ -673,23 +694,25 @@ void Editor::UpdateDisplayConstantsProperties()
 {
     nlohmann::ordered_json jsonObject;
 
-    AddFloatToJson(jsonObject, "Lyrics", "fontSize", "Font Size", song->settings.displayCosntants.lyricFontSize.size);
-    AddFloatToJson(jsonObject, "Lyrics", "lyricPositionY", "Lyric Y Position", song->settings.displayCosntants.lyricPositionY);
-    AddFloatToJson(jsonObject, "Lyrics", "lyricSpaceWidth", "Lyric Spacing", song->settings.displayCosntants.lyricSpaceWidth);
+    AddFloatToJson(jsonObject, "Lyrics", "fontSize", "Font Size", song->settings.displayConstants.lyricFontSize.size);
+    AddFloatToJson(jsonObject, "Lyrics", "lyricPositionY", "Lyric Y Position", song->settings.displayConstants.lyricPositionY);
+    AddFloatToJson(jsonObject, "Lyrics", "lyricSpaceWidth", "Lyric Spacing", song->settings.displayConstants.lyricSpaceWidth);
 
-    AddFloatToJson(jsonObject, "Other", "chordMarginFromBarline", "Chord Margin From Barline", song->settings.displayCosntants.chordMarginFromBarline);
-    AddFloatToJson(jsonObject, "Other", "beatWidth", "Beat Width", song->settings.displayCosntants.beatWidth);
-    AddFloatToJson(jsonObject, "Other", "chordPositionY", "Chord Y Position", song->settings.displayCosntants.chordPositionY);
-    AddFloatToJson(jsonObject, "Other", "minimumMeasureWidth", "Minimum Measure Width", song->settings.displayCosntants.minimumMeasureWidth);
-    AddBoolToJson(jsonObject, "Other", "displayReminderPickupLyrics", "Display Reminder Pickup Lyrics", song->settings.displayCosntants.displayReminderPickupLyrics);
-    AddFloatToJson(jsonObject, "Other", "measureBarlineHeight", "Measure Height", song->settings.displayCosntants.measureBarlineHeight);
-    AddFloatToJson(jsonObject, "Other", "chordFontSize", "Chord Font Size", song->settings.displayCosntants.chordFontSize.size);
+    AddFloatToJson(jsonObject, "Other", "chordMarginFromBarline", "Chord Margin From Barline", song->settings.displayConstants.chordMarginFromBarline);
+    AddFloatToJson(jsonObject, "Other", "beatWidth", "Beat Width", song->settings.displayConstants.beatWidth);
+    AddFloatToJson(jsonObject, "Other", "chordPositionY", "Chord Y Position", song->settings.displayConstants.chordPositionY);
+    AddFloatToJson(jsonObject, "Other", "minimumMeasureWidth", "Minimum Measure Width", song->settings.displayConstants.minimumMeasureWidth);
+    AddBoolToJson(jsonObject, "Other", "displayReminderPickupLyrics", "Display Reminder Pickup Lyrics", song->settings.displayConstants.displayReminderPickupLyrics);
+    AddFloatToJson(jsonObject, "Other", "measureBarlineHeight", "Measure Height", song->settings.displayConstants.measureBarlineHeight);
+    AddFloatToJson(jsonObject, "Other", "chordFontSize", "Chord Font Size", song->settings.displayConstants.chordFontSize.size);
 
-    AddFloatToJson(jsonObject, "Systems", "systemDistance", "System Distance", song->settings.displayCosntants.systemLayout.systemDistance);
-    AddFloatToJson(jsonObject, "Systems", "firstPageTopSystemDistance", "First Page: System Distance From Top", song->settings.displayCosntants.systemLayout.firstPageTopSystemDistance);
-    AddFloatToJson(jsonObject, "Systems", "topSystemDistance", "System Distance From Top", song->settings.displayCosntants.systemLayout.topSystemDistance);
-    AddFloatToJson(jsonObject, "Pages", "pageWidth", "Page Width", song->settings.displayCosntants.pageWidth);
-    AddFloatToJson(jsonObject, "Pages", "pageHeight", "Page Height", song->settings.displayCosntants.pageHeight);
+    AddFloatToJson(jsonObject, "Systems", "systemDistance", "System Distance", song->settings.displayConstants.systemLayout.systemDistance);
+    AddFloatToJson(jsonObject, "Systems", "firstPageTopSystemDistance", "First Page: System Distance From Top", song->settings.displayConstants.systemLayout.firstPageTopSystemDistance);
+    AddFloatToJson(jsonObject, "Systems", "topSystemDistance", "System Distance From Top", song->settings.displayConstants.systemLayout.topSystemDistance);
+    AddFloatToJson(jsonObject, "Pages", "topMargin", "Top Margin", song->settings.displayConstants.topMargin);
+    AddFloatToJson(jsonObject, "Pages", "bottomMargin", "Bottom Margin", song->settings.displayConstants.bottomMargin);
+    AddFloatToJson(jsonObject, "Pages", "leftMargin", "Left Margin", song->settings.displayConstants.leftMargin);
+    AddFloatToJson(jsonObject, "Pages", "rightMargin", "Right Margin", song->settings.displayConstants.rightMargin);
 
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }

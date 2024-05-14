@@ -43,8 +43,8 @@ export class CanvasRenderer extends Renderer {
     drawLine(startX, startY, endX, endY, paint) {
         this.usePaint(paint);
 
-        this.context.strokeStyle = "#000000FF";
-        this.context.fillStyle = "#000000FF";
+        //this.context.strokeStyle = "#000000FF";
+        //this.context.fillStyle = "#000000FF";
 
         if (paint.verticalEnds) {
             this.context.beginPath();

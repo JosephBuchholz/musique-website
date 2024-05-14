@@ -271,7 +271,7 @@ void Song::OnUpdate()
                 }
 
                 if (ending)
-                    ending->CalculatePositionAsPaged(displayConstants);
+                    ending->CalculatePositionAsPaged(settings.displayConstants);
             }
         }
 
@@ -279,11 +279,11 @@ void Song::OnUpdate()
         for (const auto& instrument : instruments)
         {
             if (instrument->instrumentBracket)
-                instrument->instrumentBracket->CalculateAsPaged(displayConstants, -18.0f);
+                instrument->instrumentBracket->CalculateAsPaged(settings.displayConstants, -18.0f);
 
             for (const auto& staff : instrument->staves)
             {
-                staff->CalculateAsPaged(displayConstants);
+                staff->CalculateAsPaged(settings.displayConstants);
 
                 int measureIndex = 0;
                 int systemIndex = -1;
@@ -292,7 +292,7 @@ void Song::OnUpdate()
                     if (measure->startNewSystem)
                         systemIndex++;
 
-                    measure->CalculateAsPaged(displayConstants, settings, systems[systemIndex], staff->lines);
+                    measure->CalculateAsPaged(settings.displayConstants, settings, systems[systemIndex], staff->lines);
                     if (measureIndex >= m_MeasureWidths.size())
                     {
                         m_MeasureBeginWidths.push_back(0.0f);
@@ -321,14 +321,14 @@ void Song::OnUpdate()
                             note->defaultPosition.y = INVALID_FLOAT_VALUE;
                         }
 
-                        note->CalculatePositionAsPaged(displayConstants, staff->lines);
+                        note->CalculatePositionAsPaged(settings.displayConstants, staff->lines);
 
                         if (note->type == NoteType::Standard && !note->isRest)
-                            note->position.y = (displayConstants.lineSpacing * measure->CalculateNoteYPositionRelativeToMeasure(noteIndex));
+                            note->position.y = (settings.displayConstants.lineSpacing * measure->CalculateNoteYPositionRelativeToMeasure(noteIndex));
 
                         for (auto& lyric : note->lyrics)
                         {
-                            lyric.CalculatePositionAsPaged(displayConstants);
+                            lyric.CalculatePositionAsPaged(settings.displayConstants);
                         }
 
                         noteIndex++;
@@ -336,7 +336,7 @@ void Song::OnUpdate()
 
                     for (const auto& noteChord : measure->noteChords)
                     {
-                        noteChord->CalculatePositionAsPaged(displayConstants, staff->lines, measure, (softwareName == "MuseScore" && softwareMajorVersion == 4));
+                        noteChord->CalculatePositionAsPaged(settings.displayConstants, staff->lines, measure, (softwareName == "MuseScore" && softwareMajorVersion == 4));
                     }
 
                     measureIndex++;
@@ -415,7 +415,7 @@ void Song::OnUpdate()
                         //    multiMeasureRestCount++;
                         //}
 
-                        float systemWidth = displayConstants.pageWidth - systems[systemIndex]->layout.systemLeftMargin - systems[systemIndex]->layout.systemRightMargin - displayConstants.leftMargin - displayConstants.rightMargin;
+                        float systemWidth = settings.displayConstants.pageWidth - systems[systemIndex]->layout.systemLeftMargin - systems[systemIndex]->layout.systemRightMargin - settings.displayConstants.leftMargin - settings.displayConstants.rightMargin;
 
                         if (previousMeasure)
                         {
@@ -446,13 +446,13 @@ void Song::OnUpdate()
                             {
                                 float lineSpacing;
                                 if (multiMeasureRest->type == Measure::MeasureType::Tab)
-                                    lineSpacing = displayConstants.tabLineSpacing;
+                                    lineSpacing = settings.displayConstants.tabLineSpacing;
                                 else
-                                    lineSpacing = displayConstants.lineSpacing;
+                                    lineSpacing = settings.displayConstants.lineSpacing;
 
                                 auto measureDataItem = systems[systemIndex]->systemMeasureData.find(multiMeasureRest->index);
 
-                                multiMeasureRest->multiMeasureRestSymbol->CalculateAsPaged(displayConstants, lineSpacing, staff->lines, multiMeasureRest->measureWidth, measureDataItem->second.measureBeginningWidth);
+                                multiMeasureRest->multiMeasureRestSymbol->CalculateAsPaged(settings.displayConstants, lineSpacing, staff->lines, multiMeasureRest->measureWidth, measureDataItem->second.measureBeginningWidth);
                             }
                         }
 
@@ -613,7 +613,7 @@ void Song::OnUpdate()
                         direction->AddNewSegment(segment);
                     }
 
-                    direction->CalculateAsPaged(displayConstants);
+                    direction->CalculateAsPaged(settings.displayConstants);
                 }
 
                 int measureIndex = 0;
@@ -626,27 +626,27 @@ void Song::OnUpdate()
 
                         for (auto& word : direction.words)
                         {
-                            word.CalculatePositionAsPaged(displayConstants, defaultX, defaultY);
+                            word.CalculatePositionAsPaged(settings.displayConstants, defaultX, defaultY);
                         }
 
                         /*for (auto& rehearsals : direction.rehearsals)
                         {
-                            rehearsals.CalculatePositionAsPaged(displayConstants, defaultX, defaultY);
+                            rehearsals.CalculatePositionAsPaged(settings.displayConstants, defaultX, defaultY);
                         }*/
 
                         if (direction.metronomeMark != nullptr)
                         {
-                            direction.metronomeMark->CalculatePositionAsPaged(displayConstants, defaultX, defaultY);
+                            direction.metronomeMark->CalculatePositionAsPaged(settings.displayConstants, defaultX, defaultY);
                         }
 
                         for (auto& dynamic : direction.dynamics)
                         {
-                            dynamic.CalculatePositionAsPaged(displayConstants, { defaultX, defaultY });
+                            dynamic.CalculatePositionAsPaged(settings.displayConstants, { defaultX, defaultY });
                         }
 
                         if (direction.marker != nullptr)
                         {
-                            direction.marker->CalculatePositionAsPaged(displayConstants, { 0.0f, -20.0f });
+                            direction.marker->CalculatePositionAsPaged(settings.displayConstants, { 0.0f, -20.0f });
                         }
 
                         std::shared_ptr<SoundEvent> soundEvent = direction.GetSoundEvent();
@@ -662,13 +662,13 @@ void Song::OnUpdate()
                         float defaultX = GetPositionXInMeasure(chord.beatPositionInSong, measureIndex);
                         float defaultY = -40.0f;
 
-                        chord.CalculatePositionAsPaged(displayConstants, defaultX, defaultY);
+                        chord.CalculatePositionAsPaged(settings.displayConstants, defaultX, defaultY);
                     }
 
-                    float measureHeight = measure->GetMiddleHeight(staff->lines, staff->GetLineSpacing(displayConstants));
+                    float measureHeight = measure->GetMiddleHeight(staff->lines, staff->GetLineSpacing(settings.displayConstants));
                     for (const auto& tuplet : measure->tuplets)
                     {
-                        tuplet->CalculatePositionAsPaged(displayConstants, measureHeight, { 0.0f, 0.0f }, { 0.0f, 0.0f });
+                        tuplet->CalculatePositionAsPaged(settings.displayConstants, measureHeight, { 0.0f, 0.0f }, { 0.0f, 0.0f });
                     }
 
                     for (const auto& note : measure->notes)
@@ -709,10 +709,10 @@ void Song::OnUpdate()
 
                             float slope = std::abs(beamGroup.GetSlope());
 
-                            if (slope > displayConstants.maxBeamSlope) // slope needs to be smaller
+                            if (slope > settings.displayConstants.maxBeamSlope) // slope needs to be smaller
                             {
                                 float run = beamGroup.beamEndPosition.x - beamGroup.beamStartPosition.x;
-                                float maxRise = run * displayConstants.maxBeamSlope; // since: (run * maxslope) / run = maxslope
+                                float maxRise = run * settings.displayConstants.maxBeamSlope; // since: (run * maxslope) / run = maxslope
 
                                 if (beamGroup.beamStartPosition.y > beamGroup.beamEndPosition.y)
                                 {
@@ -761,9 +761,9 @@ void Song::OnUpdate()
                             }
                         }
 
-                        if (smallestStemHeight < displayConstants.minNoteStemHeight) // stems need to be longer
+                        if (smallestStemHeight < settings.displayConstants.minNoteStemHeight) // stems need to be longer
                         {
-                            float heightOffset = displayConstants.minNoteStemHeight - smallestStemHeight; // how much to offset the beam
+                            float heightOffset = settings.displayConstants.minNoteStemHeight - smallestStemHeight; // how much to offset the beam
                             heightOffset *= direction;
                             heightOffset += 20.0f * direction; // TODO: temp
 
@@ -808,13 +808,13 @@ void Song::OnUpdate()
 void Song::CalculateSystems()
 {
     systems.clear();
-    const float maxSystemWidth = displayConstants.pageWidth - (displayConstants.systemLayout.systemLeftMargin + displayConstants.systemLayout.systemRightMargin) - (displayConstants.leftMargin + displayConstants.rightMargin);
+    const float maxSystemWidth = settings.displayConstants.pageWidth - (settings.displayConstants.systemLayout.systemLeftMargin + settings.displayConstants.systemLayout.systemRightMargin) - (settings.displayConstants.leftMargin + settings.displayConstants.rightMargin);
 
     float currentSystemWidth = 0.0f;
     std::shared_ptr<System> currentSystem = std::make_shared<System>();
     currentSystem->beginningMeasureIndex = 0;
     currentSystem->endingMeasureIndex = 0;
-    System::SystemLayout defaultLayout = settings.displayCosntants.systemLayout;
+    System::SystemLayout defaultLayout = settings.displayConstants.systemLayout;
 
     currentSystem->layout = defaultLayout;
     for (const auto& instrument : instruments)
@@ -894,7 +894,7 @@ void Song::CalculateSystemPositionsAndPageBreaks()
     auto start = high_resolution_clock::now();
     for (const auto& instrument : instruments)
     {
-        instrument->CalculateTotalBoundingBoxes(displayConstants, systems);
+        instrument->CalculateTotalBoundingBoxes(settings.displayConstants, systems);
     }
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(stop - start);
@@ -913,8 +913,8 @@ void Song::CalculateSystemPositionsAndPageBreaks()
         bool firstInst = true;
         for (const auto& instrument : instruments)
         {
-            instrument->CalculateSystemPositionData(displayConstants, systemIndex, system->beginningMeasureIndex, system->endingMeasureIndex, firstInst, previousInstPosition, previousInstBelowAndMiddleHeight);
-            BoundingBox instrumentBoundingBox = instrument->GetTotalBoundingBox(displayConstants, systemIndex);
+            instrument->CalculateSystemPositionData(settings.displayConstants, systemIndex, system->beginningMeasureIndex, system->endingMeasureIndex, firstInst, previousInstPosition, previousInstBelowAndMiddleHeight);
+            BoundingBox instrumentBoundingBox = instrument->GetTotalBoundingBox(settings.displayConstants, systemIndex);
             instrumentBoundingBox.position += instrument->systemPositionData[systemIndex];
 
             if (boundingBoxNotSet)
@@ -961,8 +961,8 @@ void Song::CalculateSystemPositionsAndPageBreaks()
     CreatePageBreak(0);
     Page newPage;
 
-    Vec2<float> previousSystemPosition = { 0.0f, displayConstants.topMargin + systems[0]->layout.firstPageTopSystemDistance };
-    float bottomLimit = displayConstants.pageHeight * (17.0f / 18.0f);
+    Vec2<float> previousSystemPosition = { 0.0f, settings.displayConstants.topMargin + systems[0]->layout.firstPageTopSystemDistance };
+    float bottomLimit = settings.displayConstants.pageHeight * (17.0f / 18.0f);
     int previousSystemIndex = -1;
     systemIndex = 0;
     bool startNewPage = true;
@@ -990,14 +990,14 @@ void Song::CalculateSystemPositionsAndPageBreaks()
                 // start a new page
                 LOGD_TAG("Song", "Starting new page");
                 startNewPage = true;
-                previousSystemPosition = { 0.0f, displayConstants.topMargin + systems[systemIndex]->layout.topSystemDistance };
+                previousSystemPosition = { 0.0f, settings.displayConstants.topMargin + systems[systemIndex]->layout.topSystemDistance };
                 CreatePageBreak(system->beginningMeasureIndex);
                 pages.push_back(newPage);
                 newPage = Page();
             }
         }
 
-        system->position.x = displayConstants.leftMargin + system->layout.systemLeftMargin;
+        system->position.x = settings.displayConstants.leftMargin + system->layout.systemLeftMargin;
         system->position.y = previousSystemPosition.y;
 
         if (previousSystemIndex >= 0 && !startNewPage)
@@ -1017,13 +1017,13 @@ void Song::CalculateSystemPositionsAndPageBreaks()
     pages.push_back(newPage);
 
     // page numbers
-    Vec2<float> pageNumberDefaultPosition = { displayConstants.pageWidth / 2.0f, displayConstants.pageHeight * (17.0f / 18.0f) };
+    Vec2<float> pageNumberDefaultPosition = { settings.displayConstants.pageWidth / 2.0f, settings.displayConstants.pageHeight * (17.0f / 18.0f) };
     int i = 0;
     for (auto& page : pages)
     {
         PageNumber newPageNumber(i + 1);
 
-        newPageNumber.CalculatePosition(displayConstants, pageNumberDefaultPosition);
+        newPageNumber.CalculatePosition(settings.displayConstants, pageNumberDefaultPosition);
 
         page.pageNumber = newPageNumber;
 
@@ -1339,9 +1339,9 @@ float Song::GetSystemHeight(int systemIndex) const
     float height = bottomInstrument->systemPositionData[systemIndex].y;
 
     float instHeight = bottomInstrument->staves[bottomInstrument->staves.size() - 1]->systemPositionData[systemIndex].y;
-    float lineSpacing = displayConstants.lineSpacing;
+    float lineSpacing = settings.displayConstants.lineSpacing;
     if (bottomInstrument->staves[bottomInstrument->staves.size() - 1]->type == Staff::StaffType::Tab)
-        lineSpacing = displayConstants.tabLineSpacing;
+        lineSpacing = settings.displayConstants.tabLineSpacing;
     instHeight += bottomInstrument->staves[bottomInstrument->staves.size() - 1]->GetMiddleHeight(lineSpacing);
 
     height += instHeight;
@@ -1550,12 +1550,12 @@ void Song::UpdateBoundingBoxes(const std::vector<Vec2<float>>& pagePositions, co
 
         int staffIndex = 0;
         for (const auto& staff : instrument->staves) {
-            float ls = displayConstants.lineSpacing;
+            float ls = settings.displayConstants.lineSpacing;
             if (staff->type == Staff::StaffType::Tab) {
-                ls = displayConstants.tabLineSpacing;
+                ls = settings.displayConstants.tabLineSpacing;
             }
 
-            staff->UpdateBoundingBoxes(displayConstants);
+            staff->UpdateBoundingBoxes(settings.displayConstants);
 
             for (const auto& direction : staff->durationDirections)
             {
@@ -1616,15 +1616,15 @@ void Song::UpdateBoundingBoxes(const std::vector<Vec2<float>>& pagePositions, co
 
                     if (staff->type == Staff::StaffType::Standard)
                     {
-                        measureHeight = float(staff->lines - 1) * displayConstants.lineSpacing;
+                        measureHeight = float(staff->lines - 1) * settings.displayConstants.lineSpacing;
                     }
                     else
                     {
-                        measureHeight = float(staff->lines - 1) * displayConstants.tabLineSpacing;
+                        measureHeight = float(staff->lines - 1) * settings.displayConstants.tabLineSpacing;
                     }
 
                     //LOGW("measurePositionX: %f", measurePositionX);
-                    measure->UpdateBoundingBoxes(displayConstants, {measurePositionX + systemPosition.x + pagePosition.x, instPositionY + staffPositionY }, measureHeight); // this line crashes
+                    measure->UpdateBoundingBoxes(settings.displayConstants, {measurePositionX + systemPosition.x + pagePosition.x, instPositionY + staffPositionY }, measureHeight); // this line crashes
                 }
 
                 measureIndex++;
@@ -1661,23 +1661,23 @@ void Song::RenderBoundingBoxes(RenderData& renderData, const std::vector<Vec2<fl
                 int start = system->beginningMeasureIndex;
                 int end = system->endingMeasureIndex;
 
-                BoundingBox bb = staff->GetTotalBoundingBox(displayConstants, systemIndex);
+                BoundingBox bb = staff->GetTotalBoundingBox(settings.displayConstants, systemIndex);
                 bb.position += systemPositions[systemIndex];
                 bb.position += instrument->systemPositionData[systemIndex];
                 bb.position += staff->systemPositionData[systemIndex];
 
                 bb.size.x = 1050.0f;
 
-                /*bb.size.y = staff->GetTotalHeight(displayConstants, start, end);
-                bb.position.y -= staff->GetAboveHeight(displayConstants, start, end);*/
+                /*bb.size.y = staff->GetTotalHeight(settings.displayConstants, start, end);
+                bb.position.y -= staff->GetAboveHeight(settings.displayConstants, start, end);*/
 
                 bb.Render(renderData, (int)0xFF00FF00);
 
                 staffIndex++;
             }
 
-            BoundingBox instrumentBoundingBox = instrument->GetTotalBoundingBox(displayConstants, systemIndex);
-            //instrumentBoundingBox.position.y -= instrument->GetAboveHeight(displayConstants, start, end);
+            BoundingBox instrumentBoundingBox = instrument->GetTotalBoundingBox(settings.displayConstants, systemIndex);
+            //instrumentBoundingBox.position.y -= instrument->GetAboveHeight(settings.displayConstants, start, end);
             instrumentBoundingBox.position += systemPositions[systemIndex];
             instrumentBoundingBox.position += instrument->systemPositionData[systemIndex];
             instrumentBoundingBox.size.x = 1050.0f;
@@ -1707,7 +1707,7 @@ void Song::RenderBoundingBoxes(RenderData& renderData, const std::vector<Vec2<fl
                     int start = system->beginningMeasureIndex;
                     int end = system->endingMeasureIndex;
 
-                    BoundingBox bb = staff->GetTotalBoundingBox(displayConstants, systemIndex);
+                    BoundingBox bb = staff->GetTotalBoundingBox(settings.displayConstants, systemIndex);
                     bb.position += systemPositions[systemIndex];
                     bb.position += instrument->systemPositionData[systemIndex];
                     bb.position += staff->systemPositionData[systemIndex];
@@ -2012,7 +2012,7 @@ std::vector<Vec2<float>> Song::GetSystemPositions() const
 
         if (DoesMeasureStartNewPage(measureIndex)) // if it is the first system on the page
         {
-            systemPosition.y = displayConstants.topMargin + system->layout.topSystemDistance;
+            systemPosition.y = settings.displayConstants.topMargin + system->layout.topSystemDistance;
         }
         else
         {
@@ -2021,7 +2021,7 @@ std::vector<Vec2<float>> Song::GetSystemPositions() const
             systemPosition.y = previousSystemPositionY + lastInstrumentPositionY + system->layout.systemDistance + instruments[lastInstrumentIndex]->GetMiddleHeight(10.0f, 13.33f, measureIndex, measureIndex + 1);
         }
 
-        systemPosition.x = displayConstants.leftMargin + system->layout.systemLeftMargin;
+        systemPosition.x = settings.displayConstants.leftMargin + system->layout.systemLeftMargin;
 
         systemPositions.push_back(systemPosition);
 
@@ -2046,7 +2046,7 @@ std::shared_ptr<Measure> Song::GetMeasureAtPoint(Vec2<float> point, const std::v
                 int start = system->beginningMeasureIndex;
                 int end = system->endingMeasureIndex;
 
-                BoundingBox bb = staff->GetTotalBoundingBox(displayConstants, systemIndex);
+                BoundingBox bb = staff->GetTotalBoundingBox(settings.displayConstants, systemIndex);
                 bb.position += systemPositions[systemIndex];
                 bb.position += instrument->systemPositionData[systemIndex];
                 bb.position += staff->systemPositionData[systemIndex];

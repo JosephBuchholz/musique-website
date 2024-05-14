@@ -160,6 +160,12 @@ void OnCanvasResize(float width, float height)
     app.Rerender();
 }
 
+void OnUpdatePageSize(int pageSizeStr, float pageWidthMM, float pageHeightMM, float pageWidthTenths, float pageHeightTenths)
+{
+    App& app = App::GetInstance();
+    app.OnUpdatePageSize("a4", { pageWidthMM, pageHeightMM }, { pageWidthTenths, pageHeightTenths });
+}
+
 void AddAudioCallbacksToCpp(int writeMidiFP)
 {
     MidiCallbacks& midiCallbacks = MidiCallbacks::GetInstance();
@@ -209,5 +215,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("onPropertiesUpdated", &OnPropertiesUpdated);
     emscripten::function("onNewElement", &OnNewElement);
     emscripten::function("onCanvasResize", &OnCanvasResize);
+    emscripten::function("onUpdatePageSize", &OnUpdatePageSize);
     emscripten::function("loadSong", &LoadSong);
 }

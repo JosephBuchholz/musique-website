@@ -2130,6 +2130,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
 
             int measureNumber = XMLHelper::GetNumberAttribute(measure, "number", 0, true);
             float measureWidth = XMLHelper::GetFloatAttribute(measure, "width", 1.0f);
+            bool isPickupMeasure = XMLHelper::GetBoolAttribute(measure, "isPickup", false);
             //LOGW("number: %d, measureWidth: %f", measureNumber, measureWidth);
 
             bool implicitMeasure = XMLHelper::GetBoolAttribute(measure, "implicit", false);
@@ -2139,6 +2140,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
 
             std::vector<std::shared_ptr<CSMeasure>> currentMeasures;
             song->systemMeasures.push_back(std::make_shared<SystemMeasure>());
+            song->systemMeasures.back()->isPickupMeasure = isPickupMeasure;
 
             // adding staves
             if (firstMeasure)

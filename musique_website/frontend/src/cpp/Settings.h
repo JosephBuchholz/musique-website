@@ -29,7 +29,7 @@ public:
     ChordSymbolStyle chordSymbolStyle = ChordSymbolStyle::Auto;
     ShowChordDiagram showChordDiagram = ShowChordDiagram::Auto;
 
-    MusicDisplayConstants displayCosntants;
+    MusicDisplayConstants displayConstants;
 };
 
 #endif // MUSIQUE_SETTINGS_H

@@ -72,6 +72,8 @@ public:
 
     void Rerender();
 
+    void OnUpdatePageSize(const std::string& sizeType, Vec2<float> pageSizeMM, Vec2<float> pageSizeTenths);
+
     // TODO: move back to private
     std::shared_ptr<Editor> editor;
 private:

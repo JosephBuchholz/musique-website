@@ -505,3 +505,17 @@ void App::Rerender()
     //musicRenderer->Render(song, song->settings);
     musicRenderer->RenderWithRenderData();
 }
+
+void App::OnUpdatePageSize(const std::string& sizeType, Vec2<float> pageSizeMM, Vec2<float> pageSizeTenths)
+{
+    song->settings.displayConstants.pageWidth = pageSizeTenths.x;
+    song->settings.displayConstants.pageHeight = pageSizeTenths.y;
+
+    song->OnUpdate();
+    song->CalculateSystems();
+    song->CalculateSystemPositionsAndPageBreaks();
+
+    musicRenderer->updateRenderData = true;
+    musicRenderer->layoutCalculated = false;
+    musicRenderer->Render(song, song->settings);
+}

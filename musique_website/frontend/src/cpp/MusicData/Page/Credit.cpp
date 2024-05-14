@@ -16,6 +16,7 @@ void Credit::Render(RenderData& renderData, Vec2<float> pagePosition, Vec2<float
             paint.isBold = true;
 
         paint.textSize = words.fontSize.size;
+        paint.color = selectedColor;
 
         if (words.justify == Justify::Center)
             paint.align = Paint::Align::Center;

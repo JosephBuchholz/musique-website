@@ -7,6 +7,22 @@ import * as Renderer from "../rendering/canvas_renderer.js";
 import { jsPDF } from "jspdf";
 import PDFRenderer from "../rendering/pdf_renderer.js";
 
+function getASeriesPageWidthMM(size) {
+    return ((1 / Math.pow(2, 1 / 4)) * 1000.0) / Math.pow(2, size / 2);
+}
+
+function getASeriesPageHeightMM(size) {
+    return getASeriesPageWidthMM(size) * Math.sqrt(2);
+}
+
+function getBSeriesPageWidthMM(size) {
+    return getASeriesPageWidthMM(size) * Math.pow(2, 1 / 4);
+}
+
+function getBSeriesPageHeightMM(size) {
+    return getASeriesPageHeightMM(size) * Math.pow(2, 1 / 4);
+}
+
 function writeMidi(bytes, size) {
     var byteArray = new Uint8Array(size);
 
@@ -89,6 +105,36 @@ function createModule() {
     });
 }
 
+var scalingMM = 6.35;
+var scalingTenths = 40;
+
+function MMToTenths(value) {
+    return (scalingTenths / scalingMM) * value;
+}
+
+function TenthsToMM(value) {
+    return (scalingMM / scalingTenths) * value;
+}
+
+var pageSize = "a4";
+
+var pageWidthMM = 210;
+var pageHeightMM = 297;
+
+var pageWidthTenths = MMToTenths(pageWidthMM);
+var pageHeightTenths = MMToTenths(pageHeightMM);
+
+var pageWidthModalProps = pageWidthMM;
+var pageHeightModalProps = pageHeightMM;
+
+function setPageSizeMM(width, height) {
+    pageWidthMM = width;
+    pageHeightMM = height;
+
+    pageWidthTenths = MMToTenths(width);
+    pageHeightTenths = MMToTenths(height);
+}
+
 export default function EditorPage() {
     const canvasRef = useRef(null);
     const pdfCanvasRef = useRef(null);
@@ -97,8 +143,8 @@ export default function EditorPage() {
 
     const [editableProperties, setEditableProperties] = useState("");
 
-    const pageWidthTenths = 1233.87;
-    const pageHeightTenths = 1596.77;
+    //const pageWidthTenths = 1233.87;
+    //const pageHeightTenths = 1596.77;
 
     const pageWidth = pageWidthTenths * Renderer.scale;
     const pageHeight = pageHeightTenths * Renderer.scale;
@@ -302,8 +348,8 @@ export default function EditorPage() {
                 renderer.clear();
             }
 
-            const pdfPageWidth = 210;
-            const pdfPageHeight = 297;
+            const pdfPageWidth = pageWidthMM;
+            const pdfPageHeight = pageHeightMM;
 
             var isFirstPage = true;
 
@@ -313,7 +359,14 @@ export default function EditorPage() {
                 isRenderingPDF = true;
                 isFirstPage = true;
 
-                pdfDocument = new jsPDF("p", "mm", "a4");
+                if (pageSize == "custom") {
+                    pdfDocument = new jsPDF("p", "mm", [
+                        pageWidthMM,
+                        pageHeightMM,
+                    ]);
+                } else {
+                    pdfDocument = new jsPDF("p", "mm", pageSize);
+                }
 
                 renderer = new PDFRenderer(
                     pdfDocument,
@@ -352,7 +405,14 @@ export default function EditorPage() {
                 var posY = (pdfPageHeight - height) / 2;
 
                 if (!isFirstPage) {
-                    pdfDocument.addPage("p", "mm", "a4");
+                    if (pageSize == "custom") {
+                        pdfDocument.addPage("p", "mm", [
+                            pageWidthMM,
+                            pageHeightMM,
+                        ]);
+                    } else {
+                        pdfDocument.addPage("p", "mm", pageSize);
+                    }
                 } else {
                     // a page was already added when document was created
                     isFirstPage = false;
@@ -518,6 +578,112 @@ export default function EditorPage() {
         };
     });
 
+    const [showPagePropsModal, setShowPagePropsModal] = useState(false);
+    const [pageSizePagePropsModel, setPageSizePagePropsModel] = useState("a4");
+    const [pageWidthCustom, setPageWidthCustom] = useState(1.0);
+    const [pageHeightCustom, setPageHeightCustom] = useState(1.0);
+
+    function setPageSizeInchesProps(width, height) {
+        pageWidthModalProps = Math.round(inchesToMM(width));
+        pageHeightModalProps = Math.round(inchesToMM(height));
+    }
+
+    function setPageSizeASeriesProps(size) {
+        pageWidthModalProps = Math.round(getASeriesPageWidthMM(size));
+        pageHeightModalProps = Math.round(getASeriesPageHeightMM(size));
+    }
+
+    function setPageSizeBSeriesProps(size) {
+        pageWidthModalProps = Math.round(getBSeriesPageWidthMM(size));
+        pageHeightModalProps = Math.round(getBSeriesPageHeightMM(size));
+    }
+
+    function inchesToMM(value) {
+        return value * 25.4;
+    }
+
+    if (pageSizePagePropsModel == "a2") {
+        setPageSizeASeriesProps(2);
+    } else if (pageSizePagePropsModel == "a3") {
+        setPageSizeASeriesProps(3);
+    } else if (pageSizePagePropsModel == "a4") {
+        setPageSizeASeriesProps(4);
+    } else if (pageSizePagePropsModel == "a5") {
+        setPageSizeASeriesProps(5);
+    } else if (pageSizePagePropsModel == "b4") {
+        setPageSizeBSeriesProps(4);
+    } else if (pageSizePagePropsModel == "b5") {
+        setPageSizeBSeriesProps(5);
+    } else if (pageSizePagePropsModel == "letter") {
+        setPageSizeInchesProps(8.5, 11);
+    } else if (pageSizePagePropsModel == "legal") {
+        setPageSizeInchesProps(8.5, 14);
+    } else if (pageSizePagePropsModel == "tabloid") {
+        setPageSizeInchesProps(11, 17);
+    } else if (pageSizePagePropsModel == "ledger") {
+        setPageSizeInchesProps(17, 11);
+    }
+
+    var currentModal = null;
+    if (showPagePropsModal) {
+        currentModal = (
+            <PagePropertiesModal
+                setShowModal={(s) => {
+                    if (!s) {
+                        pageWidthModalProps = pageWidthMM;
+                        pageHeightModalProps = pageHeightMM;
+                        if (pageSizePagePropsModel == "custom") {
+                            setPageWidthCustom(pageWidthMM);
+                            setPageHeightCustom(pageHeightMM);
+                        }
+                        setPageSizePagePropsModel(pageSize);
+                    }
+
+                    setShowPagePropsModal(s);
+                }}
+                onChnage={(value, width, height) => {
+                    setPageWidthCustom(width);
+                    setPageHeightCustom(height);
+                    setPageSizePagePropsModel(value);
+                }}
+                onApply={() => {
+                    pageSize = pageSizePagePropsModel;
+                    if (pageSize == "custom") {
+                        setPageSizeMM(pageWidthCustom, pageHeightCustom);
+                    } else {
+                        setPageSizeMM(
+                            pageWidthModalProps,
+                            pageHeightModalProps
+                        );
+                    }
+
+                    setShowPagePropsModal(false);
+
+                    if (moduleIsCreated) {
+                        module.onUpdatePageSize(
+                            module.stringToNewUTF8(pageSize),
+                            parseFloat(pageWidthMM),
+                            parseFloat(pageHeightMM),
+                            parseFloat(pageWidthTenths),
+                            parseFloat(pageHeightTenths)
+                        );
+                    }
+                }}
+                currentPageSizeValue={pageSizePagePropsModel}
+                currentPageWidth={
+                    pageSizePagePropsModel == "custom"
+                        ? pageWidthCustom
+                        : pageWidthModalProps
+                }
+                currentPageHeight={
+                    pageSizePagePropsModel == "custom"
+                        ? pageHeightCustom
+                        : pageHeightModalProps
+                }
+            ></PagePropertiesModal>
+        );
+    }
+
     return (
         <>
             <div className="flex flex-col h-screen">
@@ -543,7 +709,11 @@ export default function EditorPage() {
                     ></canvas>
                 </div>
 
-                <ComponentsSidebar />
+                <ComponentsSidebar
+                    onPagePropsButtonClicked={() => {
+                        setShowPagePropsModal(true);
+                    }}
+                />
 
                 <ButtonTray />
 
@@ -560,8 +730,104 @@ export default function EditorPage() {
                         }
                     }}
                 />
+
+                {currentModal}
             </div>
         </>
+    );
+}
+
+function PagePropertiesModal({
+    setShowModal,
+    onChnage = (value, width, height) => {},
+    onApply = () => {},
+    currentPageSizeValue = "a4",
+    currentPageWidth = 0.0,
+    currentPageHeight = 0.0,
+}) {
+    var customizeSizeDisabled = !(currentPageSizeValue == "custom");
+
+    return (
+        <Modal
+            onClickOutside={() => {
+                setShowModal(false);
+            }}
+        >
+            <div className="flex justify-end">
+                <TextButton
+                    onClick={() => {
+                        setShowModal(false);
+                    }}
+                >
+                    X
+                </TextButton>
+            </div>
+
+            <div>
+                <label for="pageSize">Page Size: </label>
+                <select
+                    name="pageSize"
+                    id="pageSize"
+                    onChange={(e) => {
+                        console.log(e.target.value);
+                        var width = currentPageWidth;
+                        var height = currentPageHeight;
+
+                        onChnage(e.target.value, width, height);
+                    }}
+                    value={currentPageSizeValue}
+                >
+                    <option value="a2">A2</option>
+                    <option value="a3">A3</option>
+                    <option value="a4">A4</option>
+                    <option value="a5">A5</option>
+                    <option value="b4">B4</option>
+                    <option value="b5">B5</option>
+                    <option value="letter">Letter</option>
+                    <option value="legal">Legal</option>
+                    <option value="tabloid">Tabloid</option>
+                    <option value="ledger">Ledger</option>
+                    <option value="custom">Custom</option>
+                </select>
+
+                <NumberField
+                    label="Width (mm)"
+                    value={currentPageWidth}
+                    disabled={customizeSizeDisabled}
+                    onChange={(e) => {
+                        onChnage(
+                            currentPageSizeValue,
+                            e.target.value,
+                            currentPageHeight
+                        );
+                    }}
+                ></NumberField>
+                <NumberField
+                    label="Height (mm)"
+                    value={currentPageHeight}
+                    disabled={customizeSizeDisabled}
+                    onChange={(e, k1, k2) => {
+                        onChnage(
+                            currentPageSizeValue,
+                            currentPageWidth,
+                            e.target.value
+                        );
+                    }}
+                ></NumberField>
+            </div>
+
+            <div className="flex justify-end">
+                <TextButton onClick={onApply}>Apply</TextButton>
+
+                <TextButton
+                    onClick={() => {
+                        setShowModal(false);
+                    }}
+                >
+                    Cancel
+                </TextButton>
+            </div>
+        </Modal>
     );
 }
 
@@ -655,7 +921,7 @@ function ButtonTray() {
     );
 }
 
-function ComponentsSidebar() {
+function ComponentsSidebar({ onPagePropsButtonClicked }) {
     return (
         <>
             <div className="fixed top-0 left-0 w-1/4 h-full pt-16">
@@ -722,10 +988,35 @@ function ComponentsSidebar() {
                         >
                             Add Rehearsal/Section Marking
                         </TextButton>
+
+                        <TextButton onClick={onPagePropsButtonClicked}>
+                            Page Properties
+                        </TextButton>
                     </ul>
                 </div>
             </div>
         </>
+    );
+}
+
+function Modal({ children, onClickOutside }) {
+    const outsideDivRef = useRef(null);
+
+    return (
+        <div
+            ref={outsideDivRef}
+            className="fixed top-0 left-0 z-50 w-full h-full flex justify-center items-center bg-black bg-opacity-35"
+            onClick={(e) => {
+                // test for clicking of just this div (not its children)
+                if (e.target == e.currentTarget) {
+                    onClickOutside();
+                }
+            }}
+        >
+            <div className="bg-white rounded-md shadow-lg max-w-[80%] max-h-[80%] overflow-auto p-4">
+                {children}
+            </div>
+        </div>
     );
 }
 
@@ -828,7 +1119,7 @@ function Sidebar({ properties, onPropertiesChange }) {
     return (
         <>
             <div className="fixed top-0 right-0 w-1/4 h-full pt-16">
-                <div className="border-l-2 bg-slate-50 w-full h-full">
+                <div className="border-l-2 bg-slate-50 w-full h-full overflow-auto">
                     <ul className="m-2 space-y-2">
                         <SidebarHeading>Properties</SidebarHeading>
 
@@ -882,6 +1173,7 @@ function NumberField({
     k2 = "",
     onChange = () => {},
     className = "",
+    disabled = false,
 }) {
     className +=
         " h-7 rounded-sm border-2 hover:border-blue-200 active:border-blue-500";
@@ -896,6 +1188,7 @@ function NumberField({
                     onChange(e, k1, k2);
                 }}
                 type="number"
+                disabled={disabled}
             />
         </label>
     );

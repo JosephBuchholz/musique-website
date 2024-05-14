@@ -19,7 +19,7 @@ public:
     void Init(const Settings& settings);
     void Delete() override;
 
-    void Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition) const;
+    void Render(RenderData& renderData, const Settings& settings, const std::shared_ptr<SystemMeasure>& systemMeasure, Vec2<float> parentPosition) const;
 
     BoundingBox GetTotalBoundingBox(const MusicDisplayConstants& displayConstants) const;
 

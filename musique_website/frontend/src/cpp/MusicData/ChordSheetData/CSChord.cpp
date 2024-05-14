@@ -9,11 +9,20 @@ void CSChord::Render(RenderData& renderData, const Settings& settings, Vec2<floa
 void CSChord::Init(Vec2<float> pos)
 {
     position = pos;
+
+    chordSymbol.justify = Justify::Left;
+}
+
+BoundingBox CSChord::GetBoundingBox() const
+{
+    BoundingBox bb = chordSymbol.GetBoundingBoxRelativeToParent();
+    bb.position += position;
+    return bb;
 }
 
 Vec2<float> CSChord::GetDimensions() const
 {
-    return chordSymbol.GetBoundingBoxRelativeToParent().size;
+    return GetBoundingBox().size;
 }
 
 void CSChord::Delete()

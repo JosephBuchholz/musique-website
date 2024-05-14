@@ -4,8 +4,13 @@
 
 void TextElement::Render(RenderData& renderData, Vec2<float> parentPosition, Paint parentPaint) const
 {
+    uint32_t originalColor = parentPaint.color;
     TextualElement::ModifyPaint(parentPaint);
-    //parentPaint.color = color;
+
+    if (originalColor == 0x000000FF)
+        parentPaint.color = color;
+    else
+        parentPaint.color = originalColor;
 
     renderData.AddText(Text(text, position.x + parentPosition.x, position.y + parentPosition.y, parentPaint));
 }

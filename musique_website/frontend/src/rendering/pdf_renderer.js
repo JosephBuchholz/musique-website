@@ -65,8 +65,6 @@ export default class PDFRenderer extends Renderer {
     }
 
     setFont(paint) {
-        //console.log(this.pdfDocument.getFontList());
-
         var font = "Times";
         if (paint.useMusicFont) font = "bravura";
 
@@ -83,6 +81,18 @@ export default class PDFRenderer extends Renderer {
 
     drawLine(startX, startY, endX, endY, paint) {
         this.usePaint(paint);
+
+        /*console.log({
+            width: this.width,
+            height: this.height,
+            pdfWidth: this.pdfPageWidth,
+            pdfHeight: this.pdfPageHeight,
+            offsetY: this.offsetY,
+            pageWidth: this.pageWidth,
+            pageHeight: this.pageHeight,
+            scale: this.scale,
+            canvasScale: this.canvasScale,
+        });*/
 
         if (paint.verticalEnds) {
             var width = paint.strokeWidth;
@@ -144,9 +154,6 @@ export default class PDFRenderer extends Renderer {
     }
 
     drawUTF16Text(text, posX, posY, paint) {
-        //paint.useMusicFont = true;
-        console.log("hellloooooo");
-        console.log("JS: text: " + text);
         this.drawText(text, posX, posY, paint);
     }
 

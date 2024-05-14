@@ -206,12 +206,14 @@ XMLElement* ExportTextDirection(XMLDocument& doc, const std::shared_ptr<TextDire
     return directionElement;
 }
 
-XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
+XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<SystemMeasure>& systemMeasure, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
 {
     XMLElement* measureElement = doc.NewElement("measure");
 
     //measureElement->SetAttribute("number", measure->number);
     measureElement->SetAttribute("width", measure->width);
+    if (systemMeasure->isPickupMeasure)
+        measureElement->SetAttribute("isPickup", HarmonyXMLExportHelper::FromBoolToYesNo(systemMeasure->isPickupMeasure));
 
     if (measure->isFirstMeasureOfSystem || startsNewSystem)
     {
@@ -399,7 +401,7 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
                     if (startsNewSystem)
                         systemIndex++;
 
-                    XMLElement* m = ExportMeasure(doc, measure, i, song->systems[systemIndex], startsNewSystem);
+                    XMLElement* m = ExportMeasure(doc, measure, i, song->systemMeasures[i], song->systems[systemIndex], startsNewSystem);
                     part->InsertEndChild(m);
                     i++;
                 }
