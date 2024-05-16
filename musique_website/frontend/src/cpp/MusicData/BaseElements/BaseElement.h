@@ -10,7 +10,7 @@ class BaseElement {
 
 public:
     enum class ElementType {
-        None = 0, CSLyric, CSChord, CSMeasure, CSStaff, Credit, TextDirection
+        None = 0, CSLyric, CSChord, CSMeasure, CSStaff, Credit, TextDirection, TimeSignature, KeySignature, Clef
     };
 
 public:

@@ -206,7 +206,17 @@ XMLElement* ExportTextDirection(XMLDocument& doc, const std::shared_ptr<TextDire
     return directionElement;
 }
 
-XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, int index, const std::shared_ptr<SystemMeasure>& systemMeasure, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
+XMLElement* ExportTimeSignature(XMLDocument& doc, const std::shared_ptr<TimeSignature>& timeSignature)
+{
+    XMLElement* timeElement = doc.NewElement("time");
+
+    timeElement->InsertEndChild(NewTextElement(doc, "beats", ToString(timeSignature->notes)));
+    timeElement->InsertEndChild(NewTextElement(doc, "beat-type", ToString(timeSignature->noteType)));
+
+    return timeElement;
+}
+
+XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, const std::shared_ptr<CSMeasure>& previousMeasure, int index, const std::shared_ptr<SystemMeasure>& systemMeasure, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
 {
     XMLElement* measureElement = doc.NewElement("measure");
 
@@ -234,11 +244,36 @@ XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& me
         measureElement->InsertEndChild(printElement);
     }
 
+    XMLElement* attributesElement = nullptr;
+
+    if (measure->timeSignature)
+    {
+        if (index == 0)
+        {
+            if (!attributesElement)
+                attributesElement = doc.NewElement("attributes");
+
+            attributesElement->InsertEndChild(ExportTimeSignature(doc, measure->timeSignature));
+        }
+        else if (previousMeasure->timeSignature != measure->timeSignature)
+        {
+            if (!attributesElement)
+                attributesElement = doc.NewElement("attributes");
+            
+            attributesElement->InsertEndChild(ExportTimeSignature(doc, measure->timeSignature));
+        }
+    }
+
     if (index == 0)
     {
-        XMLElement* attributesElement = doc.NewElement("attributes");
-        attributesElement->InsertEndChild(NewTextElement(doc, "divisions", ToString(16)));
+        if (!attributesElement)
+            attributesElement = doc.NewElement("attributes");
 
+        attributesElement->InsertEndChild(NewTextElement(doc, "divisions", ToString(16)));
+    }
+
+    if (attributesElement)
+    {
         measureElement->InsertEndChild(attributesElement);
     }
 
@@ -316,6 +351,17 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
 
     root->InsertFirstChild(work);
 
+    // defaults
+    XMLElement* defaultsElement = doc.NewElement("defaults");
+    XMLElement* pageLayoutElement = doc.NewElement("page-layout");
+
+    pageLayoutElement->InsertEndChild(NewTextElement(doc, "page-height", ToString(song->settings.displayConstants.pageHeight)));
+    pageLayoutElement->InsertEndChild(NewTextElement(doc, "page-width", ToString(song->settings.displayConstants.pageWidth)));
+
+    defaultsElement->InsertEndChild(pageLayoutElement);
+
+    root->InsertEndChild(defaultsElement);
+
     // credits
     for (auto credit : song->credits)
     {
@@ -387,6 +433,7 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
             {
                 int systemIndex = -1;
                 int i = 0;
+                std::shared_ptr<CSMeasure> previousMeasure = nullptr;
                 for (const auto& measure : staff->csStaff->measures)
                 {
                     if (measure->isFirstMeasureOfSystem)
@@ -401,9 +448,10 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
                     if (startsNewSystem)
                         systemIndex++;
 
-                    XMLElement* m = ExportMeasure(doc, measure, i, song->systemMeasures[i], song->systems[systemIndex], startsNewSystem);
+                    XMLElement* m = ExportMeasure(doc, measure, previousMeasure, i, song->systemMeasures[i], song->systems[systemIndex], startsNewSystem);
                     part->InsertEndChild(m);
                     i++;
+                    previousMeasure = measure;
                 }
             }
         }

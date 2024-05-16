@@ -17,6 +17,9 @@ class TimeSignature : public VisibleElement
     friend class Measure;
 
 public:
+    
+    TimeSignature()
+        : BaseElement(BaseElement::ElementType::TimeSignature) {}
 
     /**
      * Renders this class.
@@ -31,6 +34,17 @@ public:
      * @param[in] offsetY The offset in the y direction.
      */
     void Render(RenderData& renderData, bool showTimeSignature, float positionX, float measurePositionY, float lineSpacing, int lines, float offsetX = 0.0f, float offsetY = 0.0f) const;
+
+    /**
+     * Renders this class.
+     *
+     * @param[out] renderData The `RenderData` object to render to.
+     * @param[in] parentPosition The position of the time signature's parent (position of time signature originates from the left for x and the center for y).
+     * @param[in] height The height of the time signature (width will be scaled accordingly).
+     */
+    void Render(RenderData& renderData, Vec2<float> parentPosition, float height) const;
+
+    float GetWidth(float height) const;
 
     static SMuFLID GetTimeSignatureSMuFLID(int time);
 

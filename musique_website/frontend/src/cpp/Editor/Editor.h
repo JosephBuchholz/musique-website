@@ -5,6 +5,7 @@
 #include "../MusicData/Song.h"
 #include "../Events/InputEvent.h"
 #include "../Rendering/MusicRenderer.h"
+#include "../MusicData/Measures/TimeSignature.h"
 
 class Editor
 {
@@ -24,6 +25,8 @@ private:
     void UpdateMeasureProperties(std::shared_ptr<CSMeasure> measure);
     void UpdateCreditProperties(std::shared_ptr<Credit> credit);
     void UpdateTextDirectionProperties(std::shared_ptr<TextDirection> direction);
+    void UpdateTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSignature);
+    void SetTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSignature, const std::string& propertiesString);
     void UpdateDisplayConstantsProperties();
 
     void SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected);

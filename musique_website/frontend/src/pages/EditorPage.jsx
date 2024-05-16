@@ -748,18 +748,14 @@ function PagePropertiesModal({
     var customizeSizeDisabled = !(currentPageSizeValue == "custom");
 
     return (
-        <Modal
-            onClickOutside={() => {
-                setShowModal(false);
-            }}
-        >
+        <Modal>
             <div className="flex justify-end">
                 <TextButton
                     onClick={() => {
                         setShowModal(false);
                     }}
                 >
-                    X
+                    <img src="/static/icons/x_icon.svg" alt="close" />
                 </TextButton>
             </div>
 
@@ -915,7 +911,10 @@ function ButtonTray() {
                     }
                 }}
             >
-                Export Song
+                <img
+                    src="/static/icons/download_icon.svg"
+                    alt="download song"
+                />
             </TrayButton>
         </div>
     );
@@ -989,6 +988,16 @@ function ComponentsSidebar({ onPagePropsButtonClicked }) {
                             Add Rehearsal/Section Marking
                         </TextButton>
 
+                        <TextButton
+                            onClick={() => {
+                                if (moduleIsCreated) {
+                                    module.onNewElement(6);
+                                }
+                            }}
+                        >
+                            Add Time Signature
+                        </TextButton>
+
                         <TextButton onClick={onPagePropsButtonClicked}>
                             Page Properties
                         </TextButton>
@@ -999,7 +1008,7 @@ function ComponentsSidebar({ onPagePropsButtonClicked }) {
     );
 }
 
-function Modal({ children, onClickOutside }) {
+function Modal({ children, onClickOutside = () => {} }) {
     const outsideDivRef = useRef(null);
 
     return (

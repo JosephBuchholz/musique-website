@@ -8,6 +8,7 @@
 #include "LyricPickup.h"
 #include "../Directions/Direction.h"
 #include "../Directions/TextDirection.h"
+#include "../Measures/TimeSignature.h"
 
 class CSMeasure : public VisibleElement
 {
@@ -40,6 +41,8 @@ public:
 
     int divisions = 0;
 
+    float duration = 0.0f;
+
     std::vector<std::shared_ptr<CSChord>> chords;
     std::vector<std::shared_ptr<CSLyric>> lyrics;
 
@@ -47,6 +50,9 @@ public:
 
     std::shared_ptr<LyricPickup> lyricPickup;
     
+    std::shared_ptr<TimeSignature> timeSignature;
+    bool showTimeSignature = false;
+
     //std::vector<Direction> directions;
     std::vector<std::shared_ptr<TextDirection>> textDirections;
 };

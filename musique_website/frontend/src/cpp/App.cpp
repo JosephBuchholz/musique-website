@@ -107,7 +107,7 @@ void App::LoadSongFromString(const std::string& extension, const std::string& st
 
         if (song)
         {
-            song->settings = settings;
+            //song->settings = settings;
             UpdateSongData(song->songData);
         }
 
@@ -129,7 +129,7 @@ void App::LoadSongFromString(const std::string& extension, const std::string& st
 
         if (song)
         {
-            song->settings = settings;
+            //song->settings = settings;
             UpdateSongData(song->songData);
         }
 

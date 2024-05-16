@@ -61,6 +61,13 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
             ParseWorkElement(workElement, song->songData.songTitle, song->songData.workNumber);
         }
 
+        // defaults
+        XMLElement* defaultsElement = root->FirstChildElement("defaults");
+        if (defaultsElement)
+        {
+            displayConstants = ParseDefaultsElement(defaultsElement);
+        }
+
         // credits
         XMLNode* previousCreditNode = root->FirstChildElement("credit");
         while (true)
@@ -218,7 +225,7 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
     instrumentInfo.visible = true;
     song->songData.instrumentInfos.push_back(instrumentInfo);
 
-    song->displayConstants = displayConstants;
+    song->settings.displayConstants = displayConstants;
 
     // TODO: fix dangerous line of code
     song->systems[song->systems.size() - 1]->endingMeasureIndex = song->instruments[0]->staves[0]->csStaff->measures.size() - 1;
@@ -1557,8 +1564,8 @@ MusicDisplayConstants HarmonyXMLParser::ParseDefaultsElement(XMLElement* default
         XMLElement* pageLayoutElement = defaultsElement->FirstChildElement("page-layout");
         if (pageLayoutElement)
         {
-            displayConstants.pageWidth = XMLHelper::GetFloatValue("page-width", pageLayoutElement, displayConstants.pageWidth, true); // required
             displayConstants.pageHeight = XMLHelper::GetFloatValue("page-height", pageLayoutElement, displayConstants.pageHeight, true); // required
+            displayConstants.pageWidth = XMLHelper::GetFloatValue("page-width", pageLayoutElement, displayConstants.pageWidth, true); // required
 
             XMLElement* pageLayoutMarginsElement = pageLayoutElement->FirstChildElement("page-margins");
             if (pageLayoutMarginsElement)
@@ -2351,28 +2358,36 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                             i++;
                         }
                     }
-                }
+                }*/
 
                 // time signature
                 XMLElement* timeSignatureElement = attributes->FirstChildElement("time");
                 if (timeSignatureElement)
                 {
-                    TimeSignature timeSignature = TimeSignature();
+                    std::shared_ptr<TimeSignature> timeSignature = std::make_shared<TimeSignature>();
                     // print object
-                    timeSignature.printObject = XMLHelper::GetBoolAttribute(timeSignatureElement, "print-object", true);
+                    timeSignature->printObject = XMLHelper::GetBoolAttribute(timeSignatureElement, "print-object", true);
 
                     const char* symbol = timeSignatureElement->Attribute("symbol");
                     if (symbol)
-                        timeSignature.displayType = TimeSignature::GetDisplayTypeFromString(symbol);
+                        timeSignature->displayType = TimeSignature::GetDisplayTypeFromString(symbol);
 
                     XMLElement* beats = timeSignatureElement->FirstChildElement("beats");
                     if (beats)
-                        timeSignature.notes = ToInt(beats->GetText());
+                        timeSignature->notes = ToInt(beats->GetText());
                     XMLElement* beatType = timeSignatureElement->FirstChildElement("beat-type");
                     if (beatType)
-                        timeSignature.noteType = ToInt(beatType->GetText());
-
-                    for (const auto& m : currentMeasures) { m->timeSignature = timeSignature; m->showTimeSignature = true; m->CalculateDuration(); }
+                        timeSignature->noteType = ToInt(beatType->GetText());
+                    
+                    for (const auto& m : currentMeasures)
+                    {
+                        m->timeSignature = timeSignature;
+                        if (!song->systemMeasures.back()->isPickupMeasure)
+                            m->showTimeSignature = true;
+                        else
+                            m->showTimeSignature = false;
+                        m->duration = timeSignature->notes * (4.0f / timeSignature->noteType);
+                    }
                 }
                 else
                 {
@@ -2382,13 +2397,17 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                         for (const auto& m : currentMeasures)
                         {
                             m->timeSignature = previousMeasures[i]->timeSignature;
-                            m->CalculateDuration();
+                            if (song->systemMeasures[song->systemMeasures.size() - 2]->isPickupMeasure) // if previous measrue is a pickup measure
+                                m->showTimeSignature = true;
+                            else
+                                m->showTimeSignature = false;
+                            m->duration = m->timeSignature->notes * (4.0f / m->timeSignature->noteType);
                             i++;
                         }
                     }
                 }
 
-                // clef
+                /*// clef
                 XMLNode* previousClefElement = attributes->FirstChildElement("clef");
                 if (previousClefElement)
                 {
@@ -2605,7 +2624,12 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     int i = 0;
                     for (const auto& m : currentMeasures)
                     {
-                        //m->timeSignature = previousMeasures[i]->timeSignature;
+                        m->timeSignature = previousMeasures[i]->timeSignature;
+                        if (song->systemMeasures[song->systemMeasures.size() - 2]->isPickupMeasure) // if previous measrue is a pickup measure
+                            m->showTimeSignature = true;
+                        else
+                            m->showTimeSignature = false;
+                        m->duration = m->timeSignature->notes * (4.0f / m->timeSignature->noteType);
                         //m->CalculateDuration();
                         //m->keySignature = previousMeasures[i]->keySignature;
                         //m->clef = previousMeasures[i]->clef;

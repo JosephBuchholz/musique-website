@@ -1,8 +1,9 @@
 #include "TimeSignature.h"
 
+#include "../../RenderMeasurement.h"
+
 void TimeSignature::Render(RenderData& renderData, bool showTimeSignature, float positionX, float measurePositionY, float lineSpacing, int lines, float offsetX, float offsetY) const
 {
-    // time signature
     if (printObject && showTimeSignature)
     {
         int spaces = lines - 1;
@@ -35,6 +36,67 @@ void TimeSignature::Render(RenderData& renderData, bool showTimeSignature, float
                 LOGW("Time signature display type is not handled");
                 break;
             }
+        }
+    }
+}
+
+void TimeSignature::Render(RenderData& renderData, Vec2<float> parentPosition, float height) const
+{
+    if (printObject)
+    {
+        const float timeDigitHeightDefault = 20.0f;
+
+        Paint paint = Paint(selectedColor.color);
+        paint.glyphSizeFactor = height / (timeDigitHeightDefault * 2.0f);
+
+        switch (displayType)
+        {
+            case TimeSignatureDisplayType::Common:
+            {
+                renderData.AddGlyph(SMuFLGlyph(SMuFLID::timeSigCommon, parentPosition + position, paint));
+                break;
+            }
+            case TimeSignatureDisplayType::Cut:
+            {
+                renderData.AddGlyph(SMuFLGlyph(SMuFLID::timeSigCutCommon, parentPosition + position, paint));
+                break;
+            }
+            case TimeSignatureDisplayType::Standard:
+            {
+                float timeDigitHeight = height / 2.0f;
+
+                renderData.AddGlyph(SMuFLGlyph(GetTimeSignatureSMuFLID(notes), position + Vec2<float>{ parentPosition.x, parentPosition.y - (timeDigitHeight / 2.0f) }, paint));
+                renderData.AddGlyph(SMuFLGlyph(GetTimeSignatureSMuFLID(noteType), position + Vec2<float>{ parentPosition.x, parentPosition.y + (timeDigitHeight / 2.0f) }, paint));
+                break;
+            }
+            default:
+            {
+                LOGW_TAG("TimeSignature", "Time signature display type is not handled");
+                break;
+            }
+        }
+    }
+}
+
+float TimeSignature::GetWidth(float height) const
+{
+    const float timeDigitHeightDefault = 20.0f;
+
+    Paint paint = Paint(color.color);
+    paint.glyphSizeFactor = height / (timeDigitHeightDefault * 2.0f);
+
+    switch (displayType)
+    {
+        case TimeSignatureDisplayType::Standard:
+        {
+            float timeDigitHeight = height / 2.0f;
+            BoundingBox bb = RenderMeasurement::GetGlyphBoundingBox(SMuFLGlyph(GetTimeSignatureSMuFLID(noteType), { 0.0f, 0.0f }, paint));
+            return bb.size.x;
+        }
+        default:
+        {
+            LOGW_TAG("TimeSignature", "Time signature display type is not handled");
+            break;
         }
     }
 }

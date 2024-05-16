@@ -15,6 +15,11 @@ void CSMeasure::Render(RenderData& renderData, const Settings& settings, const s
         renderData.AddLine(Line({ currentPosition.x + width, currentPosition.y }, { currentPosition.x + width, currentPosition.y + settings.displayConstants.measureBarlineHeight }, Paint()));
     }
 
+    if (timeSignature && showTimeSignature)
+    {
+        timeSignature->Render(renderData, { currentPosition.x, currentPosition.y + (settings.displayConstants.measureBarlineHeight / 2.0f) }, settings.displayConstants.measureBarlineHeight);
+    }
+
     for (const auto& chord : chords)
     {
         chord->Render(renderData, settings, currentPosition);
@@ -78,6 +83,12 @@ void CSMeasure::Init(const Settings& settings)
     float lyricSpace = settings.displayConstants.lyricSpaceWidth;
     float minMeasureWidth = settings.displayConstants.minimumMeasureWidth;
     bool displayReminderPickupLyrics = settings.displayConstants.displayReminderPickupLyrics;
+
+    if (showTimeSignature)
+    {
+        timeSignature->position.x = 5.0f;
+        barlineMargin += timeSignature->GetWidth(settings.displayConstants.measureBarlineHeight) + 5.0f;
+    }
 
     boundingBox = BoundingBox();
     boundingBox.size.x = width;
@@ -160,7 +171,7 @@ void CSMeasure::Init(const Settings& settings)
         pickupWidth = 0.0f;
 
     if (previousLyric != nullptr)
-        previousLyric->duration = 4.0f - previousLyric->beatPosition;
+        previousLyric->duration = duration - previousLyric->beatPosition;
 
     float defaultWidth = width;
     Vec2<float> previousPosition = { barlineMargin, chordPosY };
