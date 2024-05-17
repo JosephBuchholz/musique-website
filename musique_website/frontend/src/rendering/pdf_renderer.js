@@ -1,6 +1,11 @@
 import Renderer from "./renderer";
 import { open_sansNormal } from "./open_sans-normal";
-import { bravuraNormal } from "./bravura-normal";
+/*import { bravuraNormal } from "./bravura-normal";
+import { bravuraNormalTTF } from "./bravura-normal-ttf";
+import { bravuraNormalTTF2 } from "./bravura_convertio-normal";
+import { bravuraNormalTTF3 } from "./bravura3-normal";*/
+import { leipizigNormal } from "./Leipzig-normal";
+//import { bravuraNormalOTF } from "./bravura-normal-otf";
 
 export default class PDFRenderer extends Renderer {
     constructor(
@@ -36,8 +41,11 @@ export default class PDFRenderer extends Renderer {
         this.pdfDocument.addFileToVFS("open_sans-normal.ttf", open_sansNormal);
         this.pdfDocument.addFont("open_sans-normal.ttf", "open_sans", "normal");
 
-        this.pdfDocument.addFileToVFS("bravura-normal.ttf", bravuraNormal);
-        this.pdfDocument.addFont("bravura-normal.ttf", "bravura", "normal");
+        //this.pdfDocument.addFileToVFS("bravura-normal.ttf", leipizig);
+        //this.pdfDocument.addFont("bravura-normal.ttf", "bravura", "normal");
+
+        this.pdfDocument.addFileToVFS("leipizig-normal.ttf", leipizigNormal);
+        this.pdfDocument.addFont("leipizig-normal.ttf", "leipizig", "normal");
     }
 
     usePaint(paint) {
@@ -59,6 +67,8 @@ export default class PDFRenderer extends Renderer {
             }
         } else if ((font = "bravura")) {
             return "normal";
+        } else if ((font = "leipizig")) {
+            return "normal";
         }
 
         return "normal";
@@ -66,7 +76,7 @@ export default class PDFRenderer extends Renderer {
 
     setFont(paint) {
         var font = "Times";
-        if (paint.useMusicFont) font = "bravura";
+        if (paint.useMusicFont) font = "leipizig";
 
         // sets font and font style
         this.pdfDocument.setFont(
@@ -158,7 +168,7 @@ export default class PDFRenderer extends Renderer {
     }
 
     drawGlyph(codePoint, posX, posY, paint) {
-        this.pdfDocument.setFont("bravura", "normal");
+        this.pdfDocument.setFont("leipizig", "normal");
 
         this.pdfDocument.setFontSize(
             paint.glyphSizeFactor * 40.0 * this.scale * 2.83465

@@ -176,6 +176,50 @@ XMLElement* ExportChord(XMLDocument& doc, const std::shared_ptr<CSChord>& chord)
 
     kindElement->SetText(harmonyTypeString.c_str());
     chordElement->InsertEndChild(kindElement);
+
+    XMLElement* typeElement = doc.NewElement("type");
+
+    std::string typeString = "quarter";
+    switch (chord->noteHead->noteDuration)
+    {
+        case NoteValue::Maxima: typeString = "maxima"; break;
+        case NoteValue::Long: typeString = "long"; break;
+        case NoteValue::Breve: typeString = "breve"; break;
+        case NoteValue::Whole: typeString = "whole"; break;
+        case NoteValue::Half: typeString = "half"; break;
+        case NoteValue::Quarter: typeString = "quarter"; break;
+        case NoteValue::Eighth: typeString = "eighth"; break;
+        case NoteValue::Sixteenth: typeString = "16th"; break;
+        case NoteValue::ThirtySecond: typeString = "32nd"; break;
+        default: typeString = "none"; break;
+    }
+
+    typeElement->SetText(typeString.c_str());
+    chordElement->InsertEndChild(typeElement);
+
+    if (chord->noteStem)
+    {
+        XMLElement* noteStemElement = doc.NewElement("stem");
+
+        std::string stemType = "";
+        switch (chord->noteStem->stemType)
+        {
+            case NoteStem::StemType::Down: stemType = "down"; break;
+            case NoteStem::StemType::Up: stemType = "up"; break;
+            case NoteStem::StemType::Double: stemType = "double"; break;
+            case NoteStem::StemType::None:
+            default: stemType = "none"; break;
+        }
+
+        noteStemElement->SetText(stemType.c_str());
+        chordElement->InsertEndChild(noteStemElement);
+    }
+
+    if (chord->augDot)
+    {
+        XMLElement* dotElement = doc.NewElement("dot");
+        chordElement->InsertEndChild(dotElement);
+    }
     
     return chordElement;
 }

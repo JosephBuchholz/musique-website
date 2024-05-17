@@ -193,7 +193,7 @@ void CSMeasure::Init(const Settings& settings)
 
         Vec2<float> dimensions = chord->GetDimensions();
         Vec2<float> position = previousPosition;
-        chord->Init(position);
+        chord->Init(settings, position);
 
         previousPosition = position;
         previousPosition.x += dimensions.x + chord->duration * beatWidth;

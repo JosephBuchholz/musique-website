@@ -184,6 +184,10 @@ export class CanvasRenderer extends Renderer {
     measureGlyph(context, codePoint, paint) {
         this.usePaintForGlyph(paint);
 
+        // temp?
+        var fontSize = 40.0 * paint.glyphSizeFactor;
+        this.context.font = fontSize.toString() + "px " + this.currentFont;
+
         var textMetrics = this.context.measureText(
             String.fromCodePoint(codePoint)
         );

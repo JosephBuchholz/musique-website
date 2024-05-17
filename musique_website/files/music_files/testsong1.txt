@@ -21,11 +21,11 @@
     <part id="">
         <measure width="65.678467" isPickup="yes">
             <attributes>
-                <divisions>16</divisions>
                 <time>
                     <beats>4</beats>
                     <beat-type>4</beat-type>
                 </time>
+                <divisions>16</divisions>
             </attributes>
             <lyric default-x="0" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>How</text>
@@ -39,7 +39,7 @@
                 </direction-type>
             </direction>
         </measure>
-        <measure width="299.01364">
+        <measure width="317.17365">
             <print new-system="yes">
                 <system-layout>
                     <system-margins>
@@ -49,53 +49,57 @@
                     <system-distance>127.000000</system-distance>
                 </system-layout>
             </print>
-            <lyric default-x="12" default-y="50" is-pickup="no" starts-pickup="no">
+            <lyric default-x="30.159988" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>long</text>
             </lyric>
-            <chord-symbol default-x="12" default-y="22">
+            <chord-symbol default-x="30.159988" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="63.266357" default-y="50" is-pickup="no" starts-pickup="no">
+            <lyric default-x="81.426346" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>to</text>
             </lyric>
             <forward>
                 <duration>31</duration>
             </forward>
-            <lyric default-x="121.39136" default-y="50" is-pickup="no" starts-pickup="no">
+            <lyric default-x="139.55135" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>breathe</text>
             </lyric>
-            <chord-symbol default-x="121.39136" default-y="22">
+            <chord-symbol default-x="139.55135" default-y="22">
                 <duration>32</duration>
                 <root>
                     <root-step>C</root-step>
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="201.95456" default-y="50" is-pickup="no" starts-pickup="no">
+            <lyric default-x="220.11456" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>the</text>
             </lyric>
             <forward>
                 <duration>2</duration>
             </forward>
-            <lyric default-x="241.22092" default-y="50" is-pickup="no" starts-pickup="no">
+            <lyric default-x="259.38092" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>air</text>
             </lyric>
             <forward>
                 <duration>1</duration>
             </forward>
-            <lyric default-x="275.99002" default-y="50" is-pickup="no" starts-pickup="no">
+            <lyric default-x="294.15002" default-y="50" is-pickup="no" starts-pickup="no">
                 <text>of</text>
             </lyric>
         </measure>
@@ -110,6 +114,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>48</duration>
@@ -144,6 +149,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -164,6 +171,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -189,6 +198,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>48</duration>
@@ -220,6 +230,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -240,6 +252,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -271,6 +285,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -285,6 +301,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -296,6 +314,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -330,6 +350,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -350,6 +372,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -369,6 +393,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>48</duration>
@@ -380,6 +407,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="147.74803">
@@ -402,6 +431,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
         </measure>
         <measure width="275.79019">
@@ -424,6 +454,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <direction>
                 <direction-type>
@@ -449,6 +481,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -480,6 +514,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -512,6 +549,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -540,6 +579,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -560,6 +601,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -594,6 +637,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>40</duration>
@@ -614,6 +660,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -642,6 +690,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -662,6 +712,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -693,6 +745,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -707,6 +761,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -721,6 +777,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="220.28119">
@@ -743,6 +801,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -757,6 +817,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -782,6 +844,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -793,6 +857,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -804,6 +870,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="176.83591">
@@ -814,6 +882,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -825,6 +895,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="220.28119">
@@ -847,6 +919,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -861,6 +935,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -886,6 +962,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>48</duration>
@@ -897,6 +976,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="147.74803">
@@ -913,6 +994,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
         </measure>
         <measure width="309.27521">
@@ -935,6 +1017,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <direction>
                 <direction-type>
@@ -960,6 +1044,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -985,6 +1071,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>64</duration>
@@ -1019,6 +1106,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1039,6 +1128,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1070,6 +1161,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>64</duration>
@@ -1101,6 +1193,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1127,6 +1221,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1158,6 +1254,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -1172,6 +1270,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -1183,6 +1283,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -1217,6 +1319,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1237,6 +1341,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1256,6 +1362,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1273,6 +1382,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="147.74803">
@@ -1292,6 +1403,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
         </measure>
         <measure width="252.73399">
@@ -1314,6 +1426,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <direction>
                 <direction-type>
@@ -1339,6 +1453,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1364,6 +1480,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>64</duration>
@@ -1398,6 +1515,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1418,6 +1537,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1443,6 +1564,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>64</duration>
@@ -1477,6 +1599,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1497,6 +1621,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1516,6 +1642,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -1530,6 +1658,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -1541,6 +1671,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -1572,6 +1704,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1598,6 +1732,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1623,6 +1759,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
             <forward>
                 <duration>64</duration>
@@ -1657,6 +1794,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1683,6 +1822,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1708,6 +1849,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -1719,6 +1862,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -1747,6 +1892,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -1761,6 +1908,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1786,6 +1935,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>48</duration>
@@ -1797,6 +1949,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>suspended-fourth</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="147.74803">
@@ -1822,6 +1976,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
         </measure>
         <measure width="301.7207">
@@ -1844,6 +1999,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <direction>
                 <direction-type>
@@ -1869,6 +2026,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1900,6 +2059,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1926,6 +2088,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1954,6 +2118,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1974,6 +2140,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -1999,6 +2167,9 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
+                <dot/>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2019,6 +2190,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2047,6 +2220,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2067,6 +2242,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2098,6 +2275,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -2112,6 +2291,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>quarter</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>16</duration>
@@ -2126,6 +2307,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="220.28119">
@@ -2148,6 +2331,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -2162,6 +2347,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2187,6 +2374,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
         </measure>
         <measure width="220.28119">
@@ -2209,6 +2397,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -2223,6 +2413,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2248,6 +2440,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -2259,6 +2453,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="201.30432">
@@ -2281,6 +2477,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -2295,6 +2493,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2320,6 +2520,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>minor</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -2331,6 +2533,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
         </measure>
         <measure width="201.30432">
@@ -2353,6 +2557,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>32</duration>
@@ -2367,6 +2573,8 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>half</type>
+                <stem>up</stem>
             </chord-symbol>
             <forward>
                 <duration>1</duration>
@@ -2392,6 +2600,7 @@
                     <root-alter>0.000000</root-alter>
                 </root>
                 <kind>none</kind>
+                <type>whole</type>
             </chord-symbol>
         </measure>
     </part>

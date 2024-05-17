@@ -594,6 +594,52 @@ void HarmonyXMLParser::ParseChordSymbol(XMLElement* element, const std::shared_p
         previousElement = previousElement->NextSiblingElement();
     }
 
+
+    chord->noteHead = std::make_unique<NoteHead>();
+
+    // type
+    XMLElement* noteType = element->FirstChildElement("type");
+    if (noteType)
+    {
+        std::string s = noteType->GetText();
+        NoteValue durationType = NoteValue::None;
+        if (s == "whole") {
+            durationType = NoteValue::Whole;
+        } else if (s == "half") {
+            durationType = NoteValue::Half;
+        } else if (s == "quarter") {
+            durationType = NoteValue::Quarter;
+        } else if (s == "eighth") {
+            durationType = NoteValue::Eighth;
+        } else if (s == "16th") {
+            durationType = NoteValue::Sixteenth;
+        } else if (s == "32nd") {
+            durationType = NoteValue::ThirtySecond;
+        } else {
+            durationType = NoteValue::None;
+        }
+        chord->noteHead->noteDuration = durationType;
+    }
+
+    // stem
+    XMLElement* stemElement = element->FirstChildElement("stem");
+    if (stemElement)
+    {
+        chord->noteStem = std::make_unique<NoteStem>();
+        chord->noteStem->stemType = NoteStem::CalculateStemTypeFromString(stemElement->GetText());
+    }
+
+    // dot
+    XMLElement* dotElement = element->FirstChildElement("dot"); // TODO: modify to allow the parsing of multiple dots
+    if (dotElement)
+    {
+        chord->augDot = std::make_unique<AugmentationDot>();
+
+        /*BaseElementParser::ParseVisibleElement(dotElement, chord->augDot);
+
+        dot.placement = MusicXMLHelper::GetAboveBelowAttribute(dotElement, "placement", dot.placement);*/
+    }
+
     newChord.CalculateChordName(Settings());
 
     chord->chordSymbol = newChord;
