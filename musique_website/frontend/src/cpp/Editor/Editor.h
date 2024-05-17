@@ -15,21 +15,21 @@ public:
     bool OnKeyboardEvent(const KeyboardEvent& event);
     bool OnTextFieldEvent(int id, const std::string& input);
     void OnPropertiesUpdated(const std::string& propertiesString);
-    std::shared_ptr<BaseElement> FindSelectedElement(Vec2<float> point);
+    BaseElement* FindSelectedElement(Vec2<float> point);
     void OnNewElement(int id);
     void OnDeleteSelected();
 
 private:
-    void UpdateLyricProperties(std::shared_ptr<CSLyric> lyric);
-    void UpdateChordProperties(std::shared_ptr<CSChord> chord);
-    void UpdateMeasureProperties(std::shared_ptr<CSMeasure> measure);
-    void UpdateCreditProperties(std::shared_ptr<Credit> credit);
-    void UpdateTextDirectionProperties(std::shared_ptr<TextDirection> direction);
-    void UpdateTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSignature);
-    void SetTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSignature, const std::string& propertiesString);
+    void UpdateLyricProperties(CSLyric* lyric);
+    void UpdateChordProperties(CSChord* chord);
+    void UpdateMeasureProperties(CSMeasure* measure);
+    void UpdateCreditProperties(Credit* credit);
+    void UpdateTextDirectionProperties(TextDirection* direction);
+    void UpdateTimeSignatureProperties(TimeSignature* timeSignature);
+    void SetTimeSignatureProperties(TimeSignature* timeSignature, const std::string& propertiesString);
     void UpdateDisplayConstantsProperties();
 
-    void SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected);
+    void SetSelection(std::vector<BaseElement*> newSelected);
 
     void Update();
 
@@ -37,7 +37,7 @@ public:
     std::shared_ptr<Song> song = nullptr;
     std::shared_ptr<MusicRenderer> musicRenderer = nullptr;
 
-    std::vector<std::shared_ptr<BaseElement>> selectedElements;
+    std::vector<BaseElement*> selectedElements;
 
     bool pointerIsDown = false;
     Vec2<float> pointerDownPosition = { 0.0f, 0.0f };

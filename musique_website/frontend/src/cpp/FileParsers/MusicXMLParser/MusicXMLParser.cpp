@@ -1532,12 +1532,12 @@ void MusicXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* pa
                     {
                         song->systems[previousSystemIndex]->endingMeasureIndex = measureIndex - 1;
 
-                        for (int i = song->systems[previousSystemIndex]->beginningMeasureIndex; i <= measureIndex - 1; i++)
+                        /*for (int i = song->systems[previousSystemIndex]->beginningMeasureIndex; i <= measureIndex - 1; i++)
                         {
                             SystemMeasure newSystemMeasure;
                             newSystemMeasure.measureIndex = i;
                             song->systems[previousSystemIndex]->systemMeasures.push_back(newSystemMeasure);
-                        }
+                        }*/
                     }
 
                     song->systems.push_back(system);

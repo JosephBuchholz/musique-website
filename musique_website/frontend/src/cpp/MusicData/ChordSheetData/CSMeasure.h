@@ -46,11 +46,12 @@ public:
     std::vector<std::shared_ptr<CSChord>> chords;
     std::vector<std::shared_ptr<CSLyric>> lyrics;
 
+    TimeSignature* timeSignature;
+
     std::shared_ptr<BaseElement> parent;
 
     std::shared_ptr<LyricPickup> lyricPickup;
     
-    std::shared_ptr<TimeSignature> timeSignature;
     bool showTimeSignature = false;
 
     //std::vector<Direction> directions;

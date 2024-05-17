@@ -5,6 +5,8 @@
 #ifndef MUSIQUE_BRACKETDIRECTION_H
 #define MUSIQUE_BRACKETDIRECTION_H
 
+#include <memory>
+
 #include "../BaseElements/VisibleElement.h"
 #include "../BaseElements/LineElement.h"
 #include "../BaseElements/TextElement.h"

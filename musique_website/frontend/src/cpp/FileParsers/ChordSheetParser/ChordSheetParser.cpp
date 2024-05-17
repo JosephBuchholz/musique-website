@@ -265,12 +265,12 @@ void ChordSheetParser::ParseChordSheet(const std::string &data, const std::share
 
             newSystem->endingMeasureIndex = currentMeasureIndex - 1;
 
-            for (int i = newSystem->beginningMeasureIndex; i <= newSystem->endingMeasureIndex; i++)
+            /*for (int i = newSystem->beginningMeasureIndex; i <= newSystem->endingMeasureIndex; i++)
             {
                 SystemMeasure systemMeasure;
                 systemMeasure.measureIndex = i;
                 newSystem->systemMeasures.push_back(systemMeasure);
-            }
+            }*/
 
             newSystem->position = { 150.0f, 200.0f + ((float)systemIndex * 75.0f) };
 

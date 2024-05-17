@@ -5,9 +5,10 @@
 #ifndef MUSIQUE_TIMESIGNATURE_H
 #define MUSIQUE_TIMESIGNATURE_H
 
-#include "../BaseElements/VisibleElement.h"
 #include "../../Rendering/RenderData.h"
+#include "../BaseElements/VisibleElement.h"
 #include "../../Collisions/Vec2.h"
+#include "../../MusicDisplayConstants.h"
 
 /**
  * This class represents a musical time signature.

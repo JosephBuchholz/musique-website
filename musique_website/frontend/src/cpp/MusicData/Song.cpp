@@ -44,9 +44,17 @@ void Song::OnUpdate()
     {
         if (instrument->staves[0]->csStaff)
         {
+            int i = 0;
+            TimeSignature* currentTimeSignature = nullptr;
             for (const auto& measure: instrument->staves[0]->csStaff->measures)
             {
+                if (systemMeasures[i]->timeSignature != nullptr)
+                    currentTimeSignature = systemMeasures[i]->timeSignature.get();
+
+                measure->timeSignature = currentTimeSignature;
                 measure->Init(settings);
+
+                i++;
             }
 
             return;
@@ -837,12 +845,12 @@ void Song::CalculateSystems()
                         // push back system
                         currentSystem->endingMeasureIndex = measureIndex - 1;
 
-                        for (int i = currentSystem->beginningMeasureIndex; i <= currentSystem->endingMeasureIndex; i++)
+                        /*for (int i = currentSystem->beginningMeasureIndex; i <= currentSystem->endingMeasureIndex; i++)
                         {
                             SystemMeasure systemMeasure;
                             systemMeasure.measureIndex = i;
                             currentSystem->systemMeasures.push_back(systemMeasure);
-                        }
+                        }*/
 
                         systems.push_back(currentSystem);
                         
@@ -861,12 +869,12 @@ void Song::CalculateSystems()
                 // push back last system
                 currentSystem->endingMeasureIndex = measureIndex - 1;
 
-                for (int i = currentSystem->beginningMeasureIndex; i <= currentSystem->endingMeasureIndex; i++)
+                /*for (int i = currentSystem->beginningMeasureIndex; i <= currentSystem->endingMeasureIndex; i++)
                 {
                     SystemMeasure systemMeasure;
                     systemMeasure.measureIndex = i;
                     currentSystem->systemMeasures.push_back(systemMeasure);
-                }
+                }*/
 
                 systems.push_back(currentSystem);
             }

@@ -44,7 +44,7 @@ void AddColorToJson(nlohmann::ordered_json& jsonObject, const std::string& headi
 }
 
 
-std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
+BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 {
     for (const auto& credit : song->credits)
     {
@@ -53,7 +53,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 
         if (bb.DoesOverlapWithPoint(point))
         {
-            return credit;
+            return credit.get();
         }
     }
 
@@ -74,7 +74,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
                     float measurePositionX = 0.0f;
                     for (int m = start; m <= end; m++)
                     {
-                        auto measure = staff->csStaff->measures[m];
+                        CSMeasure* measure = staff->csStaff->measures[m].get();
 
                         if (measure->timeSignature && measure->showTimeSignature)
                         {
@@ -103,7 +103,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return lyric;
+                                return lyric.get();
                             }
                         }
 
@@ -120,7 +120,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 
                                 if (bb.DoesOverlapWithPoint(point))
                                 {
-                                    return lyric;
+                                    return lyric.get();
                                 }   
                             }
                         }
@@ -133,7 +133,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return chord;
+                                return chord.get();
                             }
                         }
 
@@ -145,7 +145,7 @@ std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return direction;
+                                return direction.get();
                             }
                         }
 
@@ -182,17 +182,11 @@ bool Editor::OnPointerEvent(const PointerEvent& event)
         {
             Vec2<float> point = (event.position / musicRenderer->zoom) - musicRenderer->offset;
 
-            std::shared_ptr<BaseElement> selectedElement = FindSelectedElement(point);
+            BaseElement* selectedElement = FindSelectedElement(point);
 
             SetSelection({ selectedElement });
 
             Update();
-            /*//musicRenderer->m_RenderData.AddDebugDot(event.position / musicRenderer->zoom);
-            musicRenderer->updateRenderData = true;
-            musicRenderer->layoutCalculated = false;
-            //musicRenderer->RenderWithRenderData();
-            musicRenderer->Render(song, song->settings);*/
-
 
             pointerIsDown = true;
             pointerDownPosition = event.position;
@@ -255,7 +249,7 @@ bool Editor::OnTextFieldEvent(int id, const std::string& input)
 {
     for (auto e : selectedElements)
     {
-        std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(e);
+        CSLyric* lyric = dynamic_cast<CSLyric*>(e);
         lyric->lyricText.text = input;
     }
 
@@ -274,7 +268,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
     {
         if (e->elementType == BaseElement::ElementType::CSLyric)
         {
-            std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(e);
+            CSLyric* lyric = dynamic_cast<CSLyric*>(e);
 
             lyric->beatPosition = jsonObject["Main"]["beatPosition"]["value"];
             lyric->duration = jsonObject["Main"]["duration"]["value"];
@@ -287,7 +281,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
                 text.pop_back();
                 lyric->lyricText.text = text;
 
-                std::shared_ptr<CSMeasure> measure;
+                CSMeasure* measure = nullptr;
 
                 for (auto& instrument : song->instruments)
                 {
@@ -299,9 +293,9 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
                             {
                                 for (auto& l : m->lyrics)
                                 {
-                                    if (l == lyric)
+                                    if (l.get() == lyric)
                                     {
-                                        measure = m;
+                                        measure = m.get();
                                         break;
                                     }
                                 }
@@ -323,7 +317,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
                 newLyric->beatPosition = lyric->beatPosition;
                 measure->lyrics.push_back(newLyric);
 
-                SetSelection({ newLyric });
+                SetSelection({ newLyric.get() });
             }
             else
                 lyric->lyricText.text = text;
@@ -341,7 +335,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::CSChord)
         {
-            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(e);
+            CSChord* chord = dynamic_cast<CSChord*>(e);
 
             chord->chordSymbol = Chord::CreateChordFromString(jsonObject["Main"]["chordName"]["value"]);
             chord->chordSymbol.CalculateChordName(song->settings);
@@ -353,7 +347,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
-            std::shared_ptr<CSMeasure> measure = std::dynamic_pointer_cast<CSMeasure>(e);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(e);
             int measureIndex = measure->GetMeasureIndex();
 
             measure->width = jsonObject["Main"]["width"]["value"];
@@ -363,7 +357,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::Credit)
         {
-            std::shared_ptr<Credit> credit = std::dynamic_pointer_cast<Credit>(e);
+            Credit* credit = dynamic_cast<Credit*>(e);
 
             credit->words.text = jsonObject["Main"]["text"]["value"];
             credit->pageNumber = jsonObject["Main"]["pageNumber"]["value"];
@@ -381,7 +375,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::TextDirection)
         {
-            std::shared_ptr<TextDirection> direction = std::dynamic_pointer_cast<TextDirection>(e);
+            TextDirection* direction = dynamic_cast<TextDirection*>(e);
 
             direction->text.text = jsonObject["Main"]["text"]["value"];
 
@@ -398,7 +392,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::TimeSignature)
         {
-            std::shared_ptr<TimeSignature> timeSignature = std::dynamic_pointer_cast<TimeSignature>(e);
+            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e);
             SetTimeSignatureProperties(timeSignature, propertiesString);
         }
     }
@@ -434,10 +428,10 @@ void Editor::OnNewElement(int id)
 {
     if (!selectedElements.empty())
     {
-        std::shared_ptr<BaseElement> e = selectedElements[0];
+        BaseElement* e = selectedElements[0];
         if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
-            std::shared_ptr<CSMeasure> measure = std::dynamic_pointer_cast<CSMeasure>(e);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(e);
 
             if (id == 0)
             {
@@ -469,7 +463,7 @@ void Editor::OnNewElement(int id)
                         int i = 0;
                         for (const auto& m : staff->measures)
                         {
-                            if (m == measure)
+                            if (m.get() == measure)
                             {
                                 break;
                             }
@@ -500,7 +494,7 @@ void Editor::OnNewElement(int id)
             }
             else if (id == 6) // time signature
             {
-                std::shared_ptr<TimeSignature> newTimeSignature = std::make_shared<TimeSignature>();
+                std::unique_ptr<TimeSignature> newTimeSignature = std::make_unique<TimeSignature>();
 
                 for (auto instrument : song->instruments)
                 {
@@ -508,21 +502,20 @@ void Editor::OnNewElement(int id)
                     {
                         if (staff->csStaff)
                         {
-                            std::shared_ptr<TimeSignature> oldTimeSignature = nullptr;
+                            //TimeSignature* oldTimeSignature = nullptr;
 
+                            int i = 0;
                             for (auto m : staff->csStaff->measures)
                             {
-                                if (oldTimeSignature == m->timeSignature)
+                                if (m.get() == measure)
                                 {
-                                    m->timeSignature = newTimeSignature;
+                                    SystemMeasure* systemMeasure = song->systemMeasures[i].get();
+                                    systemMeasure->timeSignature = std::move(newTimeSignature);
+                                    measure->showTimeSignature = true;
+                                    break;
                                 }
 
-                                if (m == measure)
-                                {
-                                    oldTimeSignature = measure->timeSignature;
-                                    measure->timeSignature = newTimeSignature;
-                                    measure->showTimeSignature = true;
-                                }
+                                i++;
                             }
                         }
                     }
@@ -531,7 +524,7 @@ void Editor::OnNewElement(int id)
         }
         else if (e->elementType == BaseElement::ElementType::CSChord)
         {
-            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(e);
+            CSChord* chord = dynamic_cast<CSChord*>(e);
 
             if (id == 0) // add lyric
             {
@@ -549,7 +542,7 @@ void Editor::OnNewElement(int id)
                             {
                                 for (auto& c : measure->chords)
                                 {
-                                    if (c == chord)
+                                    if (c.get() == chord)
                                     {
                                         measure->lyrics.push_back(newLyric);
                                     }
@@ -592,7 +585,7 @@ void Editor::OnDeleteSelected()
     {
         if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
-            std::shared_ptr<CSMeasure> measure = std::dynamic_pointer_cast<CSMeasure>(e);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(e);
             //measure->Delete();
 
             if (measure->parent)
@@ -604,7 +597,7 @@ void Editor::OnDeleteSelected()
                     int i = 0;
                     for (const auto& m : staff->measures)
                     {
-                        if (m == measure)
+                        if (m.get() == measure)
                         {
                             break;
                         }
@@ -623,7 +616,7 @@ void Editor::OnDeleteSelected()
                         if (system->beginningMeasureIndex <= measureIndex && system->endingMeasureIndex >= measureIndex)
                         {
                             system->endingMeasureIndex--;
-                            system->systemMeasures.erase(system->systemMeasures.begin() + (measureIndex - system->beginningMeasureIndex));
+                            //system->systemMeasures.erase(system->systemMeasures.begin() + (measureIndex - system->beginningMeasureIndex));
                             system->systemMeasureData.erase(measureIndex);
 
                             if (system->endingMeasureIndex < system->beginningMeasureIndex)
@@ -649,7 +642,7 @@ void Editor::OnDeleteSelected()
         }
         else if (e->elementType == BaseElement::ElementType::TimeSignature)
         {
-            std::shared_ptr<TimeSignature> timeSignature = std::dynamic_pointer_cast<TimeSignature>(e);
+            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e);
             
             for (auto instrument : song->instruments)
             {
@@ -657,18 +650,18 @@ void Editor::OnDeleteSelected()
                 {
                     if (staff->csStaff)
                     {
-                        std::shared_ptr<TimeSignature> previousTimeSignature = std::make_shared<TimeSignature>();
+                        int i = 0;
                         for (auto measure : staff->csStaff->measures)
                         {
-                            if (measure->timeSignature == timeSignature)
+                            SystemMeasure* systemMeasure = song->systemMeasures[i].get();
+
+                            if (systemMeasure->timeSignature.get() == timeSignature)
                             {
-                                measure->timeSignature = previousTimeSignature;
+                                systemMeasure->timeSignature = nullptr;
                                 measure->showTimeSignature = false;
                             }
-                            else
-                            {
-                                previousTimeSignature = measure->timeSignature;
-                            }
+
+                            i++;
                         }
                     }
                 }
@@ -685,7 +678,7 @@ void Editor::OnDeleteSelected()
     Update();
 }
 
-void Editor::UpdateLyricProperties(std::shared_ptr<CSLyric> lyric)
+void Editor::UpdateLyricProperties(CSLyric* lyric)
 {
     nlohmann::ordered_json jsonObject;
 
@@ -705,7 +698,7 @@ void Editor::UpdateLyricProperties(std::shared_ptr<CSLyric> lyric)
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
-void Editor::UpdateChordProperties(std::shared_ptr<CSChord> chord)
+void Editor::UpdateChordProperties(CSChord* chord)
 {
     nlohmann::ordered_json jsonObject;
 
@@ -719,7 +712,7 @@ void Editor::UpdateChordProperties(std::shared_ptr<CSChord> chord)
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
-void Editor::UpdateMeasureProperties(std::shared_ptr<CSMeasure> measure)
+void Editor::UpdateMeasureProperties(CSMeasure* measure)
 {
     int measureIndex = measure->GetMeasureIndex();
             
@@ -733,7 +726,7 @@ void Editor::UpdateMeasureProperties(std::shared_ptr<CSMeasure> measure)
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
-void Editor::UpdateCreditProperties(std::shared_ptr<Credit> credit)
+void Editor::UpdateCreditProperties(Credit* credit)
 {
     nlohmann::ordered_json jsonObject;
 
@@ -751,7 +744,7 @@ void Editor::UpdateCreditProperties(std::shared_ptr<Credit> credit)
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
-void Editor::UpdateTextDirectionProperties(std::shared_ptr<TextDirection> direction)
+void Editor::UpdateTextDirectionProperties(TextDirection* direction)
 {
     nlohmann::ordered_json jsonObject;
 
@@ -795,7 +788,7 @@ void Editor::UpdateDisplayConstantsProperties()
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
-void Editor::UpdateTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSignature)
+void Editor::UpdateTimeSignatureProperties(TimeSignature* timeSignature)
 {
     nlohmann::ordered_json jsonObject;
 
@@ -808,7 +801,7 @@ void Editor::UpdateTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSi
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
 }
 
-void Editor::SetTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSignature, const std::string& propertiesString)
+void Editor::SetTimeSignatureProperties(TimeSignature* timeSignature, const std::string& propertiesString)
 {
     json jsonObject = json::parse(propertiesString);
 
@@ -819,15 +812,15 @@ void Editor::SetTimeSignatureProperties(std::shared_ptr<TimeSignature> timeSigna
     timeSignature->position.y = jsonObject["Position"]["posY"]["value"];
 }
 
-void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
+void Editor::SetSelection(std::vector<BaseElement*> newSelected)
 {
     // deselect elements
     for (int i = selectedElements.size() - 1; i >= 0; i--)
     {
-        std::shared_ptr<BaseElement> element = selectedElements[i];
+        BaseElement* element = selectedElements[i];
         if (element->elementType == BaseElement::ElementType::CSLyric)
         {
-            std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(element);
+            CSLyric* lyric = dynamic_cast<CSLyric*>(element);
             lyric->lyricText.selectedColor = 0x000000FF;
 
             if (lyric->lyricText.text == "")
@@ -837,7 +830,7 @@ void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
         }
         else if (element->elementType == BaseElement::ElementType::CSChord)
         {
-            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(element);
+            CSChord* chord = dynamic_cast<CSChord*>(element);
             chord->chordSymbol.selectedColor = 0x000000FF;
         }
         element->selectedColor = 0x000000FF;
@@ -859,45 +852,45 @@ void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
     {
         selectedElements = newSelected;
         
-        std::shared_ptr<BaseElement> selectedElement = selectedElements[0]; // TODO: revise when implementing multi-select
+        BaseElement* selectedElement = selectedElements[0]; // TODO: revise when implementing multi-select
 
         selectedElement->selectedColor = 0x3333EEFF;
 
         if (selectedElement->elementType == BaseElement::ElementType::CSLyric)
         {
-            std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(selectedElement);
+            CSLyric* lyric = dynamic_cast<CSLyric*>(selectedElement);
             lyric->lyricText.selectedColor = 0x3333EEFF;
 
-            UpdateLyricProperties(lyric);                    
+            UpdateLyricProperties(lyric);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::CSChord)
         {
-            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(selectedElement);
+            CSChord* chord = dynamic_cast<CSChord*>(selectedElement);
             chord->chordSymbol.selectedColor = 0x3333EEFF;
             
             UpdateChordProperties(chord);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::CSMeasure)
         {
-            std::shared_ptr<CSMeasure> measure = std::dynamic_pointer_cast<CSMeasure>(selectedElement);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(selectedElement);
 
             UpdateMeasureProperties(measure);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::Credit)
         {
-            std::shared_ptr<Credit> credit = std::dynamic_pointer_cast<Credit>(selectedElement);
+            Credit* credit = dynamic_cast<Credit*>(selectedElement);
 
             UpdateCreditProperties(credit);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::TextDirection)
         {
-            std::shared_ptr<TextDirection> direction = std::dynamic_pointer_cast<TextDirection>(selectedElement);
+            TextDirection* direction = dynamic_cast<TextDirection*>(selectedElement);
 
             UpdateTextDirectionProperties(direction);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::TimeSignature)
         {
-            std::shared_ptr<TimeSignature> timeSignature = std::dynamic_pointer_cast<TimeSignature>(selectedElement);
+            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(selectedElement);
 
             UpdateTimeSignatureProperties(timeSignature);
         }

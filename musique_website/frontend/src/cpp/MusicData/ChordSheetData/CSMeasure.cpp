@@ -84,7 +84,7 @@ void CSMeasure::Init(const Settings& settings)
     float minMeasureWidth = settings.displayConstants.minimumMeasureWidth;
     bool displayReminderPickupLyrics = settings.displayConstants.displayReminderPickupLyrics;
 
-    if (showTimeSignature)
+    if (timeSignature && showTimeSignature)
     {
         timeSignature->position.x = 5.0f;
         barlineMargin += timeSignature->GetWidth(settings.displayConstants.measureBarlineHeight) + 5.0f;

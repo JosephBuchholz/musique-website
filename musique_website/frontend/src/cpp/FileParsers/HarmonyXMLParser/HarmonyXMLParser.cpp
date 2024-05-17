@@ -230,12 +230,12 @@ void HarmonyXMLParser::ParseHarmonyXML(const std::string& data, const std::share
     // TODO: fix dangerous line of code
     song->systems[song->systems.size() - 1]->endingMeasureIndex = song->instruments[0]->staves[0]->csStaff->measures.size() - 1;
 
-    for (int i = song->systems[song->systems.size() - 1]->beginningMeasureIndex; i <= song->systems[song->systems.size() - 1]->endingMeasureIndex; i++)
+    /*for (int i = song->systems[song->systems.size() - 1]->beginningMeasureIndex; i <= song->systems[song->systems.size() - 1]->endingMeasureIndex; i++)
     {
         SystemMeasure newSystemMeasure;
         newSystemMeasure.measureIndex = i;
         song->systems[song->systems.size() - 1]->systemMeasures.push_back(newSystemMeasure);
-    }
+    }*/
 
     // TODO: will create problems if it is socre-timewise
     /*XMLElement* root = doc.FirstChildElement("score-partwise");
@@ -2128,6 +2128,9 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
 
     XMLNode* previousMeasureElement = part->FirstChildElement("measure");
     std::vector<std::shared_ptr<CSMeasure>> previousMeasures;
+    SystemMeasure* currentSystemMeasure = nullptr;
+    SystemMeasure* previousSystemMeasure = nullptr;
+    TimeSignature* currentTimeSignature = nullptr;
 
     while (true)
     {
@@ -2146,8 +2149,10 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             bool startNewPage = false;
 
             std::vector<std::shared_ptr<CSMeasure>> currentMeasures;
+
             song->systemMeasures.push_back(std::make_shared<SystemMeasure>());
-            song->systemMeasures.back()->isPickupMeasure = isPickupMeasure;
+            currentSystemMeasure = song->systemMeasures.back().get();
+            currentSystemMeasure->isPickupMeasure = isPickupMeasure;
 
             // adding staves
             if (firstMeasure)
@@ -2278,12 +2283,12 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     {
                         song->systems[previousSystemIndex]->endingMeasureIndex = measureIndex - 1;
 
-                        for (int i = song->systems[previousSystemIndex]->beginningMeasureIndex; i <= measureIndex - 1; i++)
+                        /*for (int i = song->systems[previousSystemIndex]->beginningMeasureIndex; i <= measureIndex - 1; i++)
                         {
                             SystemMeasure newSystemMeasure;
                             newSystemMeasure.measureIndex = i;
                             song->systems[previousSystemIndex]->systemMeasures.push_back(newSystemMeasure);
-                        }
+                        }*/
                     }
 
                     song->systems.push_back(system);
@@ -2364,7 +2369,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                 XMLElement* timeSignatureElement = attributes->FirstChildElement("time");
                 if (timeSignatureElement)
                 {
-                    std::shared_ptr<TimeSignature> timeSignature = std::make_shared<TimeSignature>();
+                    std::unique_ptr<TimeSignature> timeSignature = std::make_unique<TimeSignature>();
                     // print object
                     timeSignature->printObject = XMLHelper::GetBoolAttribute(timeSignatureElement, "print-object", true);
 
@@ -2381,27 +2386,28 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                     
                     for (const auto& m : currentMeasures)
                     {
-                        m->timeSignature = timeSignature;
-                        if (!song->systemMeasures.back()->isPickupMeasure)
+                        if (!currentSystemMeasure->isPickupMeasure)
                             m->showTimeSignature = true;
                         else
                             m->showTimeSignature = false;
                         m->duration = timeSignature->notes * (4.0f / timeSignature->noteType);
                     }
+
+                    currentTimeSignature = timeSignature.get();
+                    currentSystemMeasure->timeSignature = std::move(timeSignature);
                 }
                 else
                 {
-                    if (!previousMeasures.empty() && previousMeasures.size() == currentMeasures.size())
+                    if (!previousMeasures.empty() && previousMeasures.size() == currentMeasures.size() && previousSystemMeasure && currentTimeSignature)
                     {
                         int i = 0;
                         for (const auto& m : currentMeasures)
                         {
-                            m->timeSignature = previousMeasures[i]->timeSignature;
-                            if (song->systemMeasures[song->systemMeasures.size() - 2]->isPickupMeasure) // if previous measrue is a pickup measure
+                            if (previousSystemMeasure->isPickupMeasure) // if previous measrue is a pickup measure
                                 m->showTimeSignature = true;
                             else
                                 m->showTimeSignature = false;
-                            m->duration = m->timeSignature->notes * (4.0f / m->timeSignature->noteType);
+                            m->duration = currentTimeSignature->notes * (4.0f / currentTimeSignature->noteType);
                             i++;
                         }
                     }
@@ -2619,17 +2625,16 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
                 //if (firstMeasure)
                 //    currentInst->staves.push_back(std::make_shared<Staff>());
 
-                if (!previousMeasures.empty() && previousMeasures.size() == currentMeasures.size())
+                if (!previousMeasures.empty() && previousMeasures.size() == currentMeasures.size() && previousSystemMeasure && currentTimeSignature)
                 {
                     int i = 0;
                     for (const auto& m : currentMeasures)
                     {
-                        m->timeSignature = previousMeasures[i]->timeSignature;
-                        if (song->systemMeasures[song->systemMeasures.size() - 2]->isPickupMeasure) // if previous measrue is a pickup measure
+                        if (previousSystemMeasure->isPickupMeasure) // if previous measrue is a pickup measure
                             m->showTimeSignature = true;
                         else
                             m->showTimeSignature = false;
-                        m->duration = m->timeSignature->notes * (4.0f / m->timeSignature->noteType);
+                        m->duration = currentTimeSignature->notes * (4.0f / currentTimeSignature->noteType);
                         //m->CalculateDuration();
                         //m->keySignature = previousMeasures[i]->keySignature;
                         //m->clef = previousMeasures[i]->clef;
@@ -2838,6 +2843,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
             }
 
             previousMeasures = currentMeasures;
+            previousSystemMeasure = currentSystemMeasure;
             firstMeasure = false;
             measureIndex++;
         }

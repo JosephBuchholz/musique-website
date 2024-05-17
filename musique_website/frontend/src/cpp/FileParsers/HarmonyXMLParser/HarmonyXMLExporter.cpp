@@ -206,7 +206,7 @@ XMLElement* ExportTextDirection(XMLDocument& doc, const std::shared_ptr<TextDire
     return directionElement;
 }
 
-XMLElement* ExportTimeSignature(XMLDocument& doc, const std::shared_ptr<TimeSignature>& timeSignature)
+XMLElement* ExportTimeSignature(XMLDocument& doc, TimeSignature* timeSignature)
 {
     XMLElement* timeElement = doc.NewElement("time");
 
@@ -216,7 +216,7 @@ XMLElement* ExportTimeSignature(XMLDocument& doc, const std::shared_ptr<TimeSign
     return timeElement;
 }
 
-XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, const std::shared_ptr<CSMeasure>& previousMeasure, int index, const std::shared_ptr<SystemMeasure>& systemMeasure, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
+XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& measure, const std::shared_ptr<CSMeasure>& previousMeasure, int index, const std::shared_ptr<SystemMeasure>& systemMeasure, SystemMeasure* previousSystemMeasure, const std::shared_ptr<System>& currentSystem, bool startsNewSystem)
 {
     XMLElement* measureElement = doc.NewElement("measure");
 
@@ -246,22 +246,12 @@ XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& me
 
     XMLElement* attributesElement = nullptr;
 
-    if (measure->timeSignature)
+    if (systemMeasure->timeSignature)
     {
-        if (index == 0)
-        {
-            if (!attributesElement)
-                attributesElement = doc.NewElement("attributes");
-
-            attributesElement->InsertEndChild(ExportTimeSignature(doc, measure->timeSignature));
-        }
-        else if (previousMeasure->timeSignature != measure->timeSignature)
-        {
-            if (!attributesElement)
-                attributesElement = doc.NewElement("attributes");
-            
-            attributesElement->InsertEndChild(ExportTimeSignature(doc, measure->timeSignature));
-        }
+        if (!attributesElement)
+            attributesElement = doc.NewElement("attributes");
+        
+        attributesElement->InsertEndChild(ExportTimeSignature(doc, systemMeasure->timeSignature.get()));
     }
 
     if (index == 0)
@@ -434,6 +424,7 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
                 int systemIndex = -1;
                 int i = 0;
                 std::shared_ptr<CSMeasure> previousMeasure = nullptr;
+                SystemMeasure* previousSystemMeasure = nullptr;
                 for (const auto& measure : staff->csStaff->measures)
                 {
                     if (measure->isFirstMeasureOfSystem)
@@ -448,10 +439,11 @@ std::string HarmonyXMLExporter::ExportHarmonyXML(const std::shared_ptr<Song>& so
                     if (startsNewSystem)
                         systemIndex++;
 
-                    XMLElement* m = ExportMeasure(doc, measure, previousMeasure, i, song->systemMeasures[i], song->systems[systemIndex], startsNewSystem);
+                    XMLElement* m = ExportMeasure(doc, measure, previousMeasure, i, song->systemMeasures[i], previousSystemMeasure, song->systems[systemIndex], startsNewSystem);
                     part->InsertEndChild(m);
                     i++;
                     previousMeasure = measure;
+                    previousSystemMeasure = song->systemMeasures[i].get();
                 }
             }
         }

@@ -10,8 +10,6 @@ void CSLyric::Init(const Settings& settings, Vec2<float> pos)
 
 void CSLyric::Delete()
 {
-    onDeleteCallback();
-
     if (parentSyllableGroup)
     {
         int i = 0;
@@ -41,6 +39,8 @@ void CSLyric::Delete()
             i++;
         }
     }
+
+    onDeleteCallback();
 }
 
 void CSLyric::Render(RenderData& renderData, const Settings& settings, Vec2<float> parentPosition, bool renderPickup) const

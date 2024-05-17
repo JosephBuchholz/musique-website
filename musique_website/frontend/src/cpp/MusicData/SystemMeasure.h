@@ -1,7 +1,11 @@
 #ifndef MUSIQUE_SYSTEMMEASURE_H
 #define MUSIQUE_SYSTEMMEASURE_H
 
+
 //#include "Measures/MeasureNumber.h"
+//#include "Measures/TimeSignature.h"
+
+class TimeSignature;
 
 class SystemMeasure
 {
@@ -11,6 +15,8 @@ public:
     bool pageBreak = false;
     bool systemBreak = false;
     bool isPickupMeasure = false; // must be the first measure of a system/section
+
+    std::unique_ptr<TimeSignature> timeSignature;
 
     //MeasureNumber measureNumber; // the number that is displayed for this measure
 };
