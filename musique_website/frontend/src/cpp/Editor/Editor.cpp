@@ -44,7 +44,7 @@ void AddColorToJson(nlohmann::ordered_json& jsonObject, const std::string& headi
 }
 
 
-BaseElement* Editor::FindSelectedElement(Vec2<float> point)
+std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 {
     for (const auto& credit : song->credits)
     {
@@ -53,7 +53,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 
         if (bb.DoesOverlapWithPoint(point))
         {
-            return credit.get();
+            return credit;
         }
     }
 
@@ -74,7 +74,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
                     float measurePositionX = 0.0f;
                     for (int m = start; m <= end; m++)
                     {
-                        CSMeasure* measure = staff->csStaff->measures[m].get();
+                        std::shared_ptr<CSMeasure> measure = staff->csStaff->measures[m];
 
                         if (measure->timeSignature && measure->showTimeSignature)
                         {
@@ -88,7 +88,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return measure->timeSignature;
+                                //return measure->timeSignature;
                             }
                         }
 
@@ -103,7 +103,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return lyric.get();
+                                return lyric;
                             }
                         }
 
@@ -120,7 +120,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 
                                 if (bb.DoesOverlapWithPoint(point))
                                 {
-                                    return lyric.get();
+                                    return lyric;
                                 }   
                             }
                         }
@@ -133,7 +133,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return chord.get();
+                                return chord;
                             }
                         }
 
@@ -145,7 +145,7 @@ BaseElement* Editor::FindSelectedElement(Vec2<float> point)
 
                             if (bb.DoesOverlapWithPoint(point))
                             {
-                                return direction.get();
+                                return direction;
                             }
                         }
 
@@ -182,7 +182,7 @@ bool Editor::OnPointerEvent(const PointerEvent& event)
         {
             Vec2<float> point = (event.position / musicRenderer->zoom) - musicRenderer->offset;
 
-            BaseElement* selectedElement = FindSelectedElement(point);
+            std::shared_ptr<BaseElement> selectedElement = FindSelectedElement(point);
 
             SetSelection({ selectedElement });
 
@@ -249,7 +249,7 @@ bool Editor::OnTextFieldEvent(int id, const std::string& input)
 {
     for (auto e : selectedElements)
     {
-        CSLyric* lyric = dynamic_cast<CSLyric*>(e);
+        CSLyric* lyric = dynamic_cast<CSLyric*>(e.get());
         lyric->lyricText.text = input;
     }
 
@@ -268,7 +268,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
     {
         if (e->elementType == BaseElement::ElementType::CSLyric)
         {
-            CSLyric* lyric = dynamic_cast<CSLyric*>(e);
+            CSLyric* lyric = dynamic_cast<CSLyric*>(e.get());
 
             lyric->beatPosition = jsonObject["Main"]["beatPosition"]["value"];
             lyric->duration = jsonObject["Main"]["duration"]["value"];
@@ -317,7 +317,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
                 newLyric->beatPosition = lyric->beatPosition;
                 measure->lyrics.push_back(newLyric);
 
-                SetSelection({ newLyric.get() });
+                SetSelection({ newLyric });
             }
             else
                 lyric->lyricText.text = text;
@@ -335,7 +335,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::CSChord)
         {
-            CSChord* chord = dynamic_cast<CSChord*>(e);
+            CSChord* chord = dynamic_cast<CSChord*>(e.get());
 
             chord->chordSymbol = Chord::CreateChordFromString(jsonObject["Main"]["chordName"]["value"]);
             chord->chordSymbol.CalculateChordName(song->settings);
@@ -347,7 +347,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
-            CSMeasure* measure = dynamic_cast<CSMeasure*>(e);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(e.get());
             int measureIndex = measure->GetMeasureIndex();
 
             measure->width = jsonObject["Main"]["width"]["value"];
@@ -357,7 +357,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::Credit)
         {
-            Credit* credit = dynamic_cast<Credit*>(e);
+            Credit* credit = dynamic_cast<Credit*>(e.get());
 
             credit->words.text = jsonObject["Main"]["text"]["value"];
             credit->pageNumber = jsonObject["Main"]["pageNumber"]["value"];
@@ -375,7 +375,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::TextDirection)
         {
-            TextDirection* direction = dynamic_cast<TextDirection*>(e);
+            TextDirection* direction = dynamic_cast<TextDirection*>(e.get());
 
             direction->text.text = jsonObject["Main"]["text"]["value"];
 
@@ -392,7 +392,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
         }
         else if (e->elementType == BaseElement::ElementType::TimeSignature)
         {
-            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e);
+            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e.get());
             SetTimeSignatureProperties(timeSignature, propertiesString);
         }
     }
@@ -428,7 +428,7 @@ void Editor::OnNewElement(int id)
 {
     if (!selectedElements.empty())
     {
-        BaseElement* e = selectedElements[0];
+        BaseElement* e = selectedElements[0].get();
         if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
             CSMeasure* measure = dynamic_cast<CSMeasure*>(e);
@@ -442,11 +442,20 @@ void Editor::OnNewElement(int id)
             }
             else if (id == 1)
             {
+                std::unique_ptr<AddChordCommand> command = std::make_unique<AddChordCommand>();
+
                 std::shared_ptr<CSChord> newChord = std::make_shared<CSChord>();
                 newChord->chordSymbol = Chord::CreateChordFromString("C");
                 newChord->chordSymbol.CalculateChordName(song->settings);
+                newChord->noteHead = std::make_unique<NoteHead>();
+                newChord->noteHead->noteDuration = NoteValue::Quarter;
+                newChord->duration = 1.0f;
+                newChord->noteStem = std::make_unique<NoteStem>();
+                newChord->noteStem->stemType = NoteStem::StemType::Up;
+                command->chord = newChord;
+                command->measure = measure;
 
-                measure->chords.push_back(newChord);
+                ExecuteCommand(std::move(command));
             }
             else if (id == 2 || id == 3 || id == 4) // insert measure
             {
@@ -553,6 +562,86 @@ void Editor::OnNewElement(int id)
                 }
 
             }
+            else if (id >= 10 && id <= 15) // change duration
+            {
+                if (id == 10)
+                {
+                    chord->noteHead->noteDuration = NoteValue::Whole;
+                    chord->noteStem = nullptr;
+                    chord->noteFlag = nullptr;
+                    chord->augDot = nullptr;
+                    chord->duration = 4.0f;
+                }
+                else if (id == 11)
+                {
+                    chord->noteHead->noteDuration = NoteValue::Half;
+                    if (!chord->noteStem)
+                    {
+                        chord->noteStem = std::make_unique<NoteStem>();
+                        chord->noteStem->stemType = NoteStem::StemType::Up;
+                    }
+                    chord->noteFlag = nullptr;
+                    chord->augDot = nullptr;
+                    chord->duration = 2.0f;
+                }
+                else if (id == 12)
+                {
+                    chord->noteHead->noteDuration = NoteValue::Quarter;
+                    if (!chord->noteStem)
+                    {
+                        chord->noteStem = std::make_unique<NoteStem>();
+                        chord->noteStem->stemType = NoteStem::StemType::Up;
+                    }
+                    chord->noteFlag = nullptr;
+                    chord->augDot = nullptr;
+                    chord->duration = 1.0f;
+                }
+                else if (id == 13)
+                {
+                    chord->noteHead->noteDuration = NoteValue::Eighth;
+                    if (!chord->noteStem)
+                    {
+                        chord->noteStem = std::make_unique<NoteStem>();
+                        chord->noteStem->stemType = NoteStem::StemType::Up;
+                    }
+
+                    chord->noteFlag = std::make_unique<NoteFlag>();
+                    chord->noteFlag->type = NoteFlag::Type::Up;
+                    chord->noteFlag->noteDuration = NoteValue::Eighth;
+
+                    chord->augDot = nullptr;
+                    chord->duration = 0.5f;
+                }
+                else if (id == 14)
+                {
+                    chord->noteHead->noteDuration = NoteValue::Sixteenth;
+                    if (!chord->noteStem)
+                    {
+                        chord->noteStem = std::make_unique<NoteStem>();
+                        chord->noteStem->stemType = NoteStem::StemType::Up;
+                    }
+
+                    chord->noteFlag = std::make_unique<NoteFlag>();
+                    chord->noteFlag->type = NoteFlag::Type::Up;
+                    chord->noteFlag->noteDuration = NoteValue::Sixteenth;
+
+                    chord->augDot = nullptr;
+                    chord->duration = 0.25f;
+                }
+                else if (id == 15)
+                {
+                    if (chord->augDot)
+                    {
+                        chord->augDot = nullptr;
+                        chord->duration *= 2.0f/3.0f;
+                    }
+                    else
+                    {
+                        chord->augDot = std::make_unique<AugmentationDot>();
+                        chord->duration *= 3.0f/2.0f;
+                    }
+                }
+            }
         }
     }
     else
@@ -576,6 +665,25 @@ void Editor::OnNewElement(int id)
         }
     }
 
+    if (id == 17 && !executedCommandStack.empty()) // undo
+    {
+        std::unique_ptr<EditorCommand> command = std::move(executedCommandStack.back());
+        executedCommandStack.pop_back();
+
+        command->Undo();
+
+        redoCommandStack.push_back(std::move(command));
+    }
+    else if (id == 18 && !redoCommandStack.empty()) // redo
+    {
+        std::unique_ptr<EditorCommand> command = std::move(redoCommandStack.back());
+        redoCommandStack.pop_back();
+
+        command->Execute();
+
+        executedCommandStack.push_back(std::move(command));
+    }
+
     Update();
 }
 
@@ -585,7 +693,7 @@ void Editor::OnDeleteSelected()
     {
         if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
-            CSMeasure* measure = dynamic_cast<CSMeasure*>(e);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(e.get());
             //measure->Delete();
 
             if (measure->parent)
@@ -642,7 +750,7 @@ void Editor::OnDeleteSelected()
         }
         else if (e->elementType == BaseElement::ElementType::TimeSignature)
         {
-            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e);
+            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e.get());
             
             for (auto instrument : song->instruments)
             {
@@ -666,6 +774,22 @@ void Editor::OnDeleteSelected()
                     }
                 }
             }
+        }
+        else if (e->elementType == BaseElement::ElementType::CSChord)
+        {
+            std::shared_ptr<CSChord> chord = std::dynamic_pointer_cast<CSChord>(e);
+
+            std::unique_ptr<DeleteChordCommand> command = std::make_unique<DeleteChordCommand>();
+
+            command->chord = chord;
+            
+            if (chord->parent->elementType == BaseElement::ElementType::CSMeasure)
+            {
+                CSMeasure* parentMeasure = dynamic_cast<CSMeasure*>(chord->parent);
+                command->measure = parentMeasure;
+            }
+
+            ExecuteCommand(std::move(command));
         }
         else
         {
@@ -812,12 +936,12 @@ void Editor::SetTimeSignatureProperties(TimeSignature* timeSignature, const std:
     timeSignature->position.y = jsonObject["Position"]["posY"]["value"];
 }
 
-void Editor::SetSelection(std::vector<BaseElement*> newSelected)
+void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
 {
     // deselect elements
     for (int i = selectedElements.size() - 1; i >= 0; i--)
     {
-        BaseElement* element = selectedElements[i];
+        BaseElement* element = selectedElements[i].get();
         if (element->elementType == BaseElement::ElementType::CSLyric)
         {
             CSLyric* lyric = dynamic_cast<CSLyric*>(element);
@@ -852,45 +976,45 @@ void Editor::SetSelection(std::vector<BaseElement*> newSelected)
     {
         selectedElements = newSelected;
         
-        BaseElement* selectedElement = selectedElements[0]; // TODO: revise when implementing multi-select
+        std::shared_ptr<BaseElement> selectedElement = selectedElements[0]; // TODO: revise when implementing multi-select
 
         selectedElement->selectedColor = 0x3333EEFF;
 
         if (selectedElement->elementType == BaseElement::ElementType::CSLyric)
         {
-            CSLyric* lyric = dynamic_cast<CSLyric*>(selectedElement);
+            CSLyric* lyric = dynamic_cast<CSLyric*>(selectedElement.get());
             lyric->lyricText.selectedColor = 0x3333EEFF;
 
             UpdateLyricProperties(lyric);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::CSChord)
         {
-            CSChord* chord = dynamic_cast<CSChord*>(selectedElement);
+            CSChord* chord = dynamic_cast<CSChord*>(selectedElement.get());
             chord->chordSymbol.selectedColor = 0x3333EEFF;
             
             UpdateChordProperties(chord);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::CSMeasure)
         {
-            CSMeasure* measure = dynamic_cast<CSMeasure*>(selectedElement);
+            CSMeasure* measure = dynamic_cast<CSMeasure*>(selectedElement.get());
 
             UpdateMeasureProperties(measure);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::Credit)
         {
-            Credit* credit = dynamic_cast<Credit*>(selectedElement);
+            Credit* credit = dynamic_cast<Credit*>(selectedElement.get());
 
             UpdateCreditProperties(credit);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::TextDirection)
         {
-            TextDirection* direction = dynamic_cast<TextDirection*>(selectedElement);
+            TextDirection* direction = dynamic_cast<TextDirection*>(selectedElement.get());
 
             UpdateTextDirectionProperties(direction);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::TimeSignature)
         {
-            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(selectedElement);
+            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(selectedElement.get());
 
             UpdateTimeSignatureProperties(timeSignature);
         }
@@ -915,4 +1039,11 @@ void Editor::Update()
     musicRenderer->updateRenderData = true;
     musicRenderer->layoutCalculated = false;
     musicRenderer->Render(song, song->settings);
+}
+
+void Editor::ExecuteCommand(std::unique_ptr<EditorCommand> command)
+{
+    command->Execute();
+    executedCommandStack.push_back(std::move(command));
+    redoCommandStack.clear();
 }

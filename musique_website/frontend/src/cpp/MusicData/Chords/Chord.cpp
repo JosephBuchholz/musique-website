@@ -294,7 +294,7 @@ void Chord::AddSpansForChordString()
             // if it is a musical symbol
             case (uint16_t)SMuFLID::csymAccidentalFlat:
             case (uint16_t)SMuFLID::csymAccidentalDoubleFlat:
-            case (uint16_t)SMuFLID::csymAccidentalSharp:
+            case (uint16_t)SMuFLID::accidentalSharp:
             case (uint16_t)SMuFLID::csymAccidentalDoubleSharp:
             case (uint16_t)SMuFLID::csymAccidentalNatural:
             case (uint16_t)SMuFLID::csymAlteredBassSlash:
@@ -380,7 +380,7 @@ SMuFLID Chord::GetChordSymbolAccidentalSMuFLID(int alter)
         case -2: return SMuFLID::csymAccidentalDoubleFlat;
         case -1: return SMuFLID::csymAccidentalFlat;
         case 0: return SMuFLID::csymAccidentalNatural;
-        case 1: return SMuFLID::csymAccidentalSharp;
+        case 1: return SMuFLID::accidentalSharp;
         case 2: return SMuFLID::csymAccidentalDoubleSharp;
         case 3: return SMuFLID::csymAccidentalTripleSharp;
         default: return SMuFLID::ErrorGlyph;

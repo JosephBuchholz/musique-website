@@ -191,6 +191,8 @@ void CSMeasure::Init(const Settings& settings)
             }
         });
 
+        chord->parent = this;
+
         Vec2<float> dimensions = chord->GetDimensions();
         Vec2<float> position = previousPosition;
         chord->Init(settings, position);

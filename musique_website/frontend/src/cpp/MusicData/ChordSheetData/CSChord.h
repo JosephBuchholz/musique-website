@@ -43,6 +43,8 @@ public:
     std::unique_ptr<NoteFlag> noteFlag;
     std::unique_ptr<AugmentationDot> augDot;
 
+    BaseElement* parent = nullptr;
+
     std::function<void()> onDeleteCallback = []() {};
 };
 

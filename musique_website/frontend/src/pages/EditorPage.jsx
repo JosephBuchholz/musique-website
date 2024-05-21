@@ -686,50 +686,54 @@ export default function EditorPage() {
 
     return (
         <>
-            <div className="flex flex-col h-screen">
+            <div className="w-screen h-screen flex flex-col">
                 <Header></Header>
 
-                <div className="fixed top-0 left-1/4 w-1/2 h-full pt-16 pb-20">
-                    <div ref={canvasDiv} className="border-2 w-full h-full">
+                <ActionBar></ActionBar>
+
+                <div className="h-full w-full flex flex-row overflow-auto">
+                    <ComponentsSidebar
+                        onPagePropsButtonClicked={() => {
+                            setShowPagePropsModal(true);
+                        }}
+                    />
+
+                    <div className="w-full">
+                        <div ref={canvasDiv} className="border-2 w-full h-full">
+                            <canvas
+                                ref={canvasRef}
+                                className="w-full h-full"
+                                id="canvas"
+                                width="776"
+                                height="600"
+                            ></canvas>
+                        </div>
+
                         <canvas
-                            ref={canvasRef}
-                            className="w-full h-full"
-                            id="canvas"
-                            width="776"
-                            height="600"
+                            ref={pdfCanvasRef}
+                            className="border-2 hidden"
+                            id="pdf_canvas"
+                            width={pageWidth}
+                            height={pageHeight}
                         ></canvas>
                     </div>
 
-                    <canvas
-                        ref={pdfCanvasRef}
-                        className="border-2 hidden"
-                        id="pdf_canvas"
-                        width={pageWidth}
-                        height={pageHeight}
-                    ></canvas>
+                    <Sidebar
+                        properties={editableProperties}
+                        onPropertiesChange={(newProperties) => {
+                            setEditableProperties(newProperties);
+
+                            if (moduleIsCreated) {
+                                var ptr = module.stringToNewUTF8(
+                                    JSON.stringify(newProperties)
+                                );
+                                module.onPropertiesUpdated(ptr);
+                            }
+                        }}
+                    />
                 </div>
 
-                <ComponentsSidebar
-                    onPagePropsButtonClicked={() => {
-                        setShowPagePropsModal(true);
-                    }}
-                />
-
                 <ButtonTray />
-
-                <Sidebar
-                    properties={editableProperties}
-                    onPropertiesChange={(newProperties) => {
-                        setEditableProperties(newProperties);
-
-                        if (moduleIsCreated) {
-                            var ptr = module.stringToNewUTF8(
-                                JSON.stringify(newProperties)
-                            );
-                            module.onPropertiesUpdated(ptr);
-                        }
-                    }}
-                />
 
                 {currentModal}
             </div>
@@ -827,9 +831,128 @@ function PagePropertiesModal({
     );
 }
 
+function ActionBar() {
+    return (
+        <div className="w-full flex border-b-2 bg-slate-50">
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(10);
+                    }
+                }}
+            >
+                Whole
+                {/*<img
+                    src="/static/icons/quarter_note_icon.svg"
+                    alt="change to whole note"
+            />*/}
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(11);
+                    }
+                }}
+            >
+                Half
+                {/*<img
+                    src="/static/icons/quarter_note_icon.svg"
+                    alt="change to half note"
+            />*/}
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(12);
+                    }
+                }}
+            >
+                <img
+                    src="/static/icons/quarter_note_icon.svg"
+                    alt="change to quarter note"
+                />
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(13);
+                    }
+                }}
+            >
+                Eighth
+                {/*<img
+                    src="/static/icons/quarter_note_icon.svg"
+                    alt="change to eighth note"
+            />*/}
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(14);
+                    }
+                }}
+            >
+                16th
+                {/*<img
+                    src="/static/icons/quarter_note_icon.svg"
+                    alt="change to sixteenth note"
+            />*/}
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(15);
+                    }
+                }}
+            >
+                Dot
+                {/*<img
+                    src="/static/icons/quarter_note_icon.svg"
+                    alt="make dotted note"
+            />*/}
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(16);
+                    }
+                }}
+            >
+                <img src="/static/icons/rest_icon.svg" alt="make rest" />
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(17);
+                    }
+                }}
+            >
+                Undo
+            </TrayButton>
+
+            <TrayButton
+                onClick={async () => {
+                    if (moduleIsCreated) {
+                        module.onNewElement(18);
+                    }
+                }}
+            >
+                Redo
+            </TrayButton>
+        </div>
+    );
+}
+
 function ButtonTray() {
     return (
-        <div className="fixed bottom-0 w-3/4 flex border-t-2 bg-slate-50">
+        <div className="flex border-t-2 bg-slate-50">
             <TrayToggleButton
                 icon1="/static/icons/pause_icon.svg"
                 icon2="/static/icons/play_icon.svg"
@@ -923,8 +1046,8 @@ function ButtonTray() {
 function ComponentsSidebar({ onPagePropsButtonClicked }) {
     return (
         <>
-            <div className="fixed top-0 left-0 w-1/4 h-full pt-16">
-                <div className="border-l-2 bg-slate-50 w-full h-full">
+            <div className="w-1/4 h-full">
+                <div className="border-l-2 bg-slate-50 w-full h-full overflow-y-auto">
                     <ul className="m-2 space-y-2">
                         <SidebarHeading>Components</SidebarHeading>
 
@@ -1127,8 +1250,8 @@ function Sidebar({ properties, onPropertiesChange }) {
 
     return (
         <>
-            <div className="fixed top-0 right-0 w-1/4 h-full pt-16">
-                <div className="border-l-2 bg-slate-50 w-full h-full overflow-auto">
+            <div className="h-full w-1/4">
+                <div className="border-l-2 bg-slate-50 w-full h-full overflow-y-auto">
                     <ul className="m-2 space-y-2">
                         <SidebarHeading>Properties</SidebarHeading>
 
@@ -1253,7 +1376,7 @@ function TextButton({ children, onClick = () => {} }) {
 function TrayButton({ children, onClick = () => {} }) {
     return (
         <Button
-            className="w-16 h-16 rounded-sm m-2 hover:border-2 hover:border-slate-200 active:border-blue-300"
+            className="w-10 h-10 rounded-sm m-2 hover:border-2 hover:border-slate-200 active:border-blue-300"
             onClick={onClick}
         >
             <center>{children}</center>
@@ -1270,7 +1393,7 @@ function TrayToggleButton({ icon1, icon2, alt, onClick = () => {} }) {
 
     return (
         <Button
-            className="w-16 h-16 rounded-sm m-2 hover:border-2 hover:border-slate-200 active:border-blue-300"
+            className="w-10 h-10 rounded-sm m-2 hover:border-2 hover:border-slate-200 active:border-blue-300"
             onClick={() => {
                 setToggled(!toggled);
                 onClick();
