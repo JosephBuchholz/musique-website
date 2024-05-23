@@ -2,7 +2,6 @@
 
 void AddChordCommand::Execute()
 {
-    LOGD("Add chord command: %f", chord->beatPosition);
     chord->selectedColor.color = 0x000000FF;
     measure->chords.push_back(chord);
 }
@@ -17,21 +16,7 @@ void AddChordCommand::Undo()
 
 void DeleteChordCommand::Execute()
 {
-    LOGD("Delete chord command: %f", chord->beatPosition);
-    /*std::shared_ptr<CSChord> chordCopy = std::make_shared<CSChord>();
-    chordCopy->chordSymbol = chord->chordSymbol;
-    chordCopy->duration = chord->duration;
-    chordCopy->beatPosition = chord->beatPosition;
-    chordCopy->beatPositionInSong = chord->beatPositionInSong;
-    //chordCopy->noteHead = std::move(chord->noteHead);
-    //chordCopy->noteStem = std::move(chord->noteStem);
-    //chordCopy->noteFlag = std::move(chord->noteFlag);
-    //chordCopy->augDot = std::move(chord->augDot);
-    chordCopy->parent = chord->parent;*/
-
     chord->Delete();
-
-    //chord = chordCopy;
 }
 
 void DeleteChordCommand::Undo()
@@ -41,3 +26,32 @@ void DeleteChordCommand::Undo()
     command.measure = measure;
     command.Execute();
 }
+
+
+void AddLyricCommand::Execute()
+{
+    lyric->selectedColor.color = 0x000000FF;
+    measure->lyrics.push_back(lyric);
+}
+
+void AddLyricCommand::Undo()
+{
+    DeleteLyricCommand command;
+    command.lyric = lyric;
+    command.measure = measure;
+    command.Execute();
+}
+
+void DeleteLyricCommand::Execute()
+{
+    lyric->Delete();
+}
+
+void DeleteLyricCommand::Undo()
+{
+    AddLyricCommand command;
+    command.lyric = lyric;
+    command.measure = measure;
+    command.Execute();
+}
+

@@ -117,6 +117,10 @@ bool OnKeyboardEvent(int eventType, int keyCodePtr)
         event.keyCode = KeyboardEvent::KeyCode::Control;
     else if (keyCode == "Shift")
         event.keyCode = KeyboardEvent::KeyCode::Shift;
+    else if (keyCode == "z")
+        event.keyCode = KeyboardEvent::KeyCode::z;
+    else if (keyCode == "y")
+        event.keyCode = KeyboardEvent::KeyCode::y;
 
     App& app = App::GetInstance();
 

@@ -37,3 +37,27 @@ public:
     std::shared_ptr<CSChord> chord;
     CSMeasure* measure;
 };
+
+class AddLyricCommand : public EditorCommand
+{
+public:
+    
+    virtual void Execute() override;
+    virtual void Undo() override;
+
+public:
+    std::shared_ptr<CSLyric> lyric;
+    CSMeasure* measure;
+};
+
+class DeleteLyricCommand : public EditorCommand
+{
+public:
+    
+    virtual void Execute() override;
+    virtual void Undo() override;
+
+public:
+    std::shared_ptr<CSLyric> lyric;
+    CSMeasure* measure;
+};

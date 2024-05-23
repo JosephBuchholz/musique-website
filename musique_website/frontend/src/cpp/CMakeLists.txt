@@ -132,6 +132,7 @@ add_executable(
         Editor/Editor.cpp
         Editor/Properties.cpp
         Editor/EditorCommand.cpp
+        Editor/ElementProperties.cpp
 
         FileParsers/Json/JsonHelper.cpp
 

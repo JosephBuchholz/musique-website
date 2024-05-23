@@ -244,6 +244,8 @@ void CSMeasure::Init(const Settings& settings)
             }
         });
 
+        lyric->parent = this;
+
         if (lyric->isPickupToNextMeasure && lyric->parentLyricPickup && !displayReminderPickupLyrics)
         {
             lyric->Init(settings, { 0.0f, 0.0f });

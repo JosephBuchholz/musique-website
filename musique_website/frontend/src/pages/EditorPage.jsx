@@ -505,12 +505,18 @@ export default function EditorPage() {
         // --- Event Listeners ---
 
         function keydownEventListener(event) {
-            const key = event.key;
-            console.log("key: " + key);
-
             if (moduleIsCreated) {
                 module.onKeyboardEvent(
                     KeyboardEventType.Down.value,
+                    module.stringToNewUTF8(event.key)
+                );
+            }
+        }
+
+        function keyupEventListener(event) {
+            if (moduleIsCreated) {
+                module.onKeyboardEvent(
+                    KeyboardEventType.Up.value,
                     module.stringToNewUTF8(event.key)
                 );
             }
@@ -563,12 +569,14 @@ export default function EditorPage() {
         }
 
         document.addEventListener("keydown", keydownEventListener, true);
+        document.addEventListener("keyup", keyupEventListener, true);
         canvas.addEventListener("pointerdown", pointerDownEventListener);
         document.addEventListener("pointermove", pointerMoveEventListener);
         document.addEventListener("pointerup", pointerUpEventListener);
 
         return () => {
             document.removeEventListener("keydown", keydownEventListener, true);
+            document.removeEventListener("keyup", keyupEventListener, true);
             canvas.removeEventListener("pointerdown", pointerDownEventListener);
             document.removeEventListener(
                 "pointermove",
@@ -841,11 +849,10 @@ function ActionBar() {
                     }
                 }}
             >
-                Whole
-                {/*<img
-                    src="/static/icons/quarter_note_icon.svg"
+                <img
+                    src="/static/icons/whole_note_icon.svg"
                     alt="change to whole note"
-            />*/}
+                />
             </TrayButton>
 
             <TrayButton
@@ -855,11 +862,10 @@ function ActionBar() {
                     }
                 }}
             >
-                Half
-                {/*<img
-                    src="/static/icons/quarter_note_icon.svg"
+                <img
+                    src="/static/icons/half_note_icon.svg"
                     alt="change to half note"
-            />*/}
+                />
             </TrayButton>
 
             <TrayButton
@@ -934,7 +940,7 @@ function ActionBar() {
                     }
                 }}
             >
-                Undo
+                <img src="/static/icons/undo_icon.svg" alt="undo" />
             </TrayButton>
 
             <TrayButton
@@ -944,7 +950,7 @@ function ActionBar() {
                     }
                 }}
             >
-                Redo
+                <img src="/static/icons/redo_icon.svg" alt="redo" />
             </TrayButton>
         </div>
     );

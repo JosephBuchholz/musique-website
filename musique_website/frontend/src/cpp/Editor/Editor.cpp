@@ -5,44 +5,7 @@
 #include "Properties.h"
 #include "../Callbacks.h"
 
-#include "../libs/nlohmann/json.hpp"
-using json = nlohmann::json;
-
-void AddBoolToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, bool value)
-{
-    jsonObject[heading][id]["name"] = name;
-    jsonObject[heading][id]["type"] = "bool";
-    jsonObject[heading][id]["value"] = value;
-}
-
-void AddTextToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, const std::string& value)
-{
-    jsonObject[heading][id]["name"] = name;
-    jsonObject[heading][id]["type"] = "text";
-    jsonObject[heading][id]["value"] = value;
-}
-
-void AddFloatToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, float value)
-{
-    jsonObject[heading][id]["name"] = name;
-    jsonObject[heading][id]["type"] = "float";
-    jsonObject[heading][id]["value"] = value;
-}
-
-void AddIntToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, int value)
-{
-    jsonObject[heading][id]["name"] = name;
-    jsonObject[heading][id]["type"] = "int";
-    jsonObject[heading][id]["value"] = value;
-}
-
-void AddColorToJson(nlohmann::ordered_json& jsonObject, const std::string& heading, const std::string& id, const std::string& name, uint32_t value)
-{
-    jsonObject[heading][id]["name"] = name;
-    jsonObject[heading][id]["type"] = "color";
-    jsonObject[heading][id]["value"] = value;
-}
-
+#include "JsonHelper.h"
 
 std::shared_ptr<BaseElement> Editor::FindSelectedElement(Vec2<float> point)
 {
@@ -240,6 +203,33 @@ bool Editor::OnKeyboardEvent(const KeyboardEvent& event)
         {
             OnDeleteSelected();
         }
+        else if (event.keyCode == KeyboardEvent::KeyCode::Control)
+        {
+            controlPressed = true;
+        }
+        else if (event.keyCode == KeyboardEvent::KeyCode::z)
+        {
+            if (controlPressed)
+            {
+                UndoCommand();
+                Update();
+            }
+        }
+        else if (event.keyCode == KeyboardEvent::KeyCode::y)
+        {
+            if (controlPressed)
+            {
+                RedoCommand();
+                Update();
+            }
+        }
+    }
+    else if (event.eventType == KeyboardEvent::KeyboardEventType::Up)
+    {
+        if (event.keyCode == KeyboardEvent::KeyCode::Control)
+        {
+            controlPressed = false;
+        }
     }
 
     return true;
@@ -262,24 +252,53 @@ bool Editor::OnTextFieldEvent(int id, const std::string& input)
 
 void Editor::OnPropertiesUpdated(const std::string& propertiesString)
 {
-    json jsonObject = json::parse(propertiesString);
-
     for (auto e : selectedElements)
     {
         if (e->elementType == BaseElement::ElementType::CSLyric)
         {
             CSLyric* lyric = dynamic_cast<CSLyric*>(e.get());
+            if (lyric->lyricText.text == "")
+            {
+                UndoCommand(false); // undo/get rid of temp lyric
+                lyric->lyricText.text = "delete"; // so that this lyric does accidentally tigger undo again (TODO: this is kinda dumb, should get rid of this)
 
-            lyric->beatPosition = jsonObject["Main"]["beatPosition"]["value"];
-            lyric->duration = jsonObject["Main"]["duration"]["value"];
-            lyric->startsPickup = jsonObject["Main"]["startsPickup"]["value"];
+                // add new lyric with updated properties
+                std::unique_ptr<AddLyricCommand> command = std::make_unique<AddLyricCommand>();
 
+                std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
+                SetLyricProperties(newLyric.get(), propertiesString);
+
+                command->lyric = newLyric;
+                command->measure = dynamic_cast<CSMeasure*>(lyric->parent);
+
+                ExecuteCommand(std::move(command));
+
+                SetSelection({ newLyric });
+
+                break;
+            }
+        }
+
+        std::unique_ptr<ChangePropertiesCommand> command = std::make_unique<ChangePropertiesCommand>();
+        command->editor = this;
+        command->element = e;
+        command->properties = propertiesString;
+        ExecuteCommand(std::move(command));
+        
+        if (e->elementType == BaseElement::ElementType::CSLyric)
+        {
+            CSLyric* lyric = dynamic_cast<CSLyric*>(e.get());
+
+            json jsonObject = json::parse(propertiesString);
             std::string text = jsonObject["Main"]["text"]["value"];
 
             if (text.back() == ' ')
             {
                 text.pop_back();
-                lyric->lyricText.text = text;
+                if (lyric->lyricText.text == text)
+                {
+                    UndoCommand(false);
+                }
 
                 CSMeasure* measure = nullptr;
 
@@ -312,93 +331,26 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
 
                 ASSERT(measure);
 
+                std::unique_ptr<AddLyricCommand> command = std::make_unique<AddLyricCommand>();
+
                 std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
                 newLyric->lyricText.text = "";
                 newLyric->beatPosition = lyric->beatPosition;
-                measure->lyrics.push_back(newLyric);
+
+                command->lyric = newLyric;
+                command->measure = measure;
+
+                ExecuteCommand(std::move(command));
 
                 SetSelection({ newLyric });
             }
-            else
-                lyric->lyricText.text = text;
-
-            bool fontWeight = jsonObject["Text Properties"]["isBold"]["value"];
-            bool fontStyle = jsonObject["Text Properties"]["isItalic"]["value"];
-
-            lyric->lyricText.fontWeight = (FontWeight)(1 + fontWeight);
-            lyric->lyricText.fontStyle = (FontStyle)(1 + fontStyle);
-            lyric->lyricText.fontSize.size = jsonObject["Text Properties"]["textSize"]["value"];
-            lyric->lyricText.color.color = jsonObject["Text Properties"]["color"]["value"];
-
-            lyric->position.x = jsonObject["Position"]["posX"]["value"];
-            lyric->position.y = jsonObject["Position"]["posY"]["value"];
-        }
-        else if (e->elementType == BaseElement::ElementType::CSChord)
-        {
-            CSChord* chord = dynamic_cast<CSChord*>(e.get());
-
-            chord->chordSymbol = Chord::CreateChordFromString(jsonObject["Main"]["chordName"]["value"]);
-            chord->chordSymbol.CalculateChordName(song->settings);
-            chord->beatPosition = jsonObject["Main"]["beatPosition"]["value"];
-            chord->duration = jsonObject["Main"]["duration"]["value"];
-
-            chord->position.x = jsonObject["Position"]["posX"]["value"];
-            chord->position.y = jsonObject["Position"]["posY"]["value"];
-        }
-        else if (e->elementType == BaseElement::ElementType::CSMeasure)
-        {
-            CSMeasure* measure = dynamic_cast<CSMeasure*>(e.get());
-            int measureIndex = measure->GetMeasureIndex();
-
-            measure->width = jsonObject["Main"]["width"]["value"];
-            song->systemMeasures[measureIndex]->pageBreak = jsonObject["Main"]["pageBreak"]["value"];
-            song->systemMeasures[measureIndex]->systemBreak = jsonObject["Main"]["systemBreak"]["value"];
-            song->systemMeasures[measureIndex]->isPickupMeasure = jsonObject["Main"]["isPickupMeasure"]["value"];
-        }
-        else if (e->elementType == BaseElement::ElementType::Credit)
-        {
-            Credit* credit = dynamic_cast<Credit*>(e.get());
-
-            credit->words.text = jsonObject["Main"]["text"]["value"];
-            credit->pageNumber = jsonObject["Main"]["pageNumber"]["value"];
-
-            bool fontWeight = jsonObject["Text Properties"]["isBold"]["value"];
-            bool fontStyle = jsonObject["Text Properties"]["isItalic"]["value"];
-
-            credit->words.fontWeight = (FontWeight)(1 + fontWeight);
-            credit->words.fontStyle = (FontStyle)(1 + fontStyle);
-            credit->words.fontSize.size = jsonObject["Text Properties"]["textSize"]["value"];
-            credit->words.color.color = jsonObject["Text Properties"]["color"]["value"];
-
-            credit->words.positionX = jsonObject["Position"]["posX"]["value"];
-            credit->words.positionY = jsonObject["Position"]["posY"]["value"];
-        }
-        else if (e->elementType == BaseElement::ElementType::TextDirection)
-        {
-            TextDirection* direction = dynamic_cast<TextDirection*>(e.get());
-
-            direction->text.text = jsonObject["Main"]["text"]["value"];
-
-            bool fontWeight = jsonObject["Text Properties"]["isBold"]["value"];
-            bool fontStyle = jsonObject["Text Properties"]["isItalic"]["value"];
-
-            direction->text.fontWeight = (FontWeight)(1 + fontWeight);
-            direction->text.fontStyle = (FontStyle)(1 + fontStyle);
-            direction->text.fontSize.size = jsonObject["Text Properties"]["textSize"]["value"];
-            direction->text.color.color = jsonObject["Text Properties"]["color"]["value"];
-
-            direction->position.x = jsonObject["Position"]["posX"]["value"];
-            direction->position.y = jsonObject["Position"]["posY"]["value"];
-        }
-        else if (e->elementType == BaseElement::ElementType::TimeSignature)
-        {
-            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(e.get());
-            SetTimeSignatureProperties(timeSignature, propertiesString);
         }
     }
 
     if (selectedElements.empty())
     {
+        json jsonObject = json::parse(propertiesString);
+
         song->settings.displayConstants.lyricFontSize.size = jsonObject["Lyrics"]["fontSize"]["value"];
         song->settings.displayConstants.lyricPositionY = jsonObject["Lyrics"]["lyricPositionY"]["value"];
         song->settings.displayConstants.lyricSpaceWidth = jsonObject["Lyrics"]["lyricSpaceWidth"]["value"];
@@ -435,10 +387,15 @@ void Editor::OnNewElement(int id)
 
             if (id == 0)
             {
+                std::unique_ptr<AddLyricCommand> command = std::make_unique<AddLyricCommand>();
+
                 std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
                 newLyric->lyricText.text = "none";
 
-                measure->lyrics.push_back(newLyric);
+                command->lyric = newLyric;
+                command->measure = measure;
+
+                ExecuteCommand(std::move(command));
             }
             else if (id == 1)
             {
@@ -537,29 +494,39 @@ void Editor::OnNewElement(int id)
 
             if (id == 0) // add lyric
             {
-                std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
-                newLyric->lyricText.text = "none";
-                newLyric->beatPosition = chord->beatPosition;
-
+                CSMeasure* measure = nullptr;
                 for (auto& instrument : song->instruments)
                 {
                     for (auto& staff : instrument->staves)
                     {
                         if (staff->csStaff)
                         {
-                            for (auto& measure : staff->csStaff->measures)
+                            for (auto& m : staff->csStaff->measures)
                             {
-                                for (auto& c : measure->chords)
+                                for (auto& c : m->chords)
                                 {
                                     if (c.get() == chord)
                                     {
-                                        measure->lyrics.push_back(newLyric);
+                                        measure = m.get();
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                ASSERT(measure);
+
+                std::unique_ptr<AddLyricCommand> command = std::make_unique<AddLyricCommand>();
+
+                std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
+                newLyric->lyricText.text = "none";
+                newLyric->beatPosition = chord->beatPosition;
+
+                command->lyric = newLyric;
+                command->measure = measure;
+
+                ExecuteCommand(std::move(command));
 
             }
             else if (id >= 10 && id <= 15) // change duration
@@ -665,24 +632,10 @@ void Editor::OnNewElement(int id)
         }
     }
 
-    if (id == 17 && !executedCommandStack.empty()) // undo
-    {
-        std::unique_ptr<EditorCommand> command = std::move(executedCommandStack.back());
-        executedCommandStack.pop_back();
-
-        command->Undo();
-
-        redoCommandStack.push_back(std::move(command));
-    }
-    else if (id == 18 && !redoCommandStack.empty()) // redo
-    {
-        std::unique_ptr<EditorCommand> command = std::move(redoCommandStack.back());
-        redoCommandStack.pop_back();
-
-        command->Execute();
-
-        executedCommandStack.push_back(std::move(command));
-    }
+    if (id == 17)
+        UndoCommand();
+    else if (id == 18)
+        RedoCommand();
 
     Update();
 }
@@ -791,6 +744,22 @@ void Editor::OnDeleteSelected()
 
             ExecuteCommand(std::move(command));
         }
+        else if (e->elementType == BaseElement::ElementType::CSLyric)
+        {
+            std::shared_ptr<CSLyric> lyric = std::dynamic_pointer_cast<CSLyric>(e);
+
+            std::unique_ptr<DeleteLyricCommand> command = std::make_unique<DeleteLyricCommand>();
+
+            command->lyric = lyric;
+            
+            if (lyric->parent->elementType == BaseElement::ElementType::CSMeasure)
+            {
+                CSMeasure* parentMeasure = dynamic_cast<CSMeasure*>(lyric->parent);
+                command->measure = parentMeasure;
+            }
+
+            ExecuteCommand(std::move(command));
+        }
         else
         {
             e->Delete();
@@ -802,138 +771,102 @@ void Editor::OnDeleteSelected()
     Update();
 }
 
-void Editor::UpdateLyricProperties(CSLyric* lyric)
+std::string Editor::GetProperties(const BaseElement* element) const
 {
-    nlohmann::ordered_json jsonObject;
+    switch (element->elementType)
+    {
+        case BaseElement::ElementType::CSLyric:
+        {
+            return GetLyricProperties(dynamic_cast<const CSLyric*>(element));
+        }
+        case BaseElement::ElementType::CSChord:
+        {
+            return GetChordProperties(dynamic_cast<const CSChord*>(element));
+        }
+        case BaseElement::ElementType::CSMeasure:
+        {
+            return GetMeasureProperties(dynamic_cast<const CSMeasure*>(element));
+        }
+        case BaseElement::ElementType::Credit:
+        {
+            return GetCreditProperties(dynamic_cast<const Credit*>(element));
+        }
+        case BaseElement::ElementType::TextDirection:
+        {
+            return GetTextDirectionProperties(dynamic_cast<const TextDirection*>(element));
+        }
+        case BaseElement::ElementType::TimeSignature:
+        {
+            return GetTimeSignatureProperties(dynamic_cast<const TimeSignature*>(element));
+        }
+        default: break;
+    }
 
-    AddTextToJson(jsonObject, "Main", "text", "Text", lyric->lyricText.text);
-    AddFloatToJson(jsonObject, "Main", "beatPosition", "Beat Position", lyric->beatPosition);
-    AddFloatToJson(jsonObject, "Main", "duration", "Duration", lyric->duration);
-    AddBoolToJson(jsonObject, "Main", "startsPickup", "Pickup To Next Measure", lyric->startsPickup);
-
-    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)lyric->lyricText.fontWeight - 1));
-    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)lyric->lyricText.fontStyle - 1));
-    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", lyric->lyricText.fontSize.size);
-    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", lyric->lyricText.color.color);
-
-    AddFloatToJson(jsonObject, "Position", "posX", "Position X", lyric->position.x);
-    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", lyric->position.y);
-
-    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+    ASSERT(false);
+    return "";
 }
 
-void Editor::UpdateChordProperties(CSChord* chord)
+void Editor::SetProperties(BaseElement* element, const std::string& propertiesString)
 {
-    nlohmann::ordered_json jsonObject;
-
-    AddTextToJson(jsonObject, "Main", "chordName", "Chord Name", chord->chordSymbol.GetChordNameAsStandardString());
-    AddFloatToJson(jsonObject, "Main", "beatPosition", "Beat Position", chord->beatPosition);
-    AddFloatToJson(jsonObject, "Main", "duration", "Duration", chord->duration);
-
-    AddFloatToJson(jsonObject, "Position", "posX", "Position X", chord->position.x);
-    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", chord->position.y);
-
-    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-}
-
-void Editor::UpdateMeasureProperties(CSMeasure* measure)
-{
-    int measureIndex = measure->GetMeasureIndex();
-            
-    nlohmann::ordered_json jsonObject;
-
-    AddFloatToJson(jsonObject, "Main", "width", "Width", measure->width);
-    AddBoolToJson(jsonObject, "Main", "pageBreak", "Page Break", song->systemMeasures[measureIndex]->pageBreak);
-    AddBoolToJson(jsonObject, "Main", "systemBreak", "System Break", song->systemMeasures[measureIndex]->systemBreak);
-    AddBoolToJson(jsonObject, "Main", "isPickupMeasure", "Is Pickup Measure", song->systemMeasures[measureIndex]->isPickupMeasure);
-
-    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-}
-
-void Editor::UpdateCreditProperties(Credit* credit)
-{
-    nlohmann::ordered_json jsonObject;
-
-    AddTextToJson(jsonObject, "Main", "text", "Text", credit->words.text);
-    AddIntToJson(jsonObject, "Main", "pageNumber", "Page", credit->pageNumber);
-
-    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)credit->words.fontWeight - 1));
-    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)credit->words.fontStyle - 1));
-    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", credit->words.fontSize.size);
-    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", credit->words.color.color);
-
-    AddFloatToJson(jsonObject, "Position", "posX", "Position X", credit->words.positionX);
-    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", credit->words.positionY);
-
-    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-}
-
-void Editor::UpdateTextDirectionProperties(TextDirection* direction)
-{
-    nlohmann::ordered_json jsonObject;
-
-    AddTextToJson(jsonObject, "Main", "text", "Text", direction->text.text);
-
-    AddBoolToJson(jsonObject, "Text Properties", "isBold", "Bold", (bool)((int)direction->text.fontWeight - 1));
-    AddBoolToJson(jsonObject, "Text Properties", "isItalic", "Italic", (bool)((int)direction->text.fontStyle - 1));
-    AddFloatToJson(jsonObject, "Text Properties", "textSize", "Text Size", direction->text.fontSize.size);
-    AddColorToJson(jsonObject, "Text Properties", "color", "Text Color", direction->text.color.color);
-
-    AddFloatToJson(jsonObject, "Position", "posX", "Position X", direction->position.x);
-    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", direction->position.y);
-
-    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
+    switch (element->elementType)
+    {
+        case BaseElement::ElementType::CSLyric:
+        {
+            SetLyricProperties(dynamic_cast<CSLyric*>(element), propertiesString); break;
+        }
+        case BaseElement::ElementType::CSChord:
+        {
+            SetChordProperties(dynamic_cast<CSChord*>(element), propertiesString); break;
+        }
+        case BaseElement::ElementType::CSMeasure:
+        {
+            SetMeasureProperties(dynamic_cast<CSMeasure*>(element), propertiesString); break;
+        }
+        case BaseElement::ElementType::Credit:
+        {
+            SetCreditProperties(dynamic_cast<Credit*>(element), propertiesString); break;
+        }
+        case BaseElement::ElementType::TextDirection:
+        {
+            SetTextDirectionProperties(dynamic_cast<TextDirection*>(element), propertiesString); break;
+        }
+        case BaseElement::ElementType::TimeSignature:
+        {
+            SetTimeSignatureProperties(dynamic_cast<TimeSignature*>(element), propertiesString); break;
+        }
+        default:
+        {
+            ASSERT(false);
+            break;
+        }
+    }
 }
 
 void Editor::UpdateDisplayConstantsProperties()
 {
     nlohmann::ordered_json jsonObject;
 
-    AddFloatToJson(jsonObject, "Lyrics", "fontSize", "Font Size", song->settings.displayConstants.lyricFontSize.size);
-    AddFloatToJson(jsonObject, "Lyrics", "lyricPositionY", "Lyric Y Position", song->settings.displayConstants.lyricPositionY);
-    AddFloatToJson(jsonObject, "Lyrics", "lyricSpaceWidth", "Lyric Spacing", song->settings.displayConstants.lyricSpaceWidth);
+    JsonHelper::AddFloatToJson(jsonObject, "Lyrics", "fontSize", "Font Size", song->settings.displayConstants.lyricFontSize.size);
+    JsonHelper::AddFloatToJson(jsonObject, "Lyrics", "lyricPositionY", "Lyric Y Position", song->settings.displayConstants.lyricPositionY);
+    JsonHelper::AddFloatToJson(jsonObject, "Lyrics", "lyricSpaceWidth", "Lyric Spacing", song->settings.displayConstants.lyricSpaceWidth);
 
-    AddFloatToJson(jsonObject, "Other", "chordMarginFromBarline", "Chord Margin From Barline", song->settings.displayConstants.chordMarginFromBarline);
-    AddFloatToJson(jsonObject, "Other", "beatWidth", "Beat Width", song->settings.displayConstants.beatWidth);
-    AddFloatToJson(jsonObject, "Other", "chordPositionY", "Chord Y Position", song->settings.displayConstants.chordPositionY);
-    AddFloatToJson(jsonObject, "Other", "minimumMeasureWidth", "Minimum Measure Width", song->settings.displayConstants.minimumMeasureWidth);
-    AddBoolToJson(jsonObject, "Other", "displayReminderPickupLyrics", "Display Reminder Pickup Lyrics", song->settings.displayConstants.displayReminderPickupLyrics);
-    AddFloatToJson(jsonObject, "Other", "measureBarlineHeight", "Measure Height", song->settings.displayConstants.measureBarlineHeight);
-    AddFloatToJson(jsonObject, "Other", "chordFontSize", "Chord Font Size", song->settings.displayConstants.chordFontSize.size);
+    JsonHelper::AddFloatToJson(jsonObject, "Other", "chordMarginFromBarline", "Chord Margin From Barline", song->settings.displayConstants.chordMarginFromBarline);
+    JsonHelper::AddFloatToJson(jsonObject, "Other", "beatWidth", "Beat Width", song->settings.displayConstants.beatWidth);
+    JsonHelper::AddFloatToJson(jsonObject, "Other", "chordPositionY", "Chord Y Position", song->settings.displayConstants.chordPositionY);
+    JsonHelper::AddFloatToJson(jsonObject, "Other", "minimumMeasureWidth", "Minimum Measure Width", song->settings.displayConstants.minimumMeasureWidth);
+    JsonHelper::AddBoolToJson(jsonObject, "Other", "displayReminderPickupLyrics", "Display Reminder Pickup Lyrics", song->settings.displayConstants.displayReminderPickupLyrics);
+    JsonHelper::AddFloatToJson(jsonObject, "Other", "measureBarlineHeight", "Measure Height", song->settings.displayConstants.measureBarlineHeight);
+    JsonHelper::AddFloatToJson(jsonObject, "Other", "chordFontSize", "Chord Font Size", song->settings.displayConstants.chordFontSize.size);
 
-    AddFloatToJson(jsonObject, "Systems", "systemDistance", "System Distance", song->settings.displayConstants.systemLayout.systemDistance);
-    AddFloatToJson(jsonObject, "Systems", "firstPageTopSystemDistance", "First Page: System Distance From Top", song->settings.displayConstants.systemLayout.firstPageTopSystemDistance);
-    AddFloatToJson(jsonObject, "Systems", "topSystemDistance", "System Distance From Top", song->settings.displayConstants.systemLayout.topSystemDistance);
-    AddFloatToJson(jsonObject, "Pages", "topMargin", "Top Margin", song->settings.displayConstants.topMargin);
-    AddFloatToJson(jsonObject, "Pages", "bottomMargin", "Bottom Margin", song->settings.displayConstants.bottomMargin);
-    AddFloatToJson(jsonObject, "Pages", "leftMargin", "Left Margin", song->settings.displayConstants.leftMargin);
-    AddFloatToJson(jsonObject, "Pages", "rightMargin", "Right Margin", song->settings.displayConstants.rightMargin);
-
-    Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-}
-
-void Editor::UpdateTimeSignatureProperties(TimeSignature* timeSignature)
-{
-    nlohmann::ordered_json jsonObject;
-
-    AddIntToJson(jsonObject, "Main", "notes", "Top", timeSignature->notes);
-    AddIntToJson(jsonObject, "Main", "noteType", "Bottom", timeSignature->noteType);
-
-    AddFloatToJson(jsonObject, "Position", "posX", "Position X", timeSignature->position.x);
-    AddFloatToJson(jsonObject, "Position", "posY", "Position Y", timeSignature->position.y);
+    JsonHelper::AddFloatToJson(jsonObject, "Systems", "systemDistance", "System Distance", song->settings.displayConstants.systemLayout.systemDistance);
+    JsonHelper::AddFloatToJson(jsonObject, "Systems", "firstPageTopSystemDistance", "First Page: System Distance From Top", song->settings.displayConstants.systemLayout.firstPageTopSystemDistance);
+    JsonHelper::AddFloatToJson(jsonObject, "Systems", "topSystemDistance", "System Distance From Top", song->settings.displayConstants.systemLayout.topSystemDistance);
+    JsonHelper::AddFloatToJson(jsonObject, "Pages", "topMargin", "Top Margin", song->settings.displayConstants.topMargin);
+    JsonHelper::AddFloatToJson(jsonObject, "Pages", "bottomMargin", "Bottom Margin", song->settings.displayConstants.bottomMargin);
+    JsonHelper::AddFloatToJson(jsonObject, "Pages", "leftMargin", "Left Margin", song->settings.displayConstants.leftMargin);
+    JsonHelper::AddFloatToJson(jsonObject, "Pages", "rightMargin", "Right Margin", song->settings.displayConstants.rightMargin);
 
     Callbacks::GetInstance().UpdateProperties(jsonObject.dump());
-}
-
-void Editor::SetTimeSignatureProperties(TimeSignature* timeSignature, const std::string& propertiesString)
-{
-    json jsonObject = json::parse(propertiesString);
-
-    timeSignature->notes = jsonObject["Main"]["notes"]["value"];
-    timeSignature->noteType = jsonObject["Main"]["noteType"]["value"];
-
-    timeSignature->position.x = jsonObject["Position"]["posX"]["value"];
-    timeSignature->position.y = jsonObject["Position"]["posY"]["value"];
 }
 
 void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
@@ -949,7 +882,7 @@ void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
 
             if (lyric->lyricText.text == "")
             {
-                lyric->Delete();
+                UndoCommand(false);
             }
         }
         else if (element->elementType == BaseElement::ElementType::CSChord)
@@ -980,53 +913,23 @@ void Editor::SetSelection(std::vector<std::shared_ptr<BaseElement>> newSelected)
 
         selectedElement->selectedColor = 0x3333EEFF;
 
+        std::string propertiesString = GetProperties(selectedElement.get());
+        Callbacks::GetInstance().UpdateProperties(propertiesString);
+
         if (selectedElement->elementType == BaseElement::ElementType::CSLyric)
         {
             CSLyric* lyric = dynamic_cast<CSLyric*>(selectedElement.get());
             lyric->lyricText.selectedColor = 0x3333EEFF;
-
-            UpdateLyricProperties(lyric);
         }
         else if (selectedElement->elementType == BaseElement::ElementType::CSChord)
         {
             CSChord* chord = dynamic_cast<CSChord*>(selectedElement.get());
             chord->chordSymbol.selectedColor = 0x3333EEFF;
-            
-            UpdateChordProperties(chord);
-        }
-        else if (selectedElement->elementType == BaseElement::ElementType::CSMeasure)
-        {
-            CSMeasure* measure = dynamic_cast<CSMeasure*>(selectedElement.get());
-
-            UpdateMeasureProperties(measure);
-        }
-        else if (selectedElement->elementType == BaseElement::ElementType::Credit)
-        {
-            Credit* credit = dynamic_cast<Credit*>(selectedElement.get());
-
-            UpdateCreditProperties(credit);
-        }
-        else if (selectedElement->elementType == BaseElement::ElementType::TextDirection)
-        {
-            TextDirection* direction = dynamic_cast<TextDirection*>(selectedElement.get());
-
-            UpdateTextDirectionProperties(direction);
-        }
-        else if (selectedElement->elementType == BaseElement::ElementType::TimeSignature)
-        {
-            TimeSignature* timeSignature = dynamic_cast<TimeSignature*>(selectedElement.get());
-
-            UpdateTimeSignatureProperties(timeSignature);
-        }
-        else
-        {
-            LOGE("Did not recognize element type");
         }
     }
     else
     {
         UpdateDisplayConstantsProperties();
-        //Callbacks::GetInstance().UpdateProperties("{}");
     }
 }
 
@@ -1046,4 +949,43 @@ void Editor::ExecuteCommand(std::unique_ptr<EditorCommand> command)
     command->Execute();
     executedCommandStack.push_back(std::move(command));
     redoCommandStack.clear();
+}
+
+void Editor::UndoCommand(bool addToRedoStack)
+{
+    if (!executedCommandStack.empty())
+    {
+        std::unique_ptr<EditorCommand> command = std::move(executedCommandStack.back());
+        executedCommandStack.pop_back();
+
+        command->Undo();
+
+        if (addToRedoStack)
+            redoCommandStack.push_back(std::move(command));
+    }
+}
+
+void Editor::RedoCommand()
+{
+    if (!redoCommandStack.empty())
+    {
+        std::unique_ptr<EditorCommand> command = std::move(redoCommandStack.back());
+        redoCommandStack.pop_back();
+
+        command->Execute();
+
+        executedCommandStack.push_back(std::move(command));
+    }
+}
+
+void ChangePropertiesCommand::Execute()
+{
+    originalProperties = editor->GetProperties(element.get());
+    editor->SetProperties(element.get(), properties);
+}
+
+void ChangePropertiesCommand::Undo()
+{
+    properties = editor->GetProperties(element.get());
+    editor->SetProperties(element.get(), originalProperties);
 }

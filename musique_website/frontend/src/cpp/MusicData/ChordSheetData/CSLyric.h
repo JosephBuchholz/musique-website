@@ -40,6 +40,8 @@ public:
     bool startsPickup = false;
     Vec2<float> pickupPosition = { 0.0f, 0.0f };
     std::shared_ptr<LyricPickup> parentLyricPickup;
+    
+    BaseElement* parent = nullptr;
 
     std::function<void()> onDeleteCallback = []() {};
 };

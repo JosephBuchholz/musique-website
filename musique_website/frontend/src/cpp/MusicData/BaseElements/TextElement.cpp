@@ -11,8 +11,15 @@ void TextElement::Render(RenderData& renderData, Vec2<float> parentPosition, Pai
         parentPaint.color = color;
     else
         parentPaint.color = originalColor;
-
+    
+#if DEBUG
+    std::string t = text;
+    if (t == "")
+        t = "e";
+    renderData.AddText(Text(t, position.x + parentPosition.x, position.y + parentPosition.y, parentPaint));
+#else
     renderData.AddText(Text(text, position.x + parentPosition.x, position.y + parentPosition.y, parentPaint));
+#endif
 }
 
 BoundingBox TextElement::GetBoundingBox(Paint parentPaint) const
