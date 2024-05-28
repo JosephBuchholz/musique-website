@@ -70,6 +70,9 @@ private:
     void UndoCommand(bool addToRedoStack = true);
     void RedoCommand();
 
+    void InsertMeasure(int index); /// inserts measure at the given index
+    void AppendMeasure();
+
 public:
     std::shared_ptr<Song> song = nullptr;
     std::shared_ptr<MusicRenderer> musicRenderer = nullptr;

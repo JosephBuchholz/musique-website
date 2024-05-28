@@ -335,7 +335,7 @@ void Editor::OnPropertiesUpdated(const std::string& propertiesString)
 
                 std::shared_ptr<CSLyric> newLyric = std::make_shared<CSLyric>();
                 newLyric->lyricText.text = "";
-                newLyric->beatPosition = lyric->beatPosition;
+                newLyric->beatPosition = lyric->beatPosition + (1.0f/16.0f);
 
                 command->lyric = newLyric;
                 command->measure = measure;
@@ -414,18 +414,14 @@ void Editor::OnNewElement(int id)
 
                 ExecuteCommand(std::move(command));
             }
-            else if (id == 2 || id == 3 || id == 4) // insert measure
+            else if (id == 2 || id == 3 || id == 4) // insert measure; TODO: fix these weird conditions
             {
-                std::shared_ptr<CSMeasure> newMeasure = std::make_shared<CSMeasure>();
-                if (measure->parent->elementType == BaseElement::ElementType::CSStaff)
+                if (id == 2 || id == 3)
                 {
-                    std::shared_ptr<CSStaff> staff = std::dynamic_pointer_cast<CSStaff>(measure->parent);
-                    newMeasure->parent = staff;
-
-                    std::shared_ptr<SystemMeasure> newSystemMeasure = std::make_shared<SystemMeasure>();
-
-                    if (id != 4)
+                    if (measure->parent->elementType == BaseElement::ElementType::CSStaff)
                     {
+                        std::shared_ptr<CSStaff> staff = std::dynamic_pointer_cast<CSStaff>(measure->parent);
+
                         int i = 0;
                         for (const auto& m : staff->measures)
                         {
@@ -439,15 +435,13 @@ void Editor::OnNewElement(int id)
 
                         if (id == 3) // insert after, else insert before
                             i++;
-
-                        staff->measures.insert(staff->measures.begin() + i, newMeasure);
-                        song->systemMeasures.insert(song->systemMeasures.begin() + i, newSystemMeasure);
+                        
+                        InsertMeasure(i);
                     }
-                    else
-                    {
-                        staff->measures.push_back(newMeasure);
-                        song->systemMeasures.push_back(newSystemMeasure);
-                    }
+                }
+                else if (id == 4)
+                {
+                    AppendMeasure();
                 }
             }
             else if (id == 5) // rehearsal marking
@@ -455,8 +449,10 @@ void Editor::OnNewElement(int id)
                 std::shared_ptr<Rehearsal> newRehearsal = std::make_shared<Rehearsal>();
                 newRehearsal->text.text = "A";
                 newRehearsal->beatPosition = 0.0f;
+                newRehearsal->parent = measure;
 
-                measure->textDirections.push_back(newRehearsal);
+                std::unique_ptr<AddTextDirectionCommand> command = std::make_unique<AddTextDirectionCommand>(newRehearsal, measure);
+                ExecuteCommand(std::move(command));
             }
             else if (id == 6) // time signature
             {
@@ -531,83 +527,24 @@ void Editor::OnNewElement(int id)
             }
             else if (id >= 10 && id <= 15) // change duration
             {
+                NoteValue noteValue = chord->noteHead->noteDuration;
+                bool isDotted = (chord->augDot != nullptr);
+
                 if (id == 10)
-                {
-                    chord->noteHead->noteDuration = NoteValue::Whole;
-                    chord->noteStem = nullptr;
-                    chord->noteFlag = nullptr;
-                    chord->augDot = nullptr;
-                    chord->duration = 4.0f;
-                }
+                    noteValue = NoteValue::Whole;
                 else if (id == 11)
-                {
-                    chord->noteHead->noteDuration = NoteValue::Half;
-                    if (!chord->noteStem)
-                    {
-                        chord->noteStem = std::make_unique<NoteStem>();
-                        chord->noteStem->stemType = NoteStem::StemType::Up;
-                    }
-                    chord->noteFlag = nullptr;
-                    chord->augDot = nullptr;
-                    chord->duration = 2.0f;
-                }
+                    noteValue = NoteValue::Half;
                 else if (id == 12)
-                {
-                    chord->noteHead->noteDuration = NoteValue::Quarter;
-                    if (!chord->noteStem)
-                    {
-                        chord->noteStem = std::make_unique<NoteStem>();
-                        chord->noteStem->stemType = NoteStem::StemType::Up;
-                    }
-                    chord->noteFlag = nullptr;
-                    chord->augDot = nullptr;
-                    chord->duration = 1.0f;
-                }
+                    noteValue = NoteValue::Quarter;
                 else if (id == 13)
-                {
-                    chord->noteHead->noteDuration = NoteValue::Eighth;
-                    if (!chord->noteStem)
-                    {
-                        chord->noteStem = std::make_unique<NoteStem>();
-                        chord->noteStem->stemType = NoteStem::StemType::Up;
-                    }
-
-                    chord->noteFlag = std::make_unique<NoteFlag>();
-                    chord->noteFlag->type = NoteFlag::Type::Up;
-                    chord->noteFlag->noteDuration = NoteValue::Eighth;
-
-                    chord->augDot = nullptr;
-                    chord->duration = 0.5f;
-                }
+                    noteValue = NoteValue::Eighth;
                 else if (id == 14)
-                {
-                    chord->noteHead->noteDuration = NoteValue::Sixteenth;
-                    if (!chord->noteStem)
-                    {
-                        chord->noteStem = std::make_unique<NoteStem>();
-                        chord->noteStem->stemType = NoteStem::StemType::Up;
-                    }
-
-                    chord->noteFlag = std::make_unique<NoteFlag>();
-                    chord->noteFlag->type = NoteFlag::Type::Up;
-                    chord->noteFlag->noteDuration = NoteValue::Sixteenth;
-
-                    chord->augDot = nullptr;
-                    chord->duration = 0.25f;
-                }
+                    noteValue = NoteValue::Sixteenth;
                 else if (id == 15)
-                {
-                    if (chord->augDot)
-                    {
-                        chord->augDot = nullptr;
-                        chord->duration *= 2.0f/3.0f;
-                    }
-                    else
-                    {
-                        chord->augDot = std::make_unique<AugmentationDot>();
-                        chord->duration *= 3.0f/2.0f;
-                    }
-                }
+                    isDotted = !isDotted;
+
+                std::unique_ptr<ChangeChordDurationCommand> command = std::make_unique<ChangeChordDurationCommand>(chord, noteValue, isDotted);
+                ExecuteCommand(std::move(command));
             }
         }
     }
@@ -615,20 +552,7 @@ void Editor::OnNewElement(int id)
     {
         if (id == 4) // append measure
         {
-            std::shared_ptr<CSMeasure> newMeasure = std::make_shared<CSMeasure>();
-            std::shared_ptr<SystemMeasure> newSystemMeasure = std::make_shared<SystemMeasure>();
-            for (auto& instrument : song->instruments)
-            {
-                for (auto& staff : instrument->staves)
-                {
-                    if (staff->csStaff)
-                    {
-                        newMeasure->parent = staff->csStaff;
-                        staff->csStaff->measures.push_back(newMeasure);
-                        song->systemMeasures.push_back(newSystemMeasure);
-                    }
-                }
-            }
+            AppendMeasure();
         }
     }
 
@@ -640,6 +564,20 @@ void Editor::OnNewElement(int id)
     Update();
 }
 
+void Editor::InsertMeasure(int index)
+{
+    std::shared_ptr<SystemMeasure> newSystemMeasure = std::make_shared<SystemMeasure>();
+    std::shared_ptr<CSMeasure> newMeasure = std::make_shared<CSMeasure>();
+
+    std::unique_ptr<AddMeasureCommand> command = std::make_unique<AddMeasureCommand>(newMeasure, newSystemMeasure, index, song.get());
+    ExecuteCommand(std::move(command));
+}
+
+void Editor::AppendMeasure()
+{
+    InsertMeasure(song->systemMeasures.size());
+}
+
 void Editor::OnDeleteSelected()
 {
     for (auto e : selectedElements)
@@ -647,7 +585,9 @@ void Editor::OnDeleteSelected()
         if (e->elementType == BaseElement::ElementType::CSMeasure)
         {
             CSMeasure* measure = dynamic_cast<CSMeasure*>(e.get());
-            //measure->Delete();
+            std::shared_ptr<CSMeasure> measureShared;
+            std::shared_ptr<SystemMeasure> systemMeasure;
+            int measureIndex = 0;
 
             if (measure->parent)
             {
@@ -660,46 +600,21 @@ void Editor::OnDeleteSelected()
                     {
                         if (m.get() == measure)
                         {
+                            measureShared = m;
                             break;
                         }
 
                         i++;
                     }
 
-                    staff->measures.erase(staff->measures.begin() + i);
-                    song->systemMeasures.erase(song->systemMeasures.begin() + i);
-                    int measureIndex = i;
-                    int systemIndexToErase = -1;
-
-                    int systemIndex = 0;
-                    for (auto& system : song->systems)
-                    {
-                        if (system->beginningMeasureIndex <= measureIndex && system->endingMeasureIndex >= measureIndex)
-                        {
-                            system->endingMeasureIndex--;
-                            //system->systemMeasures.erase(system->systemMeasures.begin() + (measureIndex - system->beginningMeasureIndex));
-                            system->systemMeasureData.erase(measureIndex);
-
-                            if (system->endingMeasureIndex < system->beginningMeasureIndex)
-                            {
-                                systemIndexToErase = systemIndex; 
-                            }
-                        }
-                        else if (system->beginningMeasureIndex > measureIndex)
-                        {
-                            system->beginningMeasureIndex--;
-                            system->endingMeasureIndex--;
-                        }
-
-                        systemIndex++;
-                    }
-
-                    if (systemIndexToErase != -1)
-                    {
-                        song->systems.erase(song->systems.begin() + systemIndexToErase);
-                    }
+                    measureIndex = i;
                 }       
             }
+            
+            systemMeasure = song->systemMeasures[measureIndex];
+
+            std::unique_ptr<DeleteMeasureCommand> command = std::make_unique<DeleteMeasureCommand>(measureShared, systemMeasure, measureIndex, song.get());
+            ExecuteCommand(std::move(command));
         }
         else if (e->elementType == BaseElement::ElementType::TimeSignature)
         {
@@ -758,6 +673,19 @@ void Editor::OnDeleteSelected()
                 command->measure = parentMeasure;
             }
 
+            ExecuteCommand(std::move(command));
+        }
+        else if (e->elementType == BaseElement::ElementType::TextDirection)
+        {
+            std::shared_ptr<TextDirection> textDirection = std::dynamic_pointer_cast<TextDirection>(e);
+            CSMeasure* measure = nullptr;
+
+            if (textDirection->parent->elementType == BaseElement::ElementType::CSMeasure)
+            {
+                measure = dynamic_cast<CSMeasure*>(textDirection->parent);
+            }
+
+            std::unique_ptr<DeleteTextDirectionCommand> command = std::make_unique<DeleteTextDirectionCommand>(textDirection, measure);
             ExecuteCommand(std::move(command));
         }
         else

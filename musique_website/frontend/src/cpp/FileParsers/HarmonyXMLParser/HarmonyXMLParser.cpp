@@ -2783,6 +2783,7 @@ void HarmonyXMLParser::ParsePart(const std::shared_ptr<Song>& song, XMLElement* 
 
                         std::shared_ptr<TextDirection> textDirection = ParseTextDirection(element, currentTimeInMeasure);
                         textDirection->beatPosition = currentTimeInMeasure;
+                        textDirection->parent = currentMeasures[0].get();
                         currentMeasures[0]->textDirections.push_back(textDirection);
 
                         /*if (!isNewDurationDirection)

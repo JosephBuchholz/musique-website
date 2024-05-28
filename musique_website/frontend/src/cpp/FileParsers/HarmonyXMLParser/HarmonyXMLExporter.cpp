@@ -325,7 +325,7 @@ XMLElement* ExportMeasure(XMLDocument& doc, const std::shared_ptr<CSMeasure>& me
     {
         TimedElement newElement;
         newElement.element = ExportLyric(doc, lyric);
-        newElement.timeInMeasure = lyric->beatPosition * divisions;
+        newElement.timeInMeasure = std::round(lyric->beatPosition * divisions);
         elements.push_back(newElement);
     }
 

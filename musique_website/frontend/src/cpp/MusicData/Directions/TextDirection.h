@@ -52,5 +52,7 @@ public:
         None = 0, Rehearsal
     } directionType = DirectionType::None;
 
+    BaseElement* parent = nullptr;
+
     std::function<void()> onDeleteCallback = []() {};
 };
