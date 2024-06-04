@@ -6,6 +6,7 @@ import handleMidiMessage from "../audio/midi.js";
 import * as Renderer from "../rendering/canvas_renderer.js";
 import { jsPDF } from "jspdf";
 import PDFRenderer from "../rendering/pdf_renderer.js";
+import { getUser } from "../userauth";
 
 function getASeriesPageWidthMM(size) {
     return ((1 / Math.pow(2, 1 / 4)) * 1000.0) / Math.pow(2, size / 2);
@@ -142,6 +143,13 @@ export default function EditorPage() {
     const propertiesList = useRef(null);
 
     const [editableProperties, setEditableProperties] = useState("");
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        getUser().then((user) => {
+            setUser(user);
+        });
+    }, []);
 
     //const pageWidthTenths = 1233.87;
     //const pageHeightTenths = 1596.77;
@@ -695,7 +703,7 @@ export default function EditorPage() {
     return (
         <>
             <div className="w-screen h-screen flex flex-col">
-                <Header></Header>
+                <Header user={user}></Header>
 
                 <ActionBar></ActionBar>
 

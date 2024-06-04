@@ -1,10 +1,13 @@
+import { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getUser, isAuthenticated } from "../userauth";
 
-export default function Header() {
-    return <NavigationBar></NavigationBar>;
+export default function Header({ user = null }) {
+    return <NavigationBar user={user}></NavigationBar>;
 }
 
-function NavigationBar() {
+function NavigationBar({ user }) {
     return (
         <>
             <div className="flex bg-gray-100 top-0 w-screen h-16 justify-between z-50">
@@ -19,7 +22,17 @@ function NavigationBar() {
 
                 <ul className="flex justify-center items-center mr-8">
                     <NavLink to="/editor">Editor</NavLink>
-                    <NavLink to="/blog">Blog</NavLink>
+                    {user === null ? (
+                        <>
+                            <NavLink to="/login">Login</NavLink>
+                            <NavLink to="/register">Register</NavLink>
+                        </>
+                    ) : (
+                        <>
+                            <NavLink to="/logout">Logout</NavLink>
+                            <h1>{user.username}</h1>
+                        </>
+                    )}
                 </ul>
             </div>
         </>
