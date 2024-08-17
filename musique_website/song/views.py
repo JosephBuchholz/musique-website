@@ -3,6 +3,14 @@ from django.http import HttpResponse
 from .models import Song, SongGroup
 import json
 
+#from rest_framework import generics
+
+#class SongView(generics.ListAPIView):
+#    queryset = Song.objects.all()
+#    serializer_class = SongSerializer
+
+#serializer
+
 KEY = 'ABC123'
 
 METHOD_ALL = 'all'
@@ -119,7 +127,11 @@ def create_json_from_query_set(query_set):
         files = []
         for file in object.files.all():
             print(file.file.url, file.score_name)
-            files.append(file.score_name)
+            file_dict = {
+                "name": file.score_name,
+                "type": file.file_type
+            }
+            files.append(file_dict)
         
         songDict = {
             "id": object.pk,

@@ -1,0 +1,7 @@
+node_modules
+**/*.bat
+**/*.py
+**/*.cjs
+**/*.h
+**/*.cpp
+**/*.html

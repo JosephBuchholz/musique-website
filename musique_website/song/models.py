@@ -19,6 +19,7 @@ class SongFile(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name='files')
 
     score_name = models.CharField(max_length=200, blank=True)
+    file_type = models.CharField(max_length=50, default="musicxml")
 
     def __str__(self):
         return self.file.url

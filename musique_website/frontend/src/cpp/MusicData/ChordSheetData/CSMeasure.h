@@ -1,0 +1,61 @@
+#ifndef MUSIQUE_CSMEASURE_H
+#define MUSIQUE_CSMEASURE_H
+
+#include <vector>
+
+#include "CSChord.h"
+#include "CSLyric.h"
+#include "LyricPickup.h"
+#include "../Directions/Direction.h"
+#include "../Directions/TextDirection.h"
+#include "../Measures/TimeSignature.h"
+
+class CSMeasure : public VisibleElement
+{
+public:
+
+    CSMeasure()
+        : BaseElement(BaseElement::ElementType::CSMeasure) {}
+
+    void Init(const Settings& settings);
+    void Delete() override;
+
+    void Render(RenderData& renderData, const Settings& settings, const std::shared_ptr<SystemMeasure>& systemMeasure, Vec2<float> parentPosition) const;
+
+    BoundingBox GetTotalBoundingBox(const MusicDisplayConstants& displayConstants) const;
+
+    int GetMeasureIndex() const;
+
+    float GetTotalWidth() const { return width + pickupWidth; };
+
+private:
+
+    float GetPositionXFromBeatPositionOfChords(float beatPosition) const;
+    std::shared_ptr<CSChord> GetChordFromBeatPosition(float beatPosition);
+
+public:
+    float width = 0.0f;
+    float pickupWidth = 0.0f;
+
+    bool isFirstMeasureOfSystem = false;
+
+    int divisions = 0;
+
+    float duration = 0.0f;
+
+    std::vector<std::shared_ptr<CSChord>> chords;
+    std::vector<std::shared_ptr<CSLyric>> lyrics;
+
+    TimeSignature* timeSignature;
+
+    std::shared_ptr<BaseElement> parent;
+
+    std::shared_ptr<LyricPickup> lyricPickup;
+    
+    bool showTimeSignature = false;
+
+    //std::vector<Direction> directions;
+    std::vector<std::shared_ptr<TextDirection>> textDirections;
+};
+
+#endif //MUSIQUE_CSMEASURE_H
