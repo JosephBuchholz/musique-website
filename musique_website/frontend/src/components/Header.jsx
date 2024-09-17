@@ -21,7 +21,7 @@ function NavigationBar({ user }) {
                 </div>
 
                 <ul className="flex justify-center items-center mr-8">
-                    <NavLink to="/editor">Editor</NavLink>
+                    <NavLink to="/songlist">Songs</NavLink>
                     {user === null ? (
                         <>
                             <NavLink to="/login">Login</NavLink>
