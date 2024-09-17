@@ -5,6 +5,7 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import NotFoundPage from "./pages/NotFound";
 import LogoutPage from "./pages/Logout";
+import SongListPage from "./pages/SongListPage";
 
 export default function App() {
     return (
@@ -14,7 +15,7 @@ export default function App() {
                     <Route index element={<HomePage></HomePage>}></Route>
                     <Route path="/home" element={<HomePage></HomePage>}></Route>
                     <Route
-                        path="/editor"
+                        path="/editor/:id"
                         element={<EditorPage></EditorPage>}
                     ></Route>
                     <Route
@@ -28,6 +29,10 @@ export default function App() {
                     <Route
                         path="/register"
                         element={<RegisterPage></RegisterPage>}
+                    ></Route>
+                    <Route
+                        path="/songlist"
+                        element={<SongListPage></SongListPage>}
                     ></Route>
                     <Route
                         path="*"

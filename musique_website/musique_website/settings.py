@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'song.apps.SongConfig',
     'users.apps.UsersConfig',
+    'user_songs.apps.UserSongsConfig',
     'frontend.apps.FrontendConfig',
     'django.contrib.admin',
     'django.contrib.auth',

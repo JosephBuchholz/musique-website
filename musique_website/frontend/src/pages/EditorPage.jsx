@@ -7,6 +7,7 @@ import * as Renderer from "../rendering/canvas_renderer.js";
 import { jsPDF } from "jspdf";
 import PDFRenderer from "../rendering/pdf_renderer.js";
 import { getUser } from "../userauth";
+import { useParams } from "react-router-dom";
 
 function getASeriesPageWidthMM(size) {
     return ((1 / Math.pow(2, 1 / 4)) * 1000.0) / Math.pow(2, size / 2);
@@ -83,10 +84,16 @@ class KeyboardEventType {
 var module;
 var moduleIsCreated = false;
 
-function createModule() {
+var onModuleCreatedCallback = () => {
+    console.log("nothing!!!");
+};
+
+async function createModule() {
+    var createdNew = false;
+
     if (!moduleIsCreated) {
         // create module
-        return Module().then((mod) => {
+        await Module().then((mod) => {
             console.log("Creating Module!");
 
             module = mod;
@@ -97,12 +104,14 @@ function createModule() {
             var writeMidiFP = module.addFunction(writeMidi, "vii");
 
             module.addAudioCallbacksToCpp(writeMidiFP);
+
+            createdNew = true;
         });
     }
 
     // else already exits
     return new Promise(function (resolve, reject) {
-        resolve(module);
+        resolve(createdNew);
     });
 }
 
@@ -136,6 +145,12 @@ function setPageSizeMM(width, height) {
     pageHeightTenths = MMToTenths(height);
 }
 
+function loadSong(data, filetype, mod) {
+    var ptr = mod.stringToNewUTF8(data);
+    var fileType = mod.stringToNewUTF8(filetype);
+    var result = mod.loadSong(ptr, fileType);
+}
+
 export default function EditorPage() {
     const canvasRef = useRef(null);
     const pdfCanvasRef = useRef(null);
@@ -144,6 +159,8 @@ export default function EditorPage() {
 
     const [editableProperties, setEditableProperties] = useState("");
     const [user, setUser] = useState(null);
+
+    const { id } = useParams();
 
     useEffect(() => {
         getUser().then((user) => {
@@ -199,7 +216,9 @@ export default function EditorPage() {
 
         var pdfDocument;
 
-        createModule().then((mod) => {
+        createModule().then((createdNew) => {
+            if (!createdNew) return;
+
             console.log("adding rendering functions!!");
 
             function drawLineCpp(startX, startY, endX, endY, paintStrPtr) {
@@ -508,6 +527,8 @@ export default function EditorPage() {
             );
 
             module.onCanvasResize(canvas.width, canvas.height);
+
+            onModuleCreatedCallback(module);
         });
 
         // --- Event Listeners ---
@@ -593,6 +614,28 @@ export default function EditorPage() {
             document.removeEventListener("pointerup", pointerUpEventListener);
         };
     });
+
+    useEffect(() => {
+        fetch(`/usersongs/getfile?id=${id}&file_index=${0}`)
+            .then((response) => response.text())
+            .then((data) => {
+                console.log(
+                    "Fetched song file -------------------------------------"
+                );
+
+                onModuleCreatedCallback = (mod) => {
+                    console.log("MODULE CREATED AND GETTING DATA (callback)");
+                    loadSong(data, "harmonyxml", mod);
+                };
+
+                if (moduleIsCreated) {
+                    console.log(
+                        "MODULE CREATED AND GETTING DATA (module already created)"
+                    );
+                    onModuleCreatedCallback(module);
+                }
+            });
+    }, [id]);
 
     const [showPagePropsModal, setShowPagePropsModal] = useState(false);
     const [pageSizePagePropsModel, setPageSizePagePropsModel] = useState("a4");
@@ -1011,24 +1054,14 @@ function ButtonTray() {
                 onClick={async () => {
                     console.log("Get/Load Song button pressed!!!");
 
-                    /*fetch("/song/get?key=ABC123&method=all")
-                            .then((response) => response.json())
-                            .then((data) => {
-                                console.log(data);
-                            });*/
-
                     fetch(
                         "/song/get?key=ABC123&method=get_file&id=38&file_index=0"
-                        //"/song/get?key=ABC123&method=get_file&id=13&file_index=0"
                     )
                         .then((response) => response.text())
                         .then((data) => {
+                            console.log("DATA: " + data);
                             if (moduleIsCreated) {
-                                var ptr = module.stringToNewUTF8(data);
-                                var fileType =
-                                    module.stringToNewUTF8("harmonyxml");
-                                var result = module.loadSong(ptr, fileType);
-                                console.log("Loaded song: " + result);
+                                loadSong(data, "harmonyxml");
                             }
                         });
                 }}

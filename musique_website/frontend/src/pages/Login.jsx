@@ -133,6 +133,18 @@ export default function LoginPage() {
                                 Login
                             </button>
                         </div>
+
+                        <p className="text-sm text-center mb-5">
+                            Don't have an account?{" "}
+                            <a
+                                className="text-blue-500 font-medium cursor-pointer hover:text-blue-400"
+                                onClick={() => {
+                                    navigate("/register");
+                                }}
+                            >
+                                Register
+                            </a>
+                        </p>
                     </form>
                 </div>
             </div>
