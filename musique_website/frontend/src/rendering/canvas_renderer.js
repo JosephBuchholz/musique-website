@@ -1,5 +1,12 @@
+/**
+ * Renderer functions for rendering to the canvas.
+ */
+
 import Renderer from "./renderer";
 
+/**
+ * Class with functions to render to a canvas.
+ */
 export class CanvasRenderer extends Renderer {
     millimeters = 6.35;
     tenths = 40.0;

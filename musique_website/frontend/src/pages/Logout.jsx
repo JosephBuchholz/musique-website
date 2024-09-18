@@ -1,9 +1,18 @@
+/**
+ * Definition for the logout page.
+ */
+
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { getUser } from "../userauth";
 
+/**
+ * The logout page.
+ *
+ * @returns The JSX for this component.
+ */
 export default function LogoutPage() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();

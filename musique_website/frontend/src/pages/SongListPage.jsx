@@ -1,8 +1,19 @@
+/**
+ * Definition for the song list page.
+ */
+
 import Header from "../components/Header";
 import { getUser } from "../userauth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * The song list page. Displays all the songs that
+ * the current signed in user has saved to their
+ * account.
+ *
+ * @returns The JSX for this component.
+ */
 export default function SongListPage() {
     const [user, setUser] = useState(null);
     const [songList, setSongList] = useState([]);
@@ -43,6 +54,11 @@ export default function SongListPage() {
     );
 }
 
+/**
+ * An item in the song list. Represents a song.
+ *
+ * @returns The JSX for this component.
+ */
 function SongListItem({ id, title, createdAt }) {
     const navigate = useNavigate();
 

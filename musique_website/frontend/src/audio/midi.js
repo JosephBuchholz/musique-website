@@ -1,3 +1,7 @@
+/**
+ * Code for handleing midi playback.
+ */
+
 import * as Tone from "tone";
 
 const MIDI_ON_MESSAGE = 0x90;

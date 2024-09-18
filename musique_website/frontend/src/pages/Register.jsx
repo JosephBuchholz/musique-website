@@ -1,9 +1,18 @@
+/**
+ * Definition for the register page.
+ */
+
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../userauth";
 import { useEffect, useState } from "react";
 import { ErrorMessage, InputField } from "../components/FormComponents";
 
+/**
+ * The register page, so that the user can create an account.
+ *
+ * @returns The JSX for this component.
+ */
 export default function RegisterPage() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");

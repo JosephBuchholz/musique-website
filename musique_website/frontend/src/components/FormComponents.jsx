@@ -1,9 +1,19 @@
+/**
+ * Some basic components for login/signup forms.
+ */
+
+/**
+ * Basic error message component.
+ */
 export function ErrorMessage({ children }) {
     return (
         <p className="ml-2 mr-2 mb-5 text-red-600 font-medium">{children}</p>
     );
 }
 
+/**
+ * Basic input field.
+ */
 export function InputField({
     name,
     type,

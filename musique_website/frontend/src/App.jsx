@@ -1,3 +1,7 @@
+/**
+ * Definition of the main App component.
+ */
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import EditorPage from "./pages/EditorPage";
@@ -7,6 +11,11 @@ import NotFoundPage from "./pages/NotFound";
 import LogoutPage from "./pages/Logout";
 import SongListPage from "./pages/SongListPage";
 
+/**
+ * The main App component for this website.
+ *
+ * @returns The JSX for this component.
+ */
 export default function App() {
     return (
         <>

@@ -1,12 +1,14 @@
+/**
+ * Renderer functions for rendering to a PDF file.
+ */
+
 import Renderer from "./renderer";
 import { open_sansNormal } from "./open_sans-normal";
-/*import { bravuraNormal } from "./bravura-normal";
-import { bravuraNormalTTF } from "./bravura-normal-ttf";
-import { bravuraNormalTTF2 } from "./bravura_convertio-normal";
-import { bravuraNormalTTF3 } from "./bravura3-normal";*/
 import { leipizigNormal } from "./Leipzig-normal";
-//import { bravuraNormalOTF } from "./bravura-normal-otf";
 
+/**
+ * Class with utilites to render to a PDF.
+ */
 export default class PDFRenderer extends Renderer {
     constructor(
         pdfDocument,

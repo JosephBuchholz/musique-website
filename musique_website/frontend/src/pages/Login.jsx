@@ -1,3 +1,7 @@
+/**
+ * Definition for the login page.
+ */
+
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +9,11 @@ import Cookies from "js-cookie";
 import { getUser } from "../userauth";
 import { ErrorMessage, InputField } from "../components/FormComponents";
 
+/**
+ * The login page.
+ *
+ * @returns The JSX for this component.
+ */
 export default function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");

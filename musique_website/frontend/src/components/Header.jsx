@@ -1,12 +1,22 @@
+/**
+ * Defines the Header component.
+ */
+
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getUser, isAuthenticated } from "../userauth";
 
+/**
+ * Header for display on all pages on the website.
+ */
 export default function Header({ user = null }) {
     return <NavigationBar user={user}></NavigationBar>;
 }
 
+/**
+ * Basic navigation bar.
+ */
 function NavigationBar({ user }) {
     return (
         <>
@@ -39,6 +49,9 @@ function NavigationBar({ user }) {
     );
 }
 
+/**
+ * A navigation link.
+ */
 function NavLink({ to, children }) {
     return (
         <>

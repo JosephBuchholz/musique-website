@@ -1,4 +1,8 @@
 /**
+ * Contains the base Renderer class.
+ */
+
+/**
  * The parent Renderer class.
  */
 export default class Renderer {

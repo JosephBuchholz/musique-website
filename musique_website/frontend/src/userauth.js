@@ -1,3 +1,7 @@
+/**
+ * Some user authentication code.
+ */
+
 export async function getUser() {
     var user = null;
 

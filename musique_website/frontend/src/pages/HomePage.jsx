@@ -1,7 +1,16 @@
+/**
+ * Definition for the home page.
+ */
+
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { getUser } from "../userauth";
 
+/**
+ * The home page.
+ *
+ * @returns The JSX for this component.
+ */
 export default function HomePage() {
     const [user, setUser] = useState(null);
 
