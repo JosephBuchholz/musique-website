@@ -6,6 +6,7 @@ The backend is made with Django and the frontend is made with React, TailwindCSS
 # Build and Run
 
 Needed tools: npm, Python, and Emscripten
+
 Emscripten can be installed here: https://emscripten.org/docs/getting_started/downloads.html
 
 Run these commands to build and run for the first time:
