@@ -1,35 +1,3 @@
 # Description
 
-This is a website, that's built with Django, for the mobile app to connect to and download music files.
-
-# Valid Values
-
-## Valid Tags
-
-Christmas
-Easter
-Rock
-Blues
-Metal
-Jazz
-Pop
-Classical
-Country
-Folk
-
-Solo
-Duet
-Trio
-Quartet
-Quintet
-Sextet
-
-Instrumental
-Fingerstyle Guitar
-SATB
-
-## Valid Difficulty Levels
-
-Really Easy = 0
-Average = 5
-Really Hard = 10
+This is a website that displays sheet music for the user, allows the user to create and edit guitar chord sheets, and provides live audio playback. This applicaiton used to be made only for Android (see https://github.com/JosephBuchholz/musique-android), but has now been ported to the web. The main frameworks and languages that this website uses are: C++, Python, Django, JavaScript, React, and TailwindCSS. This repository contains both the frontend and backend for the website.
